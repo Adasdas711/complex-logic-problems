@@ -4,7 +4,8 @@
   python3 scripts/build.py          — пересобрать файлы
   python3 scripts/build.py --check  — проверить, что сгенерированные файлы актуальны
 
-Генерируются: docs/01-soderzhanie.md, docs/03-plan.md, docs/06-zanyatiya.md, docs/progress.md,
+Генерируются: docs/01-soderzhanie.md, docs/03-plan.md, docs/06-zanyatiya.md, docs/07-uchebnyj-plan.md,
+docs/progress.md,
 docs/indeks-po-urovnyam.md, docs/indeks-po-tipam.md, problems/*/README.md
 и таблица разделов в README.md (между пометками sections:start/end).
 Эти файлы руками не правятся.
@@ -124,6 +125,57 @@ def zanyatiya(chapters, tax) -> str:
     return "".join(out)
 
 
+def uchebnyj_plan(chapters, tax) -> str:
+    modules = load_yaml("toc.yaml")["modules"]
+    sessions = compute_sessions(chapters)
+    per_week = tax["sessions"]["per_week"]
+    week = lambda n: (n - 1) // per_week + 1
+    rows = []
+    for i, m in enumerate(modules):
+        nums = [s["num"] for s in sessions if any(c.num in m["chapters"] for c, _, _ in s["new"])]
+        if i == len(modules) - 1:   # итоговые занятия без нового материала — в последний модуль
+            nums += [s["num"] for s in sessions if not s["new"]]
+        a, b = min(nums), max(nums)
+        new = sum(n for s in sessions for c, _, n in s["new"] if c.num in m["chapters"])
+        rev = sum(n for s in sessions if a <= s["num"] <= b for _, n in s["mixed"])
+        titles = ", ".join(c.full_title for c in chapters if c.num in m["chapters"])
+        rows.append((m, titles, a, b, new, rev))
+    total_weeks = week(len(sessions))
+    out = [GEN, "# Учебный план\n\n",
+           f"**{total_weeks} недель**, {per_week} занятия в неделю по 4–6 часов, {tax['sessions']['size']} задач в занятии — "
+           f"всего {len(sessions)} занятий и {sum(s.quota for c in chapters for s in c.sections)} задач. "
+           "Задачи идут от простого к сложному; в каждом занятии есть повторение пройденного. "
+           "Подробное расписание по занятиям — в [06-zanyatiya.md](06-zanyatiya.md).\n\n",
+           "## Модули\n\n| Модуль | Главы | Недели | Занятия | Новых задач | Повторение | Что вы должны уметь к концу модуля |\n"
+           "|---|---|---|---|---|---|---|\n"]
+    for m, titles, a, b, new, rev in rows:
+        out.append(f"| **{m['name']}** | {titles} | {week(a)}–{week(b)} | {a}–{b} | {new} | {rev} | {m['goal']} |\n")
+    out.append("""
+Соседние модули делят пограничное занятие: в нём заканчивается одна глава и начинается следующая.
+
+## Как проходит занятие (4–6 часов)
+
+| Часть | Время | Что делать |
+|---|---|---|
+| Чтение | 30 мин | Параграфы книги, которые изучаются сегодня |
+| Разобранные примеры | 30 мин | По одному на каждый новый навык; разобрать и пересказать себе каждый шаг |
+| Новые задачи | 2,5–3,5 ч | Около 35 задач по лестнице: дополнение решения, однотипные задачи, вариации, задачи без известного ответа, перенос |
+| Повторение | 40 мин | Около 5 задач из смешанного набора по прошлым главам |
+| Разбор ошибок | 20 мин | Для каждой ошибки записать, какое правило нарушено; задачи с ошибками решить повторно на следующем занятии |
+
+Около четверти задач в каждом занятии — диагностические: «что здесь не так и какое правило нарушено».
+
+## Контрольные точки
+
+В конце каждого модуля — смешанный набор по всему модулю. Он сдан, если решено не меньше 90 % задач, а среди задач ступеней 1–4 — не меньше 95 %. Если результат ниже, повторить задачи по навыкам с ошибками, а потом решить набор снова. Переходить к следующему модулю стоит только после сдачи: каждый модуль опирается на предыдущие.
+
+## Регулярность
+
+Пропуски можно навёрстывать, но лучше не реже двух занятий в неделю: при длинных перерывах навык успевает забыться, и повторение не спасает. Задачи с ошибками стоит вести в отдельном списке и возвращаться к ним через неделю и через месяц.
+""")
+    return "".join(out)
+
+
 def progress(chapters, problems, tax) -> str:
     done = defaultdict(Counter)
     for pr in problems:
@@ -210,6 +262,7 @@ def generate() -> dict:
         DOCS / "01-soderzhanie.md": soderzhanie(chapters, tax),
         DOCS / "03-plan.md": plan(chapters, tax),
         DOCS / "06-zanyatiya.md": zanyatiya(chapters, tax),
+        DOCS / "07-uchebnyj-plan.md": uchebnyj_plan(chapters, tax),
         DOCS / "progress.md": progress(chapters, problems, tax),
         DOCS / "indeks-po-urovnyam.md": index_by(problems, "level", "Задачи по ступеням",
                                                  {l: f"{l}. {d['name']}" for l, d in tax["levels"].items()}),
