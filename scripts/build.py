@@ -281,17 +281,17 @@ def session_sheets(chapters, problems, tax) -> dict:
         if review:
             out.append("Повторение без нового чтения: пройденное до — " + "; ".join(review) + ".\n\n")
         out.append("## Задачи\n\n")
-        ans = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n# Ответы и решения\n\n## Ответы\n\n| № | Задача | Ответ |\n|---|---|---|\n"]
+        ans = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n# Ответы и решения\n\n## Ответы\n\n| № | Ответ |\n|---|---|\n"]
         sol = ["\n## Решения\n\n"]
         for i, p in enumerate(items, 1):
             parts = card_parts(p)
-            out.append(f"**{i}.** Ступень {p.meta['level']} · `{p.meta['id']}`\n\n{parts.get('Условие', '')}\n\n")
+            out.append(f"{i}\\. {parts.get('Условие', '')}\n\n")
             full = parts.get("Ответ", "")
             simple = "|" not in full and len(full) <= 220
             short = full.replace("\n", " ") if simple else "см. ниже, в решениях"
-            ans.append(f"| {i} | `{p.meta['id']}` | {short} |\n")
+            ans.append(f"| {i} | {short} |\n")
             extra = "" if simple else f"Ответ:\n\n{full}\n\nРешение:\n\n"
-            sol.append(f"**{i}.** `{p.meta['id']}`\n\n{extra}{parts.get('Решение', '')}\n\n")
+            sol.append(f"{i}\\. {extra}{parts.get('Решение', '')}\n\n")
         files[ROOT / "zanyatiya" / f"{s['num']:02d}.md"] = "".join(out + ans + sol)
     return files
 
