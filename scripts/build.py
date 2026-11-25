@@ -7,7 +7,7 @@
 Генерируются: docs/01-soderzhanie.md, docs/03-plan.md, docs/06-zanyatiya.md, docs/07-uchebnyj-plan.md,
 docs/progress.md,
 docs/indeks-po-urovnyam.md, docs/indeks-po-tipam.md, problems/*/README.md
-листы занятий zanyatiya/NN-zadachi.md и zanyatiya/NN-otvety.md
+документы занятий zanyatiya/NN.md
 и таблица разделов в README.md (между пометками sections:start/end).
 Эти файлы руками не правятся.
 """
@@ -247,46 +247,60 @@ def card_parts(pr) -> dict:
 
 
 def session_sheets(chapters, problems, tax) -> dict:
-    """Листы занятий: условия отдельно, ответы и решения отдельно."""
+    """Один документ на занятие: что прочитать, задачи, затем ответы и решения."""
     sessions = compute_sessions(chapters)
     by_sec = defaultdict(list)
     for p in sorted(problems, key=lambda p: p.meta["id"]):
         by_sec[(p.meta["chapter"], p.meta["section"])].append(p)
+    started = set()
     files = {}
     for s in sessions:
-        items = []
+        items, reading = [], []
         for c, sec, n in s["new"]:
             q = by_sec[(sec.chapter, sec.num)]
             items += q[:n]
             del q[:n]
+            cont = " (продолжение)" if sec.key in started else ""
+            started.add(sec.key)
+            where = c.full_title if sec.num == 0 else f"{c.full_title}, {sec.label}. {sec.title}"
+            if sec.page is not None:
+                pdf = (f"PDF {sec.page + 1}" if sec.end_page <= sec.page
+                       else f"PDF {sec.page + 1}–{sec.end_page + 1}")
+                reading.append(f"- {where}{cont} — {sec.pages} ({pdf})")
+            else:
+                reading.append(f"- {where}{cont} — {sec.source}")
+        review = []
         for m, n in s["mixed"]:
             q = by_sec[(m.chapter, m.num)]
             items += q[:n]
             del q[:n]
+            review.append(m.title.replace("После: ", ""))
         if not items:
             continue
         items.sort(key=lambda p: (p.meta["level"], p.meta["id"]))
-        num = f"{s['num']:02d}"
-        head = f"Занятие {s['num']}"
-        tasks = [GEN, f"# {head}. Задачи\n\n",
-                 f"{len(items)} задач. Ответы и решения — в [отдельном листе]({num}-otvety.md); "
-                 "смотрите их только после того, как решите.\n\n"]
-        ans = [GEN, f"# {head}. Ответы и решения\n\n", f"[Условия]({num}-zadachi.md)\n\n## Ответы\n\n| № | Задача | Ответ |\n|---|---|---|\n"]
+        out = [GEN, f"# Занятие {s['num']}\n\n",
+               f"{len(items)} задач, неделя {(s['num'] - 1) // tax['sessions']['per_week'] + 1}. "
+               "Ответы и решения — в конце документа; смотрите их только после того, как решите.\n\n",
+               "## Что прочитать\n\n",
+               "А. А. Зиновьев. *Комплексная логика*. М.: Наука, 1970. "
+               "Страницы книги; в скобках — страницы PDF-скана.\n\n", "\n".join(reading) + "\n\n"]
+        if review:
+            out.append("Повторение без нового чтения: пройденное до — " + "; ".join(review) + ".\n\n")
+        out.append("## Задачи\n\n")
+        ans = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n# Ответы и решения\n\n## Ответы\n\n| № | Задача | Ответ |\n|---|---|---|\n"]
         sol = ["\n## Решения\n\n"]
         for i, p in enumerate(items, 1):
             parts = card_parts(p)
-            tasks.append(f"**{i}.** Ступень {p.meta['level']} · {tax['types'][p.meta['type']].lower()}"
-                         f" · `{p.meta['id']}`\n\n{parts.get('Условие', '')}\n\n")
+            out.append(f"**{i}.** Ступень {p.meta['level']} · {tax['types'][p.meta['type']].lower()}"
+                       f" · `{p.meta['id']}`\n\n{parts.get('Условие', '')}\n\n")
             full = parts.get("Ответ", "")
             simple = "|" not in full and len(full) <= 220
             short = full.replace("\n", " ") if simple else "см. ниже, в решениях"
             ans.append(f"| {i} | `{p.meta['id']}` | {short} |\n")
             extra = "" if simple else f"Ответ:\n\n{full}\n\nРешение:\n\n"
             sol.append(f"**{i}.** `{p.meta['id']}`\n\n{extra}{parts.get('Решение', '')}\n\n")
-        files[ROOT / "zanyatiya" / f"{num}-zadachi.md"] = "".join(tasks)
-        files[ROOT / "zanyatiya" / f"{num}-otvety.md"] = "".join(ans + sol)
+        files[ROOT / "zanyatiya" / f"{s['num']:02d}.md"] = "".join(out + ans + sol)
     return files
-
 
 TITLES = {0: "Введение: операторы, термины, высказывания, следование",
           2: "Сильное следование, другой вариант"}

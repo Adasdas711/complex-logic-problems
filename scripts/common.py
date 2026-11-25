@@ -50,9 +50,10 @@ class Section:
     def pages(self) -> str:
         if self.page is None:
             return self.source
-        if self.end_page <= self.page + 1:
+        # Параграф читается до страницы, на которой начинается следующий, включительно.
+        if self.end_page <= self.page:
             return f"с. {self.page}"
-        return f"с. {self.page}–{self.end_page - 1}"
+        return f"с. {self.page}–{self.end_page}"
 
 
 @dataclass
