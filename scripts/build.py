@@ -7,6 +7,7 @@
 Генерируются: docs/01-soderzhanie.md, docs/03-plan.md, docs/06-zanyatiya.md, docs/07-uchebnyj-plan.md,
 docs/progress.md,
 docs/indeks-po-urovnyam.md, docs/indeks-po-tipam.md, problems/*/README.md
+листы занятий zanyatiya/NN-zadachi.md и zanyatiya/NN-otvety.md
 и таблица разделов в README.md (между пометками sections:start/end).
 Эти файлы руками не правятся.
 """
@@ -235,6 +236,58 @@ def index_by(problems, field, title, labels) -> str:
     return "".join(out)
 
 
+def card_parts(pr) -> dict:
+    """Условие, подсказка, ответ и решение карточки без разметки раскрывающихся блоков."""
+    import re
+    out, parts = {}, re.split(r"^## (.+)$", pr.body, flags=re.M)
+    for title, text in zip(parts[1::2], parts[2::2]):
+        text = re.sub(r"</?details>|<summary>.*?</summary>", "", text).strip()
+        out[title] = text
+    return out
+
+
+def session_sheets(chapters, problems, tax) -> dict:
+    """Листы занятий: условия отдельно, ответы и решения отдельно."""
+    sessions = compute_sessions(chapters)
+    by_sec = defaultdict(list)
+    for p in sorted(problems, key=lambda p: p.meta["id"]):
+        by_sec[(p.meta["chapter"], p.meta["section"])].append(p)
+    files = {}
+    for s in sessions:
+        items = []
+        for c, sec, n in s["new"]:
+            q = by_sec[(sec.chapter, sec.num)]
+            items += q[:n]
+            del q[:n]
+        for m, n in s["mixed"]:
+            q = by_sec[(m.chapter, m.num)]
+            items += q[:n]
+            del q[:n]
+        if not items:
+            continue
+        items.sort(key=lambda p: (p.meta["level"], p.meta["id"]))
+        num = f"{s['num']:02d}"
+        head = f"Занятие {s['num']}"
+        tasks = [GEN, f"# {head}. Задачи\n\n",
+                 f"{len(items)} задач. Ответы и решения — в [отдельном листе]({num}-otvety.md); "
+                 "смотрите их только после того, как решите.\n\n"]
+        ans = [GEN, f"# {head}. Ответы и решения\n\n", f"[Условия]({num}-zadachi.md)\n\n## Ответы\n\n| № | Задача | Ответ |\n|---|---|---|\n"]
+        sol = ["\n## Решения\n\n"]
+        for i, p in enumerate(items, 1):
+            parts = card_parts(p)
+            tasks.append(f"**{i}.** Ступень {p.meta['level']} · {tax['types'][p.meta['type']].lower()}"
+                         f" · `{p.meta['id']}`\n\n{parts.get('Условие', '')}\n\n")
+            full = parts.get("Ответ", "")
+            simple = "|" not in full and len(full) <= 220
+            short = full.replace("\n", " ") if simple else "см. ниже, в решениях"
+            ans.append(f"| {i} | `{p.meta['id']}` | {short} |\n")
+            extra = "" if simple else f"Ответ:\n\n{full}\n\nРешение:\n\n"
+            sol.append(f"**{i}.** `{p.meta['id']}`\n\n{extra}{parts.get('Решение', '')}\n\n")
+        files[ROOT / "zanyatiya" / f"{num}-zadachi.md"] = "".join(tasks)
+        files[ROOT / "zanyatiya" / f"{num}-otvety.md"] = "".join(ans + sol)
+    return files
+
+
 TITLES = {0: "Введение: операторы, термины, высказывания, следование",
           2: "Сильное следование, другой вариант"}
 
@@ -272,6 +325,7 @@ def generate() -> dict:
     }
     for c in chapters:
         files[PROBLEMS / c.slug / "README.md"] = chapter_readme(c, problems, tax)
+    files.update(session_sheets(chapters, problems, tax))
     return files
 
 
