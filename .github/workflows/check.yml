@@ -1,0 +1,19 @@
+name: Проверка задач
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Формат и классификация задач
+        run: python3 scripts/validate.py
+      - name: Актуальность оглавлений
+        run: python3 scripts/build.py --check

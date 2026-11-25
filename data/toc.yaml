@@ -1,0 +1,253 @@
+# Содержание книги: А. А. Зиновьев. Комплексная логика. М.: Наука, 1970. 206 с.
+# page — страница начала параграфа по нумерации книги (в PDF-скане: страница книги + 1).
+# profile — характер материала параграфа; определяет смесь уровней и типов заданий
+#   (см. data/taxonomy.yaml и docs/02-klassifikaciya.md):
+# weight — множитель объёма (по умолчанию 1), quota — фиксированное число задач.
+#   O — язык и определения; S — логическая система (аксиомы, выводы);
+#   M — метатеория (непротиворечивость, полнота, независимость);
+#   I — семантика и интерпретация; F — концептуальный материал, сравнения, парадоксы.
+
+book_end_page: 199   # начало списка литературы — конец содержательной части
+
+chapters:
+  - num: 0
+    slug: 00-vvedenie
+    title: Введение
+    page: 3
+    sections:
+      - {num: 1, title: Цель книги, page: 3, profile: F, quota: 3}
+      - {num: 2, title: Предмет логики, page: 3, profile: F, quota: 4}
+      - {num: 3, title: Логические операторы, page: 4, profile: O, weight: 2}
+      - {num: 4, title: Термины, page: 5, profile: O, weight: 3}
+      - {num: 5, title: Высказывания, page: 7, profile: O, weight: 3}
+      - {num: 6, title: Расширения алфавита и правил образования, page: 9, profile: O}
+      - {num: 7, title: Вхождение, page: 9, profile: O, weight: 2}
+      - {num: 8, title: Логическое следование, page: 10, profile: O, weight: 2}
+      - {num: 9, title: Классический и неклассический случаи, page: 11, profile: F}
+      - {num: 10, title: Технические замечания, page: 12, profile: O, weight: 0.5}
+
+  - num: 1
+    slug: 01-silnoe-sledovanie
+    title: Сильное следование
+    page: 15
+    systems: ["S^1"]
+    sections:
+      - {num: 1, title: "Система S¹", page: 15, profile: S, weight: 4}
+      - {num: 2, title: Некоторые теоремные схемы, page: 17, profile: S, weight: 1.5}
+      - {num: 3, title: Некоторые сокращающие определения, page: 20, profile: S}
+      - {num: 4, title: Непарадоксальность, page: 21, profile: M, weight: 1.5}
+      - {num: 5, title: Главная семантическая интерпретация, page: 22, profile: I}
+      - {num: 6, title: "Непротиворечивость S¹", page: 25, profile: M, weight: 1.5}
+      - {num: 7, title: "Полнота S¹", page: 25, profile: M, weight: 0.6}
+      - {num: 8, title: "Независимость S¹", page: 33, profile: M, weight: 1.5}
+      - {num: 9, title: Правило подстановки, page: 35, profile: M}
+
+  - num: 2
+    slug: 02-silnoe-sledovanie-variant
+    title: Сильное следование (другой вариант)
+    page: 36
+    systems: ["S_1"]
+    sections:
+      - {num: 1, title: "Система S₁", page: 36, profile: S, weight: 3}
+      - {num: 2, title: Полнота, page: 37, profile: M, weight: 0.6}
+      - {num: 3, title: "Независимость S₁", page: 43, profile: M, weight: 1.5}
+      - {num: 4, title: "Эквивалентность S¹ и S₁", page: 45, profile: M}
+      - {num: 5, title: Сильное следование, page: 45, profile: F}
+
+  - num: 3
+    slug: 03-oslablennoe-sledovanie
+    title: Ослабленное следование
+    page: 49
+    systems: ["S^2", "S_2", "S^w"]
+    sections:
+      - {num: 1, title: "Система S²", page: 49, profile: S, quota: 12}
+      - {num: 2, title: "Непарадоксальность S²", page: 49, profile: M, weight: 1.5}
+      - {num: 3, title: "Полнота S²", page: 50, profile: M, weight: 0.6}
+      - {num: 4, title: "Система S₂", page: 52, profile: S, weight: 3}
+      - {num: 5, title: "Система Sʷ", page: 53, profile: S, weight: 3}
+      - {num: 6, title: "Системы, сходные с Sʷ", page: 54, profile: S}
+
+  - num: 4
+    slug: 04-drugie-formy-sledovaniya
+    title: Другие формы следования
+    page: 59
+    sections:
+      - {num: 1, title: Максимальное следование, page: 59, profile: S}
+      - {num: 2, title: Конверсное следование, page: 62, profile: S}
+      - {num: 3, title: Вырожденное следование, page: 67, profile: S}
+      - {num: 4, title: Квазиследование, page: 70, profile: S}
+
+  - num: 5
+    slug: 05-obschaya-teoriya-dedukcii
+    title: Общая теория дедукции
+    page: 72
+    sections:
+      - {num: 1, title: Общая теория дедукции, page: 72, profile: S, weight: 3}
+      - {num: 2, title: Общая теория дедукции и классическая логика, page: 72, profile: F}
+      - {num: 3, title: "«Парадоксы» следования", page: 74, profile: F}
+      - {num: 4, title: Общая теория дедукции и интуиционистская логика, page: 75, profile: F}
+      - {num: 5, title: Неклассический случай на уровне общей теории дедукции, page: 75, profile: S}
+      - {num: 6, title: Классические и неклассические отношения высказываний, page: 77, profile: I}
+      - {num: 7, title: Расширения общей теории дедукции, page: 79, profile: S}
+      - {num: 8, title: К семантической интерпретации знака следования, page: 79, profile: I}
+      - {num: 9, title: К полноте логических систем, page: 80, profile: M}
+
+  - num: 6
+    slug: 06-uslovnye-vyskazyvaniya
+    title: Условные высказывания
+    page: 82
+    systems: ["S^s_{if}", "S^w_{if}", "S^5_{if}", "S^{5*}_{if}", "S^i_{if}"]
+    sections:
+      - {num: 1, title: Условные высказывания, page: 82, profile: O}
+      - {num: 2, title: Условные высказывания и следование, page: 83, profile: F}
+      - {num: 3, title: Условные высказывания и материальная импликация, page: 83, profile: F}
+      - {num: 4, title: Интерпретация, page: 86, profile: I}
+      - {num: 5, title: Классический и неклассический случаи, page: 89, profile: F}
+      - {num: 6, title: "Система Sˢ_if", page: 90, profile: S, weight: 3}
+      - {num: 7, title: "Система Sʷ_if", page: 91, profile: S, weight: 3}
+      - {num: 8, title: "Система S⁵_if", page: 91, profile: S, weight: 3}
+      - {num: 9, title: "Система S⁵*_if", page: 93, profile: S, weight: 3}
+      - {num: 10, title: "Парадоксы Sⁱ_if", page: 94, profile: F}
+      - {num: 11, title: Полнота, page: 95, profile: M, weight: 0.6}
+
+  - num: 7
+    slug: 07-teoriya-kvantorov
+    title: Теория кванторов
+    page: 98
+    systems: ["S^s_{cq}", "S^s_{nq}"]
+    sections:
+      - {num: 1, title: Высказывания с кванторами, page: 98, profile: O, weight: 1.5}
+      - {num: 2, title: "Система Sˢ_cq", page: 99, profile: S, weight: 4}
+      - {num: 3, title: "Непарадоксальность Sˢ_cq", page: 100, profile: M, weight: 1.5}
+      - {num: 4, title: "Непротиворечивость Sˢ_cq", page: 100, profile: M, weight: 1.5}
+      - {num: 5, title: "Независимость Sˢ_cq", page: 101, profile: M, weight: 1.5}
+      - {num: 6, title: Некоторые следствия, page: 102, profile: S}
+      - {num: 7, title: Главная интерпретация, page: 105, profile: I}
+      - {num: 8, title: "Полнота Sˢ_cq", page: 107, profile: M, weight: 0.6}
+      - {num: 9, title: Проблема разрешимости, page: 116, profile: M}
+      - {num: 10, title: Другие системы для классического случая, page: 120, profile: S}
+      - {num: 11, title: "Расширение Sˢ_cq", page: 121, profile: S}
+      - {num: 12, title: "Система Sˢ_nq", page: 122, profile: S, quota: 12}
+      - {num: 13, title: "Непротиворечивость Sˢ_nq", page: 123, profile: M, weight: 1.5}
+      - {num: 14, title: "Некоторые следствия в Sˢ_nq", page: 124, profile: S}
+      - {num: 15, title: "Главная семантическая интерпретация Sˢ_nq", page: 125, profile: I}
+      - {num: 16, title: Другие системы для неклассического случая, page: 126, profile: S}
+      - {num: 17, title: Другой вариант классического случая, page: 127, profile: S}
+      - {num: 18, title: "Полнота Sˢ_nq", page: 127, profile: M, weight: 0.6}
+      - {num: 19, title: Правила подстановки, page: 129, profile: M}
+      - {num: 20, title: Расширения систем теории кванторов, page: 130, profile: S}
+      - {num: 21, title: Кванторы и условные высказывания, page: 131, profile: S}
+
+  - num: 8
+    slug: 08-teoriya-predikacii
+    title: Теория предикации
+    page: 132
+    systems: ["S^i_p"]
+    sections:
+      - {num: 1, title: "Системы Sⁱ_p", page: 132, profile: S, weight: 3}
+      - {num: 2, title: Интерпретация, page: 133, profile: I}
+      - {num: 3, title: Классический случай, page: 134, profile: S}
+      - {num: 4, title: Полнота, page: 134, profile: M, weight: 0.6}
+      - {num: 5, title: Дедуктивно связанные предикаты, page: 135, profile: S}
+      - {num: 6, title: Теория предикации и кванторы, page: 135, profile: S}
+      - {num: 7, title: Расширения теории предикации, page: 136, profile: S}
+
+  - num: 9
+    slug: 09-teoriya-terminov
+    title: Теория терминов
+    page: 137
+    systems: ["S^1_t"]
+    sections:
+      - {num: 1, title: Термины, page: 137, profile: O}
+      - {num: 2, title: "Общая теория терминов S¹_t", page: 139, profile: S}
+      - {num: 3, title: Теория субъектно-предикатных терминов, page: 141, profile: S}
+      - {num: 4, title: Силлогистика предикатов, page: 145, profile: S}
+      - {num: 5, title: Определения, page: 146, profile: O}
+      - {num: 6, title: Логически взаимозаменимые предикаты, page: 147, profile: S}
+      - {num: 7, title: Логические термины, page: 148, profile: O}
+
+  - num: 10
+    slug: 10-logika-klassov
+    title: Логика классов
+    page: 149
+    systems: ["S^1_k", "S^2_k"]
+    sections:
+      - {num: 1, title: Классы, page: 149, profile: O}
+      - {num: 2, title: "Система S¹_k", page: 149, profile: S, weight: 3}
+      - {num: 3, title: "Система S²_k", page: 151, profile: S, weight: 3}
+      - {num: 4, title: Силлогистика классов, page: 152, profile: S}
+      - {num: 5, title: Силлогистика классов и силлогистика предикатов, page: 157, profile: F}
+      - {num: 6, title: Квазиклассический случай в теории кванторов, page: 157, profile: S}
+      - {num: 7, title: Классы классов, page: 158, profile: O}
+      - {num: 8, title: Парадокс класса нормальных классов, page: 159, profile: F}
+      - {num: 9, title: Производные классы, page: 160, profile: O}
+
+  - num: 11
+    slug: 11-logika-suschestvovaniya
+    title: Логика существования
+    page: 161
+    systems: ["S^e_n", "S^e_c"]
+    sections:
+      - {num: 1, title: Экзистенциальные предикаты, page: 161, profile: O}
+      - {num: 2, title: "Система Sᵉ_n", page: 162, profile: S, weight: 3}
+      - {num: 3, title: "Некоторые следствия в Sᵉ_n", page: 164, profile: S}
+      - {num: 4, title: Теорема универсальности, page: 164, profile: M}
+      - {num: 5, title: Кванторы и предикаты существования, page: 165, profile: S}
+      - {num: 6, title: Семантическая интерпретация, page: 165, profile: I}
+      - {num: 7, title: "Система Sᵉ_c", page: 167, profile: S, weight: 3}
+
+  - num: 12
+    slug: 12-modalnaya-logika
+    title: Модальная логика
+    page: 168
+    systems: ["S^{m1}_n"]
+    sections:
+      - {num: 1, title: Модальные предикаты, page: 168, profile: O}
+      - {num: 2, title: "Система Sᵐ¹_n", page: 168, profile: S, weight: 3}
+      - {num: 3, title: Некоторые следствия, page: 171, profile: S}
+      - {num: 4, title: Модальные операторы, page: 171, profile: O}
+      - {num: 5, title: Интерпретация, page: 172, profile: I}
+      - {num: 6, title: Классический случай, page: 173, profile: S}
+      - {num: 7, title: Основная модальная логика, page: 173, profile: S}
+      - {num: 8, title: Логические модальности, page: 175, profile: F}
+      - {num: 9, title: Модальность и существование, page: 175, profile: S}
+      - {num: 10, title: Модальность и условность, page: 175, profile: S}
+      - {num: 11, title: Модальности и кванторы, page: 176, profile: S}
+      - {num: 12, title: Вероятностная логика, page: 176, profile: F}
+
+  - num: 13
+    slug: 13-logika-otnosheniy
+    title: Логика отношений
+    page: 178
+    systems: ["S^{r3}"]
+    sections:
+      - {num: 1, title: Предикаты отношений, page: 178, profile: O}
+      - {num: 2, title: Логика сравнения, page: 178, profile: S}
+      - {num: 3, title: Логика порядка, page: 181, profile: S}
+      - {num: 4, title: Интерпретация, page: 182, profile: I}
+      - {num: 5, title: Производные термины порядка, page: 182, profile: O}
+      - {num: 6, title: "Система Sʳ³", page: 183, profile: S, weight: 3}
+      - {num: 7, title: Упорядоченные конъюнкции и дизъюнкции, page: 184, profile: O}
+      - {num: 8, title: Логика изменения, page: 185, profile: S}
+      - {num: 9, title: Физическое следование, page: 187, profile: F}
+
+  - num: 14
+    slug: 14-normativnye-predikaty
+    title: Нормативные предикаты
+    page: 189
+    sections:
+      - {num: 0, title: Нормативные предикаты, page: 189, profile: S, weight: 1.5}
+
+  - num: 15
+    slug: 15-prilozhenie
+    title: "Приложение: правила приписывания значений"
+    page: 192
+    sections:
+      - {num: 0, title: Правила приписывания значений высказываниям с кванторами и формулам следования, page: 192, profile: I}
+
+# Заключение (с. 198) — материал для итоговых исследовательских задач раздела 16.
+extra:
+  - num: 16
+    slug: 16-skvoznye
+    title: Сквозные задачи (по нескольким главам)
+    quota: 50
