@@ -9,6 +9,6 @@
 - Квоты по параграфам, ступеням и доле диагностики — `docs/03-plan.md`; не превышать.
 - Задачи в параграфе идут лестницей: дополнение → изоморфные → вариации → открытый исход → перенос. Около 25 % — диагностика (тип E): ответ называет нарушенное правило с номером и страницей.
 - Каждое решение ссылается на определения, аксиомы, правила и страницу источника. Утверждения, которых нет в источнике и которые не выведены в решении, не допускаются.
-- Сгенерированные файлы (`docs/01-soderzhanie.md`, `docs/03-plan.md`, `docs/06-zanyatiya.md`, `docs/07-uchebnyj-plan.md`, `docs/progress.md`, `docs/indeks-*.md`, `problems/*/README.md`, `zanyatiya/*`, таблица разделов в `README.md`) руками не править: `python3 scripts/build.py`.
+- Сгенерированные файлы (`docs/01-soderzhanie.md`, `docs/03-plan.md`, `docs/06-zanyatiya.md`, `docs/07-uchebnyj-plan.md`, `docs/progress.md`, `docs/indeks-*.md`, `zanyatiya/*`, таблица разделов в `README.md`) руками не править: `python3 scripts/build.py`.
 - Перед коммитом: `python3 scripts/validate.py` без ошибок и `python3 scripts/build.py --check`.
 - Сканы и распознанный текст книг в репозиторий не добавлять.

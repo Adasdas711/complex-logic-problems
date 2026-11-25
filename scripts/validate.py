@@ -28,8 +28,8 @@ def main() -> int:
     problems = load_problems()
 
     for pr in problems:
-        rel = pr.path.relative_to(pr.path.parent.parent.parent)
         m = pr.meta
+        rel = f"{pr.path.name}: {m.get('id', '?')}"
         err = lambda msg: errors.append(f"{rel}: {msg}")
         missing = [k for k in REQUIRED if k not in m]
         if missing:
@@ -41,16 +41,14 @@ def main() -> int:
         if not mm:
             err(f"номер {pid!r} не в формате ГГ.ПП-NNN или ГГ.ПП-NNNN")
             continue
-        if pr.path.stem != pid:
-            err(f"имя файла не совпадает с номером {pid}")
+        if pr.path.stem != pid[:2]:
+            err(f"задача главы {pid[:2]} лежит в файле {pr.path.name}")
         if (int(mm.group(1)), int(mm.group(2))) != (m["chapter"], m["section"]):
             err("глава/параграф в номере не совпадают с полями chapter/section")
         ch = by_num.get(m["chapter"])
         if not ch:
             err(f"нет главы {m['chapter']}")
             continue
-        if pr.path.parent.name != ch.slug:
-            err(f"файл должен лежать в problems/{ch.slug}/")
         sec = sections.get((m["chapter"], m["section"]))
         if not sec:
             err(f"в главе {m['chapter']} нет параграфа {m['section']}")

@@ -10,7 +10,6 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
-PROBLEMS = ROOT / "problems"
 DOCS = ROOT / "docs"
 
 ID_RE = re.compile(r"^(\d{2})\.(\d{2})-(\d{3,4})$")
@@ -230,15 +229,21 @@ class Problem:
     body: str
 
 
+ZADACHI = DATA / "zadachi"
+CARD_SEP = re.compile(r"^=====\s*$", re.M)
+
+
 def load_problems() -> list[Problem]:
+    """Задачи хранятся по одному файлу на главу: data/zadachi/<ГГ>.md, карточки разделены «=====»."""
     out = []
-    for p in sorted(PROBLEMS.glob("*/*.md")):
-        if p.name == "README.md":
-            continue
-        text = p.read_text(encoding="utf-8")
-        m = FRONT_RE.match(text)
-        meta = yaml.safe_load(m.group(1)) if m else None
-        out.append(Problem(p, meta or {}, text[m.end():] if m else text))
+    for f in sorted(ZADACHI.glob("*.md")):
+        for chunk in CARD_SEP.split(f.read_text(encoding="utf-8")):
+            chunk = chunk.strip()
+            if not chunk:
+                continue
+            m = FRONT_RE.match(chunk + "\n")
+            meta = yaml.safe_load(m.group(1)) if m else None
+            out.append(Problem(f, meta or {}, chunk[m.end():] if m else chunk))
     return out
 
 

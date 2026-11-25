@@ -6,7 +6,7 @@
 
 Генерируются: docs/01-soderzhanie.md, docs/03-plan.md, docs/06-zanyatiya.md, docs/07-uchebnyj-plan.md,
 docs/progress.md,
-docs/indeks-po-urovnyam.md, docs/indeks-po-tipam.md, problems/*/README.md
+docs/indeks-po-urovnyam.md, docs/indeks-po-tipam.md,
 документы занятий zanyatiya/NN.md
 и таблица разделов в README.md (между пометками sections:start/end).
 Эти файлы руками не правятся.
@@ -16,7 +16,7 @@ from __future__ import annotations
 import sys
 from collections import Counter, defaultdict
 
-from common import (DOCS, PROBLEMS, ROOT, compute_quotas, compute_sessions, load_book, load_problems,
+from common import (DOCS, ROOT, compute_quotas, compute_sessions, load_book, load_problems,
                     load_yaml, problem_title, study_order)
 
 GEN = "<!-- Файл сгенерирован scripts/build.py. Не редактировать вручную. -->\n\n"
@@ -189,7 +189,7 @@ def progress(chapters, problems, tax) -> str:
         for s in c.sections:
             lq.update(s.level_quota)
         d = done[c.num]
-        out.append(f"| [{c.full_title}](../problems/{c.slug}/) | " + " | ".join(f"{d[l]}/{lq[l]}" for l in LEVELS)
+        out.append(f"| {c.full_title} | " + " | ".join(f"{d[l]}/{lq[l]}" for l in LEVELS)
                    + f" | {sum(d.values())} | {sum(lq.values())} |\n")
         all_done += sum(d.values())
         all_plan += sum(lq.values())
@@ -197,28 +197,7 @@ def progress(chapters, problems, tax) -> str:
     return "".join(out)
 
 
-def chapter_readme(c, problems, tax) -> str:
-    mine = [p for p in problems if p.meta.get("chapter") == c.num]
-    out = [GEN, f"# {c.full_title}\n\n"]
-    if c.systems:
-        out.append("Системы: " + ", ".join(f"${s}$" for s in c.systems) + "\n\n")
-    if c.sources:
-        out.append("Источники:\n\n" + "".join(f"- {s}\n" for s in c.sources) + "\n")
-    out.append(f"Задач: {len(mine)} из {sum(s.quota for s in c.sections)}.\n\n")
-    for s in c.sections:
-        secp = [p for p in mine if p.meta.get("section") == s.num]
-        where = f", {s.pages}" if s.pages else ""
-        out.append(f"## {s.label}. {s.title}{where}\n\nЗадач: {len(secp)} из {s.quota} (диагностика: {s.diag_quota}).\n\n")
-        if secp:
-            out.append("| № | Ступень | Тип | Задача |\n|---|---|---|---|\n")
-            for p in sorted(secp, key=lambda p: p.meta["id"]):
-                out.append(f"| [{p.meta['id']}]({p.path.name}) | {p.meta['level']} | "
-                           f"{tax['types'].get(p.meta['type'], '?')} | {problem_title(p)} |\n")
-            out.append("\n")
-    return "".join(out)
-
-
-def index_by(problems, field, title, labels) -> str:
+def index_by(problems, field, title, labels, where) -> str:
     groups = defaultdict(list)
     for p in problems:
         groups[p.meta.get(field)].append(p)
@@ -230,8 +209,9 @@ def index_by(problems, field, title, labels) -> str:
         if items:
             out.append(f"## {labels[key]} ({len(items)})\n\n")
             for p in items:
-                rel = p.path.relative_to(ROOT).as_posix()
-                out.append(f"- [{p.meta['id']}](../{rel}) ступень {p.meta['level']} — {problem_title(p)}\n")
+                n = where.get(p.meta["id"])
+                link = f"[занятие {n}](../zanyatiya/{n:02d}.md)" if n else "вне занятий"
+                out.append(f"- `{p.meta['id']}` ступень {p.meta['level']}, {link} — {problem_title(p)}\n")
             out.append("\n")
     return "".join(out)
 
@@ -246,20 +226,39 @@ def card_parts(pr) -> dict:
     return out
 
 
-def session_sheets(chapters, problems, tax) -> dict:
-    """Один документ на занятие: что прочитать, задачи, затем ответы и решения."""
-    sessions = compute_sessions(chapters)
+def assign(chapters, problems):
+    """Раскладывает задачи по занятиям: {номер занятия: [задачи]}."""
     by_sec = defaultdict(list)
     for p in sorted(problems, key=lambda p: p.meta["id"]):
         by_sec[(p.meta["chapter"], p.meta["section"])].append(p)
-    started = set()
-    files = {}
-    for s in sessions:
-        items, reading = [], []
-        for c, sec, n in s["new"]:
+    out = {}
+    for s in compute_sessions(chapters):
+        items = []
+        for _, sec, n in s["new"]:
             q = by_sec[(sec.chapter, sec.num)]
             items += q[:n]
             del q[:n]
+        for m, n in s["mixed"]:
+            q = by_sec[(m.chapter, m.num)]
+            items += q[:n]
+            del q[:n]
+        out[s["num"]] = items
+    return out
+
+
+def session_of(chapters, problems) -> dict:
+    return {p.meta["id"]: n for n, items in assign(chapters, problems).items() for p in items}
+
+
+def session_sheets(chapters, problems, tax) -> dict:
+    """Один документ на занятие: что прочитать, задачи, затем ответы и решения."""
+    sessions = compute_sessions(chapters)
+    assigned = assign(chapters, problems)
+    started = set()
+    files = {}
+    for s in sessions:
+        items, reading = list(assigned[s["num"]]), []
+        for c, sec, n in s["new"]:
             cont = " (продолжение)" if sec.key in started else ""
             started.add(sec.key)
             where = c.full_title if sec.num == 0 else f"{c.full_title}, {sec.label}. {sec.title}"
@@ -269,12 +268,7 @@ def session_sheets(chapters, problems, tax) -> dict:
                 reading.append(f"- {where}{cont} — {sec.pages} ({pdf})")
             else:
                 reading.append(f"- {where}{cont} — {sec.source}")
-        review = []
-        for m, n in s["mixed"]:
-            q = by_sec[(m.chapter, m.num)]
-            items += q[:n]
-            del q[:n]
-            review.append(m.title.replace("После: ", ""))
+        review = [m.title.replace("После: ", "") for m, _ in s["mixed"]]
         if not items:
             continue
         items.sort(key=lambda p: (p.meta["level"], p.meta["id"]))
@@ -314,7 +308,7 @@ def readme(chapters) -> str:
         title = TITLES.get(c.num, c.title)
         if c.systems:
             title += " (" + ", ".join(f"${s}$" for s in c.systems) + ")"
-        rows.append(f"| {c.num} | [{title}](problems/{c.slug}/) | {sum(s.quota for s in c.sections)} |\n")
+        rows.append(f"| {c.num} | {title} | {sum(s.quota for s in c.sections)} |\n")
     rows.append(f"| | **Всего** | **{sum(s.quota for c in chapters for s in c.sections)}** |\n<!-- sections:end -->")
     a, b = text.index("<!-- sections:start -->"), text.index("<!-- sections:end -->") + len("<!-- sections:end -->")
     return text[:a] + "".join(rows) + text[b:]
@@ -325,6 +319,7 @@ def generate() -> dict:
     chapters = load_book()
     compute_quotas(chapters)
     problems = [p for p in load_problems() if "id" in p.meta]
+    where = session_of(chapters, problems)
     files = {
         DOCS / "01-soderzhanie.md": soderzhanie(chapters, tax),
         DOCS / "03-plan.md": plan(chapters, tax),
@@ -332,13 +327,11 @@ def generate() -> dict:
         DOCS / "07-uchebnyj-plan.md": uchebnyj_plan(chapters, tax),
         DOCS / "progress.md": progress(chapters, problems, tax),
         DOCS / "indeks-po-urovnyam.md": index_by(problems, "level", "Задачи по ступеням",
-                                                 {l: f"{l}. {d['name']}" for l, d in tax["levels"].items()}),
+                                                 {l: f"{l}. {d['name']}" for l, d in tax["levels"].items()}, where),
         DOCS / "indeks-po-tipam.md": index_by(problems, "type", "Задачи по типам",
-                                              {t: f"{t} — {n}" for t, n in tax["types"].items()}),
+                                              {t: f"{t} — {n}" for t, n in tax["types"].items()}, where),
         ROOT / "README.md": readme(chapters),
     }
-    for c in chapters:
-        files[PROBLEMS / c.slug / "README.md"] = chapter_readme(c, problems, tax)
     files.update(session_sheets(chapters, problems, tax))
     return files
 

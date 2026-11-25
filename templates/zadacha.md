@@ -1,5 +1,4 @@
 ---
-id: "ГГ.ПП-NNN"
 chapter: 0
 section: 0
 level: 1
@@ -19,24 +18,12 @@ tags: []
 
 …
 
-<details><summary>Подсказка</summary>
-
 …
-
-</details>
 
 ## Ответ
 
-<details><summary>Показать ответ</summary>
-
 …
-
-</details>
 
 ## Решение
 
-<details><summary>Показать решение</summary>
-
 …
-
-</details>
