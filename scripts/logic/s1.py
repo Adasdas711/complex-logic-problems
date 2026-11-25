@@ -179,3 +179,68 @@ def check(lines) -> list[str]:
         if not ok:
             errs.append(f"шаг {n}: неверно применено {r}")
     return errs
+
+
+# ---- § 2: теоремные схемы T1–T7 (с. 18) как готовые леммы ----
+def lemma(a, b) -> str | None:
+    if a[0] == "conj" and len(a[1]) == 2 and b == a[1][1]:
+        return "T1"                                   # xy ⊢ y
+    if a == b:
+        return "T2"                                   # x ⊢ x
+    if b == C(a, a):
+        return "T3"                                   # x ⊢ xx
+    if a[0] == "conj" and len(a[1]) == 2 and a[1][0] == a[1][1] == b:
+        return "T4"                                   # xx ⊢ x
+    if a[0] == "dis" and len(a[1]) == 2 and b == D(a[1][1], a[1][0]):
+        return "T6"                                   # x : y ⊢ y : x
+    return None
+
+
+def is_lemma(a, b, name) -> bool:
+    """Соответствует ли a ⊢ b именно схеме name (одна формула может подходить под несколько схем)."""
+    two = a[0] == "conj" and len(a[1]) == 2
+    return {"T1": two and b == a[1][1], "T2": a == b, "T3": b == C(a, a),
+            "T4": two and a[1][0] == a[1][1] == b, "T5": two and b == C(a[1][1], a[1][0]),
+            "T6": a[0] == "dis" and len(a[1]) == 2 and b == D(a[1][1], a[1][0]),
+            "T7": a[0] == "dis" and len(a[1]) == 2 and b == D(a[1][1], a[1][0])}.get(name, False)
+
+
+LEMMA_TEXT = {"T1": "xy \\vdash y", "T2": "x \\vdash x", "T3": "x \\vdash xx", "T4": "xx \\vdash x",
+              "T5": "yx \\vdash xy", "T6": "x : y \\vdash y : x", "T7": "y : x \\vdash x : y"}
+
+
+def check2(lines) -> list[str]:
+    """Как check, но основанием может быть и теоремная схема T1–T7 (§ 2)."""
+    errs = []
+    for n, (a, b, why) in enumerate(lines, 1):
+        if isinstance(why, str):
+            ok = axiom(a, b) == why or is_lemma(a, b, why)
+            if not ok:
+                errs.append(f"шаг {n}: не {why}")
+            continue
+        errs += [e for e in check(lines[:n])[-1:] if e.startswith(f"шаг {n}:")]
+    return errs
+
+
+# ---- § 4, 5, 7: критерий доказуемости ----
+def new_atoms(a, b) -> set:
+    return atoms(b) - atoms(a)
+
+
+def strong_tautology(a, b) -> bool:
+    """D1 § 7 (с. 25): тавтология и в b нет элементарных высказываний, отсутствующих в a."""
+    return tautology(a, b) and not new_atoms(a, b)
+
+
+def counterexample(a, b):
+    names = sorted(atoms(a) | atoms(b))
+    for vals in product((0, 1), repeat=len(names)):
+        env = dict(zip(names, vals))
+        if value(a, env) == 1 and value(b, env) == 0:
+            return env
+    return None
+
+
+# ---- § 3: сокращения ----
+def IMP(x, y): return D(C(x, y), C(N(x), y), C(N(x), N(y)))     # D1: x ⊃ y
+def OR(x, y): return N(C(N(x), N(y)))                            # D2: x ∨ y
