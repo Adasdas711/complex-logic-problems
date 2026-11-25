@@ -1,0 +1,25 @@
+# Глава 1, § 1 «Система S¹» (с. 15–17).
+- {id: 01-ops, kind: definition, label: "операторы S¹", section: 1, page: 15, statement: "·, :, ∼; соглашение о скобках"}
+- {id: 01-D1, kind: definition, label: D1, section: 1, page: 15, statement: "элементарные относительно S¹ высказывания"}
+- {id: 01-D2, kind: definition, label: D2, section: 1, page: 15, statement: "высказывание S¹"}
+- {id: 01-A1, kind: axiom, label: A1, section: 1, page: 15, statement: "x ⊢ ∼∼x"}
+- {id: 01-A2, kind: axiom, label: A2, section: 1, page: 15, statement: "∼∼x ⊢ x"}
+- {id: 01-A3, kind: axiom, label: A3, section: 1, page: 15, statement: "xy ⊢ x", errors: ["xy ⊢ y считают аксиомой"]}
+- {id: 01-A4, kind: axiom, label: A4, section: 1, page: 16, statement: "xy ⊢ yx"}
+- {id: 01-A5, kind: axiom, label: A5, section: 1, page: 16, statement: "x¹…xⁿ ⊢ y, y — перестановка скобок"}
+- {id: 01-A6, kind: axiom, label: A6, section: 1, page: 16, statement: "y ⊢ x¹…xⁿ"}
+- {id: 01-A7, kind: axiom, label: A7, section: 1, page: 16, statement: "∼(xy) ⊢ ∼xy : x∼y : ∼x∼y"}
+- {id: 01-A8, kind: axiom, label: A8, section: 1, page: 16, statement: "∼xy : x∼y : ∼x∼y ⊢ ∼(xy)"}
+- {id: 01-A9, kind: axiom, label: A9, section: 1, page: 16, statement: "∼(x:y) ⊢ xy : ∼x∼y; общий вид"}
+- {id: 01-A10, kind: axiom, label: A10, section: 1, page: 16, statement: "обращение A9"}
+- {id: 01-A11, kind: axiom, label: A11, section: 1, page: 16, statement: "x¹:…:xⁿ ⊢ y, y — перестановка скобок"}
+- {id: 01-A12, kind: axiom, label: A12, section: 1, page: 16}
+- {id: 01-A13, kind: axiom, label: A13, section: 1, page: 17, statement: "x¹y : … : xⁿy ⊢ (x¹ : … : xⁿ)y"}
+- {id: 01-A14, kind: axiom, label: A14, section: 1, page: 17}
+- {id: 01-R1, kind: rule, label: R1, section: 1, page: 17, statement: "x ⊢ y, y ⊢ z ⇒ x ⊢ z", errors: ["применяют, когда заключение первой формулы не совпадает с посылкой второй"]}
+- {id: 01-R2, kind: rule, label: R2, section: 1, page: 17, statement: "x ⊢ y, x ⊢ z ⇒ x ⊢ yz", errors: ["применяют к формулам с разными посылками"]}
+- {id: 01-R3, kind: rule, label: R3, section: 1, page: 17, statement: "x ⊢ y, y ⊢ x ⇒ z ⊢ v, v — замена вхождений x на y", errors: ["заменяют то, что не является вхождением, например (xy) в xyz"]}
+- {id: 01-D6, kind: definition, label: D6, section: 1, page: 17, statement: "доказуемость в S¹"}
+unclear:
+  - "A13 (с. 17): частный вид «xy : yz ⊢ (x : y)z» не согласуется с общим видом «x¹y : x²y : … ⊢ (x¹ : x² : …)y» и не является тавтологией (x = y = 1, z = 0) — опечатка. Задачи на частный вид A13 не ставятся."
+  - "A12 и общие виды A9, A10, A14 в генераторе не реализованы; задачи на них пишутся вручную."

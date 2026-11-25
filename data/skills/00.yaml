@@ -1,0 +1,17 @@
+# Введение (с. 3–14): элементарные навыки. Подробные формулировки — в книге и docs/04-oboznacheniya.md.
+- {id: 00-ops, kind: definition, label: "§ 3", section: 3, page: 4, statement: "три группы операторов; ⌉ и ? только при ←, ∃, ∀, →"}
+- {id: 00-D1-4, kind: definition, label: "D1 § 4", section: 4, page: 5, statement: "предикат: пп. 1–7"}
+- {id: 00-D2-4, kind: definition, label: "D2 § 4", section: 4, page: 6, statement: "субъект: пп. 1–9"}
+- {id: 00-read-4, kind: definition, label: "чтение терминов", section: 4, page: 6}
+- {id: 00-D1-5, kind: definition, label: "D1 § 5", section: 5, page: 7, statement: "основные высказывания, совпадение местности"}
+- {id: 00-D2-5, kind: definition, label: "D2 § 5", section: 5, page: 7, statement: "высказывание: пп. 1–6"}
+- {id: 00-D3-5, kind: definition, label: "D3 § 5", section: 5, page: 8, statement: "главный оператор"}
+- {id: 00-read-5, kind: definition, label: "чтение высказываний", section: 5, page: 8}
+- {id: 00-D1-7, kind: definition, label: "D1 § 7", section: 7, page: 9, statement: "вхождение"}
+- {id: 00-D1-6-8, kind: definition, label: "D1–D6 § 8", section: 8, page: 10, statement: "формула следования, посылка, вхождение, вырожденное следование"}
+- {id: 00-case, kind: definition, label: "§ 9", section: 9, page: 11, statement: "классический и неклассический случаи"}
+- {id: 00-meta, kind: method, label: "§ 10", section: 10, page: 12, statement: "буквы — метасимволы; аксиомные и теоремные схемы; нумерация Dikl"}
+unclear:
+  - "D2 § 4, п. 5 (с. 6) вводит (a¹,…,aⁿ) при n ≥ 2, а § 5 (с. 7) говорит об одноместном таком субъекте при n = 1. Задачи на это место не ставятся."
+  - "Правил приоритета для ∼, тильды и ↓ в книге нет: записи вида ∼t↓y неоднозначны и в задачах не используются."
+  - "Местность составных терминов книга не определяет; в основных высказываниях используются только простые термины и скобочные субъекты."
