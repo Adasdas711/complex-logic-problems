@@ -285,8 +285,7 @@ def session_sheets(chapters, problems, tax) -> dict:
         sol = ["\n## Решения\n\n"]
         for i, p in enumerate(items, 1):
             parts = card_parts(p)
-            out.append(f"**{i}.** Ступень {p.meta['level']} · {tax['types'][p.meta['type']].lower()}"
-                       f" · `{p.meta['id']}`\n\n{parts.get('Условие', '')}\n\n")
+            out.append(f"**{i}.** Ступень {p.meta['level']} · `{p.meta['id']}`\n\n{parts.get('Условие', '')}\n\n")
             full = parts.get("Ответ", "")
             simple = "|" not in full and len(full) <= 220
             short = full.replace("\n", " ") if simple else "см. ниже, в решениях"
