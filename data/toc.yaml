@@ -32,7 +32,7 @@ chapters:
     page: 15
     systems: ["S^1"]
     sections:
-      - {num: 1, title: "Система S¹", page: 15, profile: S, weight: 4}
+      - {num: 1, title: "Система S¹", page: 15, profile: S, weight: 6}
       - {num: 2, title: Некоторые теоремные схемы, page: 17, profile: S, weight: 1.5}
       - {num: 3, title: Некоторые сокращающие определения, page: 20, profile: S}
       - {num: 4, title: Непарадоксальность, page: 21, profile: M, weight: 1.5}
@@ -203,7 +203,7 @@ chapters:
     systems: ["S^{m1}_n"]
     sections:
       - {num: 1, title: Модальные предикаты, page: 168, profile: O}
-      - {num: 2, title: "Система Sᵐ¹_n", page: 168, profile: S, weight: 3}
+      - {num: 2, title: "Система Sᵐ¹_n", page: 168, profile: S, weight: 2}
       - {num: 3, title: Некоторые следствия, page: 171, profile: S}
       - {num: 4, title: Модальные операторы, page: 171, profile: O}
       - {num: 5, title: Интерпретация, page: 172, profile: I}
@@ -245,9 +245,28 @@ chapters:
     sections:
       - {num: 0, title: Правила приписывания значений высказываниям с кванторами и формулам следования, page: 192, profile: I}
 
-# Заключение (с. 198) — материал для итоговых исследовательских задач раздела 16.
+# Заключение (с. 198) — материал для итоговых задач.
+
+# Дополнительные разделы: квоты задаются вручную.
+# order_after — после какой главы раздел идёт в расписании занятий.
 extra:
   - num: 16
-    slug: 16-skvoznye
-    title: Сквозные задачи (по нескольким главам)
-    quota: 50
+    slug: 16-koordinaty-vyskazyvaniy
+    title: Координаты высказываний
+    order_after: 5
+    sources:
+      - "А. А. Зиновьев. Очерки комплексной логики. М.: Эдиториал УРСС, 2000. Раздел VIII, гл. 1, § 17 (с. 352–353), § 28 (с. 372–375). В PDF: страница книги + 5."
+      - "A. Sinowjew, H. Wessel. Logische Sprachregeln. Eine Einführung in die Logik. Кап. 14, § 3 «Lokale und universale Aussagen» (с. 495–496)."
+    sections:
+      - {num: 1, title: "Локальные и универсальные высказывания; тождество координат", source: "Очерки, с. 352–353; LSR, с. 495", profile: O, quota: 35}
+      - {num: 2, title: "Язык теории логических координат: [xα], условия [xy], переменные s, t, u, v", source: "Очерки, с. 372–373; LSR, с. 495–496", profile: O, quota: 35}
+      - {num: 3, title: "Аксиомные схемы ТЛК (группы I–VI)", source: "Очерки, с. 373–374", profile: S, quota: 70}
+      - {num: 4, title: "Определения локальности и универсальности; неопределённые случаи", source: "Очерки, с. 374–375", profile: I, quota: 35}
+      - {num: 5, title: "Условия: правило [xu¹u²] ⊣⊢ [xu¹] и его смешение с [x(u¹∧u²)]", source: "Очерки, с. 375", profile: F, quota: 25}
+      - {num: 6, title: "Диагностика: неучтённые координаты в рассуждениях", source: "Очерки, с. 352–353, 372–375; LSR, с. 495–496", profile: E, quota: 50}
+
+  - num: 17
+    slug: 17-smeshannye-nabory
+    title: Смешанные наборы для повторения
+    mixed: true
+    quota: 500

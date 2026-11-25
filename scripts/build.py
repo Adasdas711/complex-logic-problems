@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Генерация оглавлений и планов из data/*.yaml и карточек задач.
+"""Генерация оглавлений, плана и расписания занятий из data/*.yaml и карточек задач.
 
   python3 scripts/build.py          — пересобрать файлы
   python3 scripts/build.py --check  — проверить, что сгенерированные файлы актуальны
 
-Генерируются: docs/01-soderzhanie-knigi.md, docs/03-plan.md, docs/progress.md,
+Генерируются: docs/01-soderzhanie.md, docs/03-plan.md, docs/06-zanyatiya.md, docs/progress.md,
 docs/indeks-po-urovnyam.md, docs/indeks-po-tipam.md, problems/*/README.md
 и таблица разделов в README.md (между пометками sections:start/end).
 Эти файлы руками не правятся.
@@ -14,123 +14,158 @@ from __future__ import annotations
 import sys
 from collections import Counter, defaultdict
 
-from common import DOCS, PROBLEMS, ROOT, compute_quotas, load_book, load_problems, load_yaml, problem_title
+from common import (DOCS, PROBLEMS, ROOT, compute_quotas, compute_sessions, load_book, load_problems,
+                    load_yaml, problem_title, study_order)
 
 GEN = "<!-- Файл сгенерирован scripts/build.py. Не редактировать вручную. -->\n\n"
+LEVELS = range(1, 11)
 
 
-def stars(n: int) -> str:
-    return "★" * n
+def lev_head() -> str:
+    return " | ".join(str(l) for l in LEVELS)
 
 
 def soderzhanie(chapters, tax) -> str:
     prof = tax["profiles"]
-    out = [GEN, "# Содержание книги\n\n",
-           "А. А. Зиновьев. *Комплексная логика*. М.: Наука, 1970. 206 с.\n\n",
-           "Страницы указаны по нумерации книги; в PDF-скане номер страницы на 1 больше. ",
-           "Профиль — характер материала параграфа, от него зависит набор заданий ",
+    out = [GEN, "# Содержание\n\n",
+           "Основа — А. А. Зиновьев. *Комплексная логика*. М.: Наука, 1970. 206 с. ",
+           "Страницы указаны по нумерации книги; в PDF-скане номер страницы на 1 больше.\n\n",
+           "Профиль — характер материала параграфа; от него зависят ступени и типы задач "
            "(см. [классификацию](02-klassifikaciya.md)).\n\n"]
     for c in chapters:
-        if c.extra:
+        if c.mixed:
             continue
-        head = f"## {c.label}. {c.title}" if c.num not in (0, 15) else f"## {c.title}"
-        out.append(f"{head}\n\n")
+        out.append(f"## {c.full_title}\n\n")
         if c.systems:
             out.append("Системы: " + ", ".join(f"${s}$" for s in c.systems) + "\n\n")
-        out.append("| § | Название | Страницы | PDF | Профиль | Задач |\n|---|---|---|---|---|---|\n")
+        if c.sources:
+            out.append("Источники:\n\n" + "".join(f"- {s}\n" for s in c.sources) + "\n")
+        out.append("| § | Название | Страницы | Профиль | Задач | Диагностика |\n|---|---|---|---|---|---|\n")
         for s in c.sections:
-            pages = f"{s.page}" if s.end_page <= s.page + 1 else f"{s.page}–{s.end_page - 1}"
-            pdf = f"{s.page + 1}"
-            out.append(f"| {s.label} | {s.title} | {pages} | {pdf} | {s.profile} — {prof[s.profile]['name'].lower()} | {s.quota} |\n")
-        out.append(f"\nВсего задач по главе: **{sum(s.quota for s in c.sections)}**\n\n")
-    out.append("## Без параграфов\n\n- Заключение — с. 198 (используется в сквозных задачах).\n- Литература — с. 199.\n")
+            out.append(f"| {s.label} | {s.title} | {s.pages} | {s.profile} — {prof[s.profile]['name'].lower()} "
+                       f"| {s.quota} | {s.diag_quota} |\n")
+        out.append(f"\nВсего задач: **{sum(s.quota for s in c.sections)}**\n\n")
+    mixed = next(c for c in chapters if c.mixed)
+    out.append(f"## {mixed.full_title}\n\nПосле каждой главы — набор задач на всё пройденное к этому моменту, "
+               f"всего **{sum(s.quota for s in mixed.sections)}**. Распределение — в [плане](03-plan.md).\n")
     return "".join(out)
 
 
 def plan(chapters, tax) -> str:
-    levels = sorted(tax["levels"])
-    out = [GEN, "# План распределения 1000 задач\n\n",
-           "Квота параграфа пропорциональна его объёму в страницах "
-           f"(не меньше {tax['quota']['min_per_section']} и не больше {tax['quota']['max_per_section']} задач). "
-           "Внутри параграфа задачи делятся по уровням согласно профилю параграфа. "
+    total = tax["total"]
+    out = [GEN, f"# План: {total} задач\n\n",
+           "Столбцы 1–10 — ступени сложности (см. [классификацию](02-klassifikaciya.md)). "
+           "«Диагн.» — сколько из задач параграфа — диагностика ошибок (тип E).\n\n",
+           "Квота параграфа книги пропорциональна его объёму в страницах с весами для плотных мест "
+           f"(от {tax['quota']['min_per_section']} до {tax['quota']['max_per_section']} задач). "
+           "Перед работой над главой квоты уточняются по числу определений, аксиом и правил в ней. "
            "Числа меняются правкой `data/toc.yaml` и `data/taxonomy.yaml` и пересборкой.\n\n"]
-    tot = Counter()
+    tot, diag = Counter(), 0
     rows = []
     for c in chapters:
         lc = Counter()
         for s in c.sections:
             lc.update(s.level_quota)
         tot.update(lc)
-        rows.append((c, lc))
-    out.append("## По главам и уровням\n\n| Глава | " + " | ".join(stars(l) for l in levels) + " | Всего |\n")
-    out.append("|---|" + "---|" * (len(levels) + 1) + "\n")
-    for c, lc in rows:
-        name = f"{c.label}. {c.title}" if c.num not in (0, 15) else c.title
-        out.append(f"| {name} | " + " | ".join(str(lc[l]) for l in levels) + f" | **{sum(lc.values())}** |\n")
-    out.append("| **Итого** | " + " | ".join(f"**{tot[l]}**" for l in levels) + f" | **{sum(tot.values())}** |\n\n")
-    out.append("## По профилям\n\n| Профиль | Параграфов | Задач | Типы заданий |\n|---|---|---|---|\n")
+        d = sum(s.diag_quota for s in c.sections)
+        diag += d
+        rows.append((c, lc, d))
+    out.append(f"## По главам\n\n| Раздел | {lev_head()} | Всего | Диагн. |\n|---|" + "---|" * 12 + "\n")
+    for c, lc, d in rows:
+        out.append(f"| {c.full_title} | " + " | ".join(str(lc[l]) for l in LEVELS)
+                   + f" | **{sum(lc.values())}** | {d} |\n")
+    all_ = sum(tot.values())
+    out.append("| **Итого** | " + " | ".join(f"**{tot[l]}**" for l in LEVELS) + f" | **{all_}** | **{diag}** |\n")
+    out.append("| Доля, % | " + " | ".join(str(round(100 * tot[l] / all_)) for l in LEVELS)
+               + f" | 100 | {round(100 * diag / all_)} |\n\n")
+    out.append("## Ступени\n\n| № | Ступень | Что требуется | Задач |\n|---|---|---|---|\n")
+    for l in LEVELS:
+        d = tax["levels"][l]
+        out.append(f"| {l} | {d['name']} | {d['short']} | {tot[l]} |\n")
+    out.append("\n## По профилям\n\n| Профиль | Параграфов | Задач | Типичные типы |\n|---|---|---|---|\n")
     pc, pq = Counter(), Counter()
     for c in chapters:
         for s in c.sections:
             pc[s.profile] += 1
             pq[s.profile] += s.quota
     for p, d in tax["profiles"].items():
-        out.append(f"| {p} — {d['name']} | {pc[p]} | {pq[p]} | {', '.join(f'{t} ({tax['types'][t].lower()})' for t in d['types'])} |\n")
+        types = ", ".join(f"{t} ({tax['types'][t].lower()})" for t in d["types"])
+        out.append(f"| {p} — {d['name']} | {pc[p]} | {pq[p]} | {types} |\n")
     out.append("\n## По параграфам\n\n")
     for c in chapters:
-        name = f"{c.label}. {c.title}" if c.num not in (0, 15) else c.title
-        out.append(f"### {name}\n\n| § | Название | Профиль | " + " | ".join(stars(l) for l in levels) + " | Всего |\n")
-        out.append("|---|---|---|" + "---|" * (len(levels) + 1) + "\n")
+        out.append(f"### {c.full_title}\n\n| § | Название | Проф. | {lev_head()} | Всего | Диагн. |\n|---|---|---|"
+                   + "---|" * 12 + "\n")
         for s in c.sections:
-            out.append(f"| {s.label} | {s.title} | {s.profile} | " + " | ".join(str(s.level_quota[l]) for l in levels) + f" | {s.quota} |\n")
+            out.append(f"| {s.label} | {s.title} | {s.profile} | " + " | ".join(str(s.level_quota[l]) for l in LEVELS)
+                       + f" | {s.quota} | {s.diag_quota} |\n")
         out.append("\n")
     return "".join(out)
 
 
+def zanyatiya(chapters, tax) -> str:
+    sessions = compute_sessions(chapters)
+    size, per_week = tax["sessions"]["size"], tax["sessions"]["per_week"]
+    weeks = -(-len(sessions) // per_week)
+    out = [GEN, "# Занятия\n\n",
+           f"Задачник разбит на **{len(sessions)} занятий** примерно по {size} задач — по образцу семинара "
+           f"Зиновьева: занятие 4–6 часов, {per_week} раза в неделю. Это **{weeks} недель**.\n\n",
+           "В каждом занятии:\n\n"
+           "- **новый материал** — задачи очередных параграфов, по лестнице от простого к сложному;\n"
+           "- **повторение** — задачи из смешанного набора по уже пройденным главам: "
+           "правила нужно узнавать вперемешку, а не по одному;\n"
+           "- около четверти задач в обеих частях — **диагностика**: найти, что не так, и назвать нарушенное правило.\n\n"
+           "Последние занятия целиком состоят из смешанных наборов — это итоговое повторение.\n\n"
+           "| № | Неделя | Новый материал | Повторение | Задач |\n|---|---|---|---|---|\n"]
+    for s in sessions:
+        new = "; ".join(f"{sec.key} {sec.title[:40]} ({n})" for c, sec, n in s["new"]) or "—"
+        rev = "; ".join(f"{m.title.replace('После: ', 'пройденное до: ')[:60]} ({n})" for m, n in s["mixed"]) or "—"
+        n = sum(t for *_, t in s["new"]) + sum(t for _, t in s["mixed"])
+        out.append(f"| {s['num']} | {(s['num'] - 1) // per_week + 1} | {new} | {rev} | {n} |\n")
+    return "".join(out)
+
+
 def progress(chapters, problems, tax) -> str:
-    levels = sorted(tax["levels"])
     done = defaultdict(Counter)
     for pr in problems:
         done[pr.meta.get("chapter")][pr.meta.get("level")] += 1
-    out = [GEN, "# Прогресс\n\n| Глава | " + " | ".join(stars(l) for l in levels) + " | Готово | План |\n"]
-    out.append("|---|" + "---|" * (len(levels) + 2) + "\n")
+    out = [GEN, f"# Прогресс\n\nГотово / план по ступеням.\n\n| Раздел | {lev_head()} | Готово | План |\n|---|"
+           + "---|" * 12 + "\n"]
     all_done = all_plan = 0
     for c in chapters:
         lq = Counter()
         for s in c.sections:
             lq.update(s.level_quota)
         d = done[c.num]
-        name = f"{c.label}. {c.title}" if c.num not in (0, 15) else c.title
-        out.append(f"| [{name}](../problems/{c.slug}/) | " + " | ".join(f"{d[l]}/{lq[l]}" for l in levels)
+        out.append(f"| [{c.full_title}](../problems/{c.slug}/) | " + " | ".join(f"{d[l]}/{lq[l]}" for l in LEVELS)
                    + f" | {sum(d.values())} | {sum(lq.values())} |\n")
         all_done += sum(d.values())
         all_plan += sum(lq.values())
-    out.append(f"| **Итого** | " + " | ".join("" for _ in levels) + f" | **{all_done}** | **{all_plan}** |\n")
+    out.append("| **Итого** | " + " | ".join("" for _ in LEVELS) + f" | **{all_done}** | **{all_plan}** |\n")
     return "".join(out)
 
 
 def chapter_readme(c, problems, tax) -> str:
     mine = [p for p in problems if p.meta.get("chapter") == c.num]
-    head = f"# {c.label}. {c.title}" if c.num not in (0, 15) else f"# {c.title}"
-    out = [GEN, head, "\n\n"]
+    out = [GEN, f"# {c.full_title}\n\n"]
     if c.systems:
         out.append("Системы: " + ", ".join(f"${s}$" for s in c.systems) + "\n\n")
+    if c.sources:
+        out.append("Источники:\n\n" + "".join(f"- {s}\n" for s in c.sources) + "\n")
     out.append(f"Задач: {len(mine)} из {sum(s.quota for s in c.sections)}.\n\n")
     for s in c.sections:
         secp = [p for p in mine if p.meta.get("section") == s.num]
-        pages = "" if c.extra else (f", с. {s.page}" if s.end_page <= s.page + 1 else f", с. {s.page}–{s.end_page - 1}")
-        title = s.title if c.extra else f"{s.label}. {s.title}"
-        out.append(f"## {title}{pages}\n\nЗадач: {len(secp)} из {s.quota}.\n\n")
+        where = f", {s.pages}" if s.pages else ""
+        out.append(f"## {s.label}. {s.title}{where}\n\nЗадач: {len(secp)} из {s.quota} (диагностика: {s.diag_quota}).\n\n")
         if secp:
-            out.append("| № | Уровень | Тип | Задача |\n|---|---|---|---|\n")
+            out.append("| № | Ступень | Тип | Задача |\n|---|---|---|---|\n")
             for p in sorted(secp, key=lambda p: p.meta["id"]):
-                out.append(f"| [{p.meta['id']}]({p.path.name}) | {stars(p.meta['level'])} | "
+                out.append(f"| [{p.meta['id']}]({p.path.name}) | {p.meta['level']} | "
                            f"{tax['types'].get(p.meta['type'], '?')} | {problem_title(p)} |\n")
             out.append("\n")
     return "".join(out)
 
 
-def index_by(problems, tax, field, title, labels) -> str:
+def index_by(problems, field, title, labels) -> str:
     groups = defaultdict(list)
     for p in problems:
         groups[p.meta.get(field)].append(p)
@@ -139,13 +174,12 @@ def index_by(problems, tax, field, title, labels) -> str:
         out.append("Задач пока нет.\n")
     for key in labels:
         items = sorted(groups.get(key, []), key=lambda p: p.meta["id"])
-        if not items:
-            continue
-        out.append(f"## {labels[key]} ({len(items)})\n\n")
-        for p in items:
-            rel = p.path.relative_to(ROOT).as_posix()
-            out.append(f"- [{p.meta['id']}](../{rel}) {stars(p.meta['level'])} — {problem_title(p)}\n")
-        out.append("\n")
+        if items:
+            out.append(f"## {labels[key]} ({len(items)})\n\n")
+            for p in items:
+                rel = p.path.relative_to(ROOT).as_posix()
+                out.append(f"- [{p.meta['id']}](../{rel}) ступень {p.meta['level']} — {problem_title(p)}\n")
+            out.append("\n")
     return "".join(out)
 
 
@@ -156,14 +190,15 @@ TITLES = {0: "Введение: операторы, термины, высказ
 def readme(chapters) -> str:
     text = (ROOT / "README.md").read_text(encoding="utf-8")
     rows = ["<!-- sections:start -->\n| № | Раздел | Задач |\n|---|---|---|\n"]
-    for c in chapters:
+    order = study_order(chapters) + [c for c in chapters if c.mixed]
+    for c in order:
         title = TITLES.get(c.num, c.title)
         if c.systems:
             title += " (" + ", ".join(f"${s}$" for s in c.systems) + ")"
         rows.append(f"| {c.num} | [{title}](problems/{c.slug}/) | {sum(s.quota for s in c.sections)} |\n")
     rows.append(f"| | **Всего** | **{sum(s.quota for c in chapters for s in c.sections)}** |\n<!-- sections:end -->")
-    start, end = text.index("<!-- sections:start -->"), text.index("<!-- sections:end -->") + len("<!-- sections:end -->")
-    return text[:start] + "".join(rows) + text[end:]
+    a, b = text.index("<!-- sections:start -->"), text.index("<!-- sections:end -->") + len("<!-- sections:end -->")
+    return text[:a] + "".join(rows) + text[b:]
 
 
 def generate() -> dict:
@@ -172,15 +207,16 @@ def generate() -> dict:
     compute_quotas(chapters)
     problems = [p for p in load_problems() if "id" in p.meta]
     files = {
-        DOCS / "01-soderzhanie-knigi.md": soderzhanie(chapters, tax),
+        DOCS / "01-soderzhanie.md": soderzhanie(chapters, tax),
         DOCS / "03-plan.md": plan(chapters, tax),
+        DOCS / "06-zanyatiya.md": zanyatiya(chapters, tax),
         DOCS / "progress.md": progress(chapters, problems, tax),
-        DOCS / "indeks-po-urovnyam.md": index_by(problems, tax, "level", "Задачи по уровням сложности",
-                                                 {l: f"{stars(l)} {d['name']}" for l, d in tax["levels"].items()}),
-        DOCS / "indeks-po-tipam.md": index_by(problems, tax, "type", "Задачи по типам",
+        DOCS / "indeks-po-urovnyam.md": index_by(problems, "level", "Задачи по ступеням",
+                                                 {l: f"{l}. {d['name']}" for l, d in tax["levels"].items()}),
+        DOCS / "indeks-po-tipam.md": index_by(problems, "type", "Задачи по типам",
                                               {t: f"{t} — {n}" for t, n in tax["types"].items()}),
+        ROOT / "README.md": readme(chapters),
     }
-    files[ROOT / "README.md"] = readme(chapters)
     for c in chapters:
         files[PROBLEMS / c.slug / "README.md"] = chapter_readme(c, problems, tax)
     return files

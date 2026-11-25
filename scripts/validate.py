@@ -39,7 +39,7 @@ def main() -> int:
         ids[pid] += 1
         mm = ID_RE.match(pid)
         if not mm:
-            err(f"номер {pid!r} не в формате ГГ.ПП-NNN")
+            err(f"номер {pid!r} не в формате ГГ.ПП-NNN или ГГ.ПП-NNNN")
             continue
         if pr.path.stem != pid:
             err(f"имя файла не совпадает с номером {pid}")
@@ -57,13 +57,17 @@ def main() -> int:
             continue
         per_section[(m["chapter"], m["section"])] += 1
         if m["level"] not in tax["levels"]:
-            err(f"уровень {m['level']} вне 1–5")
+            err(f"ступень {m['level']} вне 1–10")
         if m["type"] not in tax["types"]:
             err(f"неизвестный тип {m['type']}")
         if m["form"] not in tax["forms"]:
             err(f"неизвестная форма {m['form']}")
         if m["answer"] not in tax["answers"]:
             err(f"неизвестный формат ответа {m['answer']}")
+        if m.get("condition") not in (None, *tax["conditions"]):
+            err(f"поле condition: {m['condition']!r} (допустимо {', '.join(tax['conditions'])})")
+        if m.get("step") not in (None, *tax["steps"]):
+            err(f"поле step: {m['step']!r} (допустимо {', '.join(tax['steps'])})")
         if m.get("case") not in (None, "classical", "nonclassical"):
             err(f"поле case: {m['case']!r} (допустимо classical, nonclassical или пусто)")
         for block in REQUIRED_BLOCKS:
