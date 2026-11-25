@@ -1,25 +1,45 @@
 # Глава 1, § 1 «Система S¹» (с. 15–17).
-- {id: 01-ops, kind: definition, label: "операторы S¹", section: 1, page: 15, statement: "·, :, ∼; соглашение о скобках"}
-- {id: 01-D1, kind: definition, label: D1, section: 1, page: 15, statement: "элементарные относительно S¹ высказывания"}
-- {id: 01-D2, kind: definition, label: D2, section: 1, page: 15, statement: "высказывание S¹"}
-- {id: 01-A1, kind: axiom, label: A1, section: 1, page: 15, statement: "x ⊢ ∼∼x"}
-- {id: 01-A2, kind: axiom, label: A2, section: 1, page: 15, statement: "∼∼x ⊢ x"}
-- {id: 01-A3, kind: axiom, label: A3, section: 1, page: 15, statement: "xy ⊢ x", errors: ["xy ⊢ y считают аксиомой"]}
-- {id: 01-A4, kind: axiom, label: A4, section: 1, page: 16, statement: "xy ⊢ yx"}
-- {id: 01-A5, kind: axiom, label: A5, section: 1, page: 16, statement: "x¹…xⁿ ⊢ y, y — перестановка скобок"}
-- {id: 01-A6, kind: axiom, label: A6, section: 1, page: 16, statement: "y ⊢ x¹…xⁿ"}
-- {id: 01-A7, kind: axiom, label: A7, section: 1, page: 16, statement: "∼(xy) ⊢ ∼xy : x∼y : ∼x∼y"}
-- {id: 01-A8, kind: axiom, label: A8, section: 1, page: 16, statement: "∼xy : x∼y : ∼x∼y ⊢ ∼(xy)"}
-- {id: 01-A9, kind: axiom, label: A9, section: 1, page: 16, statement: "∼(x:y) ⊢ xy : ∼x∼y; общий вид"}
-- {id: 01-A10, kind: axiom, label: A10, section: 1, page: 16, statement: "обращение A9"}
-- {id: 01-A11, kind: axiom, label: A11, section: 1, page: 16, statement: "x¹:…:xⁿ ⊢ y, y — перестановка скобок"}
-- {id: 01-A12, kind: axiom, label: A12, section: 1, page: 16}
-- {id: 01-A13, kind: axiom, label: A13, section: 1, page: 17, statement: "x¹y : … : xⁿy ⊢ (x¹ : … : xⁿ)y"}
-- {id: 01-A14, kind: axiom, label: A14, section: 1, page: 17}
-- {id: 01-R1, kind: rule, label: R1, section: 1, page: 17, statement: "x ⊢ y, y ⊢ z ⇒ x ⊢ z", errors: ["применяют, когда заключение первой формулы не совпадает с посылкой второй"]}
-- {id: 01-R2, kind: rule, label: R2, section: 1, page: 17, statement: "x ⊢ y, x ⊢ z ⇒ x ⊢ yz", errors: ["применяют к формулам с разными посылками"]}
-- {id: 01-R3, kind: rule, label: R3, section: 1, page: 17, statement: "x ⊢ y, y ⊢ x ⇒ z ⊢ v, v — замена вхождений x на y", errors: ["заменяют то, что не является вхождением, например (xy) в xyz"]}
-- {id: 01-D6, kind: definition, label: D6, section: 1, page: 17, statement: "доказуемость в S¹"}
+skills:
+  - {id: 01-ops, kind: definition, label: "операторы S¹", section: 1, page: 15, statement: "·, :, ∼; соглашение о скобках"}
+  - {id: 01-D1, kind: definition, label: D1, section: 1, page: 15, statement: "элементарные относительно S¹ высказывания"}
+  - {id: 01-D2, kind: definition, label: D2, section: 1, page: 15, statement: "высказывание S¹"}
+  - {id: 01-A1, kind: axiom, label: A1, section: 1, page: 15, statement: "x ⊢ ∼∼x"}
+  - {id: 01-A2, kind: axiom, label: A2, section: 1, page: 15, statement: "∼∼x ⊢ x"}
+  - {id: 01-A3, kind: axiom, label: A3, section: 1, page: 15, statement: "xy ⊢ x", errors: ["xy ⊢ y считают аксиомой"]}
+  - {id: 01-A4, kind: axiom, label: A4, section: 1, page: 16, statement: "xy ⊢ yx"}
+  - {id: 01-A5, kind: axiom, label: A5, section: 1, page: 16, statement: "x¹…xⁿ ⊢ y, y — перестановка скобок"}
+  - {id: 01-A6, kind: axiom, label: A6, section: 1, page: 16, statement: "y ⊢ x¹…xⁿ"}
+  - {id: 01-A7, kind: axiom, label: A7, section: 1, page: 16, statement: "∼(xy) ⊢ ∼xy : x∼y : ∼x∼y"}
+  - {id: 01-A8, kind: axiom, label: A8, section: 1, page: 16, statement: "∼xy : x∼y : ∼x∼y ⊢ ∼(xy)"}
+  - {id: 01-A9, kind: axiom, label: A9, section: 1, page: 16, statement: "∼(x:y) ⊢ xy : ∼x∼y; общий вид"}
+  - {id: 01-A10, kind: axiom, label: A10, section: 1, page: 16, statement: "обращение A9"}
+  - {id: 01-A11, kind: axiom, label: A11, section: 1, page: 16, statement: "x¹:…:xⁿ ⊢ y, y — перестановка скобок"}
+  - {id: 01-A12, kind: axiom, label: A12, section: 1, page: 16}
+  - {id: 01-A13, kind: axiom, label: A13, section: 1, page: 17, statement: "x¹y : … : xⁿy ⊢ (x¹ : … : xⁿ)y"}
+  - {id: 01-A14, kind: axiom, label: A14, section: 1, page: 17}
+  - {id: 01-R1, kind: rule, label: R1, section: 1, page: 17, statement: "x ⊢ y, y ⊢ z ⇒ x ⊢ z", errors: ["применяют, когда заключение первой формулы не совпадает с посылкой второй"]}
+  - {id: 01-R2, kind: rule, label: R2, section: 1, page: 17, statement: "x ⊢ y, x ⊢ z ⇒ x ⊢ yz", errors: ["применяют к формулам с разными посылками"]}
+  - {id: 01-R3, kind: rule, label: R3, section: 1, page: 17, statement: "x ⊢ y, y ⊢ x ⇒ z ⊢ v, v — замена вхождений x на y", errors: ["заменяют то, что не является вхождением, например (xy) в xyz"]}
+  - {id: 01-D6, kind: definition, label: D6, section: 1, page: 17, statement: "доказуемость в S¹"}
+  # § 2–9 (с. 17–35)
+  - {id: 01-T1-7, kind: theorem, label: "T1–T7", section: 2, page: 18, statement: "xy⊢y; x⊢x; x⊢xx; xx⊢x; yx⊢xy; x:y⊢y:x; y:x⊢x:y"}
+  - {id: 01-T8-23, kind: theorem, label: "T8–T23", section: 2, page: 18, statement: "коммутация n-членной дизъюнкции, T9–T23"}
+  - {id: 01-D1-3, kind: definition, label: "D1 § 3", section: 3, page: 20, statement: "x⊃y — сокращение xy : ∼xy : ∼x∼y"}
+  - {id: 01-D2-3, kind: definition, label: "D2 § 3", section: 3, page: 20, statement: "x∨y — сокращение ∼(∼x∼y); «по крайней мере одно из»"}
+  - {id: 01-A15-18, kind: axiom, label: "A15–A18", section: 3, page: 20, statement: "схемы для ⊃ и ∨ как первичных"}
+  - {id: 01-MT1-4, kind: metatheorem, label: "MT1 § 4", section: 4, page: 21, statement: "в заключение теоремы не входят новые элементарные высказывания", errors: ["обращение MT1", "смешение посылки и заключения"]}
+  - {id: 01-MT2-3-4, kind: metatheorem, label: "MT2, MT3 § 4", section: 4, page: 21, statement: "совпадение множеств при взаимной выводимости; список недоказуемых формул"}
+  - {id: 01-int, kind: interpretation, label: "главная интерпретация", section: 5, page: 22, statement: "пп. 1–5; x¹:…:xⁿ = 1 ⇔ ровно одно xⁱ = 1", errors: ["«:» как соединительная дизъюнкция", "x:y:z как (x:y):z"]}
+  - {id: 01-D1-3-5, kind: definition, label: "D1–D3 § 5", section: 5, page: 22, statement: "тавтология (формулы следования, высказывания); противоречие"}
+  - {id: 01-MT1-5-5, kind: metatheorem, label: "MT1–MT5 § 5", section: 5, page: 22, statement: "теорема — тавтология; MT2, MT3, MT4, MT5"}
+  - {id: 01-MT-6, kind: metatheorem, label: "MT1, MT2 § 6", section: 6, page: 25, statement: "непротиворечивость"}
+  - {id: 01-D1-7, kind: definition, label: "D1 § 7", section: 7, page: 25, statement: "сильная тавтология"}
+  - {id: 01-D2-5-7, kind: definition, label: "D2–D5 § 7", section: 7, page: 25, statement: "канонические формы высказываний и формул следования"}
+  - {id: 01-MT-7, kind: metatheorem, label: "MT1–MT8 § 7", section: 7, page: 27, statement: "полнота: сильная тавтология ⇔ теорема; MT7, MT8 (контрапозиция)"}
+  - {id: 01-indep, kind: method, label: "§ 8", section: 8, page: 33, statement: "независимость через 2-, 3-, 4-значные таблицы"}
+  - {id: 01-MT1-9, kind: metatheorem, label: "MT1 § 9", section: 9, page: 35, statement: "подстановка вместо элементарного высказывания везде"}
 unclear:
   - "A13 (с. 17): частный вид «xy : yz ⊢ (x : y)z» не согласуется с общим видом «x¹y : x²y : … ⊢ (x¹ : x² : …)y» и не является тавтологией (x = y = 1, z = 0) — опечатка. Задачи на частный вид A13 не ставятся."
   - "A12 и общие виды A9, A10, A14 в генераторе не реализованы; задачи на них пишутся вручную."
+  - "§ 8, с. 34: таблица для A12 не сохраняет правило R3. T6 (x:y ⊢ y:x) выводится без A12 (A1, A2, A4, A9, A10, R1, R3 — вывод проверен scripts/logic/s1.check), но в таблице для A12 не тавтологична (x = 0, y = 2). R1 и R2 таблица сохраняет, значит, нарушается R3. Задачи на это место не ставятся."
+  - "§ 8: таблицы для A1–A14 и R1–R3 проверены программой scripts/logic/indep.py на примерах всех схем: каждая опровергает только свою схему (для A12 — при оговорке о виде A11, с. 34; A13 — в общем виде, частный вид на с. 17 — опечатка)."
