@@ -55,6 +55,24 @@ def session_topic(s) -> str:
     return "; ".join(parts) or "Итоговое повторение"
 
 
+def chapters_label(s) -> str:
+    """«Глава 7», «Главы 6, 7», «Введение, глава 1», «Глава 5, раздел 16», «Итоговое повторение»."""
+    nums = list(dict.fromkeys(c.num for c, _, _ in s["new"]))
+    if not nums:
+        return "Итоговое повторение"
+    special = {0: "Введение", 15: "приложение", 16: "раздел 16"}
+    regular = [n for n in nums if n not in special]
+    parts = []
+    if 0 in nums:
+        parts.append("Введение")
+    if regular:
+        word = "глава" if len(regular) == 1 else "главы"
+        parts.append(f"{word} " + ", ".join(map(str, regular)))
+    parts += [special[n] for n in nums if n in (15, 16)]
+    text = ", ".join(parts)
+    return text[0].upper() + text[1:]
+
+
 def week_of(num: int, tax) -> int:
     return (num - 1) // tax["sessions"]["per_week"] + 1
 
@@ -320,7 +338,7 @@ def session_of(chapters, problems) -> dict:
 
 
 def session_sheets(chapters, problems, tax) -> dict:
-    """Один документ на занятие: что прочитать, задачи, затем ответы и решения."""
+    """Один документ на занятие: что прочитать, примеры решений, задачи, затем решения и ответы."""
     sessions = compute_sessions(chapters)
     assigned = assign(chapters, problems)
     started = set()
@@ -344,9 +362,9 @@ def session_sheets(chapters, problems, tax) -> dict:
         if not items:
             continue
         items.sort(key=lambda p: (p.meta["level"], p.meta["id"]))
-        out = [GEN, f"# Занятие {s['num']}. {session_topic(s)}\n\n",
-               f"{len(items)} задач, неделя {(s['num'] - 1) // tax['sessions']['per_week'] + 1}. "
-               "Ответы и решения — в конце документа; смотрите их только после того, как решите.\n\n",
+        out = [GEN, f"# Занятие {s['num']}. Неделя {week_of(s['num'], tax)}. {chapters_label(s)}\n\n",
+               f"Тема: {session_topic(s)}. {len(items)} задач. "
+               "Решения и ответы — в конце документа; смотрите их только после того, как решите.\n\n",
                "## Что прочитать\n\n"]
         if not reading:
             out.append("Нового чтения нет: занятие целиком повторительное.\n\n")
@@ -357,9 +375,12 @@ def session_sheets(chapters, problems, tax) -> dict:
         if review:
             out.append("Повторение без нового чтения: пройденное до — " + "; ".join(review) + ".\n\n")
         shown = [(c, sec, examples[(c.num, sec.num)]) for c, sec in fresh if (c.num, sec.num) in examples]
-        if shown:
-            out.append("## Разобранные примеры\n\n"
-                       "По одному примеру на каждый параграф, который начинается в этом занятии. Прочитайте условие, "
+        out.append("## Примеры решений\n\n")
+        if not shown:
+            out.append("Новых параграфов в этом занятии нет — примеры к пройденному материалу даны в занятиях, "
+                       "где эти параграфы начинались.\n\n")
+        else:
+            out.append("По одному примеру на каждый параграф, который начинается в этом занятии. Прочитайте условие, "
                        "попробуйте решить сами, затем разберите решение шаг за шагом — и только потом переходите к задачам.\n\n")
             for c, sec, ex in shown:
                 head = c.full_title if sec.num == 0 else f"{c.full_title}, {sec.label}. {sec.title}"
@@ -367,18 +388,18 @@ def session_sheets(chapters, problems, tax) -> dict:
                 out.append(f"### {head}\n\n**Задача.** {parts.get('Условие', '')}\n\n**Решение.**\n\n{parts.get('Решение', '')}\n\n"
                            f"**Ответ.** {parts.get('Ответ', '')}\n\n")
         out.append("## Задачи\n\n")
-        ans = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n# Ответы и решения\n\n## Ответы\n\n| № | Ответ |\n|---|---|\n"]
-        sol = ["\n## Решения\n\n"]
+        sol = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n## Ответы и решения\n\n### Решения\n\n"]
+        ans = ["\n### Ответы\n\n| № | Ответ |\n|---|---|\n"]
         for i, p in enumerate(items, 1):
             parts = card_parts(p)
             out.append(f"{i}\\. {parts.get('Условие', '')}\n\n")
             full = parts.get("Ответ", "")
             simple = "|" not in full and len(full) <= 220
-            short = full.replace("\n", " ") if simple else "см. ниже, в решениях"
+            short = full.replace("\n", " ") if simple else f"см. решение {i}"
             ans.append(f"| {i} | {short} |\n")
-            extra = "" if simple else f"Ответ:\n\n{full}\n\nРешение:\n\n"
-            sol.append(f"{i}\\. {extra}{parts.get('Решение', '')}\n\n")
-        files[SHEETS / session_name(s, tax)] = "".join(out + ans + sol)
+            extra = "" if simple else f"\n\nОтвет:\n\n{full}"
+            sol.append(f"{i}\\. {parts.get('Решение', '')}{extra}\n\n")
+        files[SHEETS / session_name(s, tax)] = "".join(out + sol + ans)
     return files
 
 KONTROL = DATA / "kontrolnye"
@@ -466,10 +487,11 @@ def kontrol_sheets(chapters, tax) -> dict:
         where = lambda p: where_key((p.meta["chapter"], p.meta["section"]))
         mat = sorted({(p.meta["chapter"], p.meta["section"]) for p in items})
         cur = {(sec.chapter, sec.num) for s in sessions if a <= s["num"] <= b for _, sec, _ in s["new"]}
-        out = [GEN, f"# Контрольная работа {k}\n\n",
+        month = {"new": [t for x in sessions if a <= x["num"] <= b for t in x["new"]]}
+        out = [GEN, f"# Контрольная работа {k}. Неделя {week_of(b, tax)}. {chapters_label(month)}\n\n",
                f"После занятия {b} (неделя {(b - 1) // per_week + 1}); материал месяца — занятия {a}–{b}. "
                f"30 задач, время — **{KONTROL_TIME}**. Книгой и своими записями пользоваться можно, "
-               "ответами и решениями занятий — нельзя. Ответы и решения — в конце документа.\n\n",
+               "ответами и решениями занятий — нельзя. Решения и ответы — в конце документа.\n\n",
                "## Как оценивать\n\n" + KONTROL_PASS + " Если работа не сдана, по таблице ответов найдите параграфы "
                "с ошибками, повторите их задачи в занятиях и через неделю решите неверные задачи этой работы снова.\n\n",
                "## Что проверяется\n\n",
@@ -478,19 +500,18 @@ def kontrol_sheets(chapters, tax) -> dict:
         if prev:
             out.append("Повторение прошлых месяцев: " + "; ".join(prev) + ".\n\n")
         out.append("## Задачи\n\n")
-        ans = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n# Ответы и решения\n\n## Ответы\n\n"
-               "| № | Ответ | Что повторить при ошибке |\n|---|---|---|\n"]
-        sol = ["\n## Решения\n\n"]
+        sol = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n## Ответы и решения\n\n### Решения\n\n"]
+        ans = ["\n### Ответы\n\n| № | Ответ | Что повторить при ошибке |\n|---|---|---|\n"]
         for i, p in enumerate(items, 1):
             parts = card_parts(p)
             out.append(f"{i}\\. {parts.get('Условие', '')}\n\n")
             full = parts.get("Ответ", "")
             simple = "|" not in full and len(full) <= 220
-            short = full.replace("\n", " ") if simple else "см. ниже, в решениях"
+            short = full.replace("\n", " ") if simple else f"см. решение {i}"
             ans.append(f"| {i} | {short} | {where(p)} |\n")
-            extra = "" if simple else f"Ответ:\n\n{full}\n\nРешение:\n\n"
-            sol.append(f"{i}\\. {extra}{parts.get('Решение', '')}\n\n")
-        files[SHEETS / kontrol_name(k, b, tax)] = "".join(out + ans + sol)
+            extra = "" if simple else f"\n\nОтвет:\n\n{full}"
+            sol.append(f"{i}\\. {parts.get('Решение', '')}{extra}\n\n")
+        files[SHEETS / kontrol_name(k, b, tax)] = "".join(out + sol + ans)
     return files
 
 
