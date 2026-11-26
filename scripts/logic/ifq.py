@@ -253,3 +253,71 @@ if __name__ == "__main__":
     f = C(ALL("a", EL("a", "b")), EL("a", "c"))
     print(tex(f), free_d4("a", f), occurrences(f), degenerate(ALL("a", EL("b", "c"))), tex(qfree(f)))
     print(s5if_provable(C(x, y), x), s5if_provable(x, C(x, y)), tex(IF(C(x, y), W(x, y))))
+
+
+# ---------- гл. 7, § 7: интерпретационная форма (косвенная интерпретация) ----------
+def interp(f, n, env=None):
+    """Интерпретационная форма: (∀b)z → z(1b)·…·z(nb), (∃b)z → z(1b)∨…∨z(nb); n — словарь числа отмеченных терминов."""
+    env = env or {}
+    k = f[0]
+    if k == "el":
+        return V(f"{env.get(f[1], f[1])}←{env.get(f[2], f[2])}")
+    if k == "v":
+        return f
+    if k == "neg":
+        return N(interp(f[1], n, env))
+    if k in ("all", "ex"):
+        a = f[1]
+        parts = [interp(f[2], n, {**env, a: f"{i}{a}"}) for i in range(1, n.get(a, 2) + 1)]
+        if len(parts) == 1:
+            return parts[0]
+        return C(*parts) if k == "all" else W(*parts)
+    if k == "imp":
+        return IMP(interp(f[1], n, env), interp(f[2], n, env))
+    return (k, tuple(interp(a, n, env) for a in f[1]))
+
+
+def bound_terms(f, acc=None):
+    acc = set() if acc is None else acc
+    k = f[0]
+    if k in ("all", "ex"):
+        acc.add(f[1])
+        bound_terms(f[2], acc)
+    elif k == "neg":
+        bound_terms(f[1], acc)
+    elif k in ("conj", "wdis", "dis"):
+        for a in f[1]:
+            bound_terms(a, acc)
+    elif k == "imp":
+        bound_terms(f[1], acc)
+        bound_terms(f[2], acc)
+    return acc
+
+
+def qtaut(x, y, nmax=3, restrict=True):
+    """Тавтология ли x ⊢ y при любом числе (1..nmax) отмеченных терминов для каждого связанного термина;
+    restrict — ограничение § 9 гл. 5 (элементарные высказывания бескванторной формы заключения входят в посылку)."""
+    import itertools
+    ts = sorted(bound_terms(x) | bound_terms(y))
+    for combo in itertools.product(range(1, nmax + 1), repeat=len(ts)):
+        n = dict(zip(ts, combo))
+        if not is_taut(IMP(interp(x, n), interp(y, n))):
+            return False
+    if restrict and not atoms(qfree(y)) <= atoms(qfree(x)):
+        return False
+    return True
+
+
+def itex(f):
+    """tex для интерпретационной формы: «1a←b» → (1a \\leftarrow b)."""
+    k = f[0]
+    if k == "v" and "←" in f[1]:
+        s, p = f[1].split("←")
+        return f"({s} \\leftarrow {p})"
+    if k == "neg":
+        return "\\sim " + itex(f[1])
+    if k == "conj":
+        return "".join(f"({itex(a)})" if a[0] == "wdis" else itex(a) for a in f[1])
+    if k == "wdis":
+        return " \\vee ".join(itex(a) for a in f[1])
+    return tex(f)
