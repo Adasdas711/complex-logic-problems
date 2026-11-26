@@ -23,6 +23,25 @@ GEN = "<!-- Файл сгенерирован scripts/build.py. Не редак�
 LEVELS = range(1, 11)
 
 
+
+def expand_source(src: str) -> str:
+    """«Очерки, с. 352–353; LSR, с. 495» → полные названия и страницы PDF «Очерков» (страница книги + 5)."""
+    import re as _re
+
+    def pdf(m):
+        a, b = int(m.group(1)), int(m.group(2) or m.group(1))
+        return f"{m.group(0)} (PDF {a + 5}" + (f"–{b + 5})" if b != a else ")")
+    out = []
+    for part in src.split("; "):
+        if part.startswith("Очерки"):
+            pages = _re.sub(r"(\d+)(?:–(\d+))?", pdf, part[len("Очерки, "):])
+            out.append(f"А. А. Зиновьев. *Очерки комплексной логики* (2000), {pages}")
+        elif part.startswith("LSR"):
+            out.append(f"A. Sinowjew, H. Wessel. *Logische Sprachregeln*, Kap. 14, § 3, {part[len('LSR, '):]}")
+        else:
+            out.append(part)
+    return "; ".join(out)
+
 def lev_head() -> str:
     return " | ".join(str(l) for l in LEVELS)
 
@@ -267,7 +286,7 @@ def session_sheets(chapters, problems, tax) -> dict:
                        else f"PDF {sec.page + 1}–{sec.end_page + 1}")
                 reading.append(f"- {where}{cont} — {sec.pages} ({pdf})")
             else:
-                reading.append(f"- {where}{cont} — {sec.source}")
+                reading.append(f"- {where}{cont} — {expand_source(sec.source)}")
         review = [m.title.replace("После: ", "") for m, _ in s["mixed"]]
         if not items:
             continue
@@ -276,8 +295,9 @@ def session_sheets(chapters, problems, tax) -> dict:
                f"{len(items)} задач, неделя {(s['num'] - 1) // tax['sessions']['per_week'] + 1}. "
                "Ответы и решения — в конце документа; смотрите их только после того, как решите.\n\n",
                "## Что прочитать\n\n",
-               "А. А. Зиновьев. *Комплексная логика*. М.: Наука, 1970. "
-               "Страницы книги; в скобках — страницы PDF-скана.\n\n", "\n".join(reading) + "\n\n"]
+               ("А. А. Зиновьев. *Комплексная логика*. М.: Наука, 1970. "
+                "Страницы книги; в скобках — страницы PDF-скана.\n\n" if any(sec.page is not None for _, sec, _ in s["new"])
+                else "Страницы книг; в скобках — страницы PDF-скана, где он есть.\n\n"), "\n".join(reading) + "\n\n"]
         if review:
             out.append("Повторение без нового чтения: пройденное до — " + "; ".join(review) + ".\n\n")
         out.append("## Задачи\n\n")
