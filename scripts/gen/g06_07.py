@@ -82,6 +82,7 @@ def permute(c, letters):
         s = m.group(0)
         return re.sub(r"(?<![\\A-Za-z])([" + "".join(letters) + r"])(?![A-Za-z])", lambda q: perm[q.group(1)], s)
     body = re.sub(r"\$[^$]+\$", repl_math, body)
+    body = re.sub(r"Буквы \$([a-z](?:, [a-z])+)\$", lambda q: "Буквы $" + ", ".join(sorted(q.group(1).split(", "))) + "$", body)
     return head + body
 
 
