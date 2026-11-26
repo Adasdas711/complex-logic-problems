@@ -7,14 +7,17 @@
 Генерируются: docs/01-soderzhanie.md, docs/03-plan.md, docs/06-zanyatiya.md, docs/07-uchebnyj-plan.md,
 docs/progress.md,
 docs/indeks-po-urovnyam.md, docs/indeks-po-tipam.md,
-документы занятий zanyatiya/NN.md, ежемесячные контрольные kontrolnye/NN.md (из data/kontrolnye/KNN.md)
+документы занятий и ежемесячных контрольных в zanyatiya/ — «NN. Неделя W Тема.md» и «NNк. Неделя W Контрольная работа K.md»
+(контрольные — из data/kontrolnye/KNN.md)
 и таблица разделов в README.md (между пометками sections:start/end).
 Эти файлы руками не правятся.
 """
 from __future__ import annotations
 
+import re
 import sys
 from collections import Counter, defaultdict
+from urllib.parse import quote
 
 import yaml
 
@@ -23,6 +26,49 @@ from common import (CARD_SEP, DATA, DOCS, FRONT_RE, ROOT, Problem, compute_quota
 
 GEN = "<!-- Файл сгенерирован scripts/build.py. Не редактировать вручную. -->\n\n"
 LEVELS = range(1, 11)
+SHEETS = ROOT / "zanyatiya"
+
+
+def _clean(name: str) -> str:
+    """Имя файла без символов, недопустимых в Windows и macOS."""
+    name = re.sub(r":\s*(\w)", lambda m: ". " + m.group(1).upper(), name).replace("*", "∗").replace("/", "–")
+    return re.sub(r'[<>"\\|?]', "", name).strip()
+
+
+def session_topic(s) -> str:
+    """Тема занятия. Одна глава: название параграфа или «глава, § a–b»; несколько глав: «глава, § …» для каждой."""
+    by_ch = {}
+    for c, sec, _ in s["new"]:
+        ch, secs = by_ch.setdefault(c.num, (c, []))
+        if sec.num not in [x.num for x in secs]:
+            secs.append(sec)
+    short = lambda c: c.title.split(":")[0]
+    parts = []
+    for c, secs in by_ch.values():
+        nums = [x.num for x in secs if x.num]
+        if len(by_ch) == 1 and len(secs) == 1:
+            parts.append(short(c) if secs[0].num == 0 else secs[0].title)
+        elif not nums:
+            parts.append(short(c))
+        else:
+            parts.append(f"{short(c)}, § {min(nums)}" + (f"–{max(nums)}" if max(nums) > min(nums) else ""))
+    return "; ".join(parts) or "Итоговое повторение"
+
+
+def week_of(num: int, tax) -> int:
+    return (num - 1) // tax["sessions"]["per_week"] + 1
+
+
+def session_name(s, tax) -> str:
+    return _clean(f"{s['num']:02d}. Неделя {week_of(s['num'], tax)} {session_topic(s)}") + ".md"
+
+
+def kontrol_name(k: int, after: int, tax) -> str:
+    return _clean(f"{after:02d}к. Неделя {week_of(after, tax)} Контрольная работа {k}") + ".md"
+
+
+def link(name: str, prefix: str = "../zanyatiya/") -> str:
+    return prefix + quote(name)
 
 
 
@@ -145,7 +191,7 @@ def zanyatiya(chapters, tax) -> str:
         new = "; ".join(f"{sec.key} {sec.title[:40]} ({n})" for c, sec, n in s["new"]) or "—"
         rev = "; ".join(f"{m.title.replace('После: ', 'пройденное до: ')[:60]} ({n})" for m, n in s["mixed"]) or "—"
         n = sum(t for *_, t in s["new"]) + sum(t for _, t in s["mixed"])
-        out.append(f"| {s['num']} | {(s['num'] - 1) // per_week + 1} | {new} | {rev} | {n} |\n")
+        out.append(f"| [{s['num']}]({link(session_name(s, tax))}) | {(s['num'] - 1) // per_week + 1} | {new} | {rev} | {n} |\n")
     return "".join(out)
 
 
@@ -220,7 +266,7 @@ def progress(chapters, problems, tax) -> str:
     return "".join(out)
 
 
-def index_by(problems, field, title, labels, where) -> str:
+def index_by(problems, field, title, labels, where, names) -> str:
     groups = defaultdict(list)
     for p in problems:
         groups[p.meta.get(field)].append(p)
@@ -233,8 +279,8 @@ def index_by(problems, field, title, labels, where) -> str:
             out.append(f"## {labels[key]} ({len(items)})\n\n")
             for p in items:
                 n = where.get(p.meta["id"])
-                link = f"[занятие {n}](../zanyatiya/{n:02d}.md)" if n else "вне занятий"
-                out.append(f"- `{p.meta['id']}` ступень {p.meta['level']}, {link} — {problem_title(p)}\n")
+                ref = f"[занятие {n}]({link(names[n])})" if n else "вне занятий"
+                out.append(f"- `{p.meta['id']}` ступень {p.meta['level']}, {ref} — {problem_title(p)}\n")
             out.append("\n")
     return "".join(out)
 
@@ -295,7 +341,7 @@ def session_sheets(chapters, problems, tax) -> dict:
         if not items:
             continue
         items.sort(key=lambda p: (p.meta["level"], p.meta["id"]))
-        out = [GEN, f"# Занятие {s['num']}\n\n",
+        out = [GEN, f"# Занятие {s['num']}. {session_topic(s)}\n\n",
                f"{len(items)} задач, неделя {(s['num'] - 1) // tax['sessions']['per_week'] + 1}. "
                "Ответы и решения — в конце документа; смотрите их только после того, как решите.\n\n",
                "## Что прочитать\n\n"]
@@ -319,7 +365,7 @@ def session_sheets(chapters, problems, tax) -> dict:
             ans.append(f"| {i} | {short} |\n")
             extra = "" if simple else f"Ответ:\n\n{full}\n\nРешение:\n\n"
             sol.append(f"{i}\\. {extra}{parts.get('Решение', '')}\n\n")
-        files[ROOT / "zanyatiya" / f"{s['num']:02d}.md"] = "".join(out + ans + sol)
+        files[SHEETS / session_name(s, tax)] = "".join(out + ans + sol)
     return files
 
 KONTROL = DATA / "kontrolnye"
@@ -370,7 +416,7 @@ def kontrol_section(chapters, tax) -> str:
             continue
         chs = sorted({c.num for s in sessions if a <= s["num"] <= b for c, _, _ in s["new"]})
         mat = ", ".join(f"гл. {n}" if n else "введение" for n in chs) or "повторение"
-        rows.append(f"| [Контрольная {k}](../kontrolnye/{k:02d}.md) | {b} | {(b - 1) // per_week + 1} | {mat} |\n")
+        rows.append(f"| [Контрольная {k}]({link(kontrol_name(k, b, tax))}) | {b} | {(b - 1) // per_week + 1} | {mat} |\n")
     return "".join(rows) + "\n"
 
 
@@ -414,7 +460,7 @@ def kontrol_sheets(chapters, tax) -> dict:
             ans.append(f"| {i} | {short} | {where(p)} |\n")
             extra = "" if simple else f"Ответ:\n\n{full}\n\nРешение:\n\n"
             sol.append(f"{i}\\. {extra}{parts.get('Решение', '')}\n\n")
-        files[ROOT / "kontrolnye" / f"{k:02d}.md"] = "".join(out + ans + sol)
+        files[SHEETS / kontrol_name(k, b, tax)] = "".join(out + ans + sol)
     return files
 
 
@@ -442,6 +488,7 @@ def generate() -> dict:
     compute_quotas(chapters)
     problems = [p for p in load_problems() if "id" in p.meta]
     where = session_of(chapters, problems)
+    names = {s["num"]: session_name(s, tax) for s in compute_sessions(chapters)}
     files = {
         DOCS / "01-soderzhanie.md": soderzhanie(chapters, tax),
         DOCS / "03-plan.md": plan(chapters, tax),
@@ -449,9 +496,9 @@ def generate() -> dict:
         DOCS / "07-uchebnyj-plan.md": uchebnyj_plan(chapters, tax),
         DOCS / "progress.md": progress(chapters, problems, tax),
         DOCS / "indeks-po-urovnyam.md": index_by(problems, "level", "Задачи по ступеням",
-                                                 {l: f"{l}. {d['name']}" for l, d in tax["levels"].items()}, where),
+                                                 {l: f"{l}. {d['name']}" for l, d in tax["levels"].items()}, where, names),
         DOCS / "indeks-po-tipam.md": index_by(problems, "type", "Задачи по типам",
-                                              {t: f"{t} — {n}" for t, n in tax["types"].items()}, where),
+                                              {t: f"{t} — {n}" for t, n in tax["types"].items()}, where, names),
         ROOT / "README.md": readme(chapters),
     }
     files.update(session_sheets(chapters, problems, tax))
@@ -462,7 +509,16 @@ def generate() -> dict:
 def main() -> int:
     check = "--check" in sys.argv
     stale = []
-    for path, text in generate().items():
+    files = generate()
+    # Лишние файлы в папках документов (старые имена) удаляются; при --check считаются устаревшими.
+    for folder in (SHEETS, ROOT / "kontrolnye"):
+        for f in sorted(folder.glob("*.md")) if folder.exists() else []:
+            if f not in files:
+                if check:
+                    stale.append(f.relative_to(ROOT).as_posix() + " (лишний)")
+                else:
+                    f.unlink()
+    for path, text in files.items():
         old = path.read_text(encoding="utf-8") if path.exists() else None
         if old != text:
             if check:
