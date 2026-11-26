@@ -6,6 +6,8 @@ skills:
   - {id: 02-A7-8, kind: axiom, label: "A7, A8", section: 1, page: 36, statement: "(x∨y)z ⊢ xz∨y; xz∨yz ⊢ (x∨y)z"}
   - {id: 02-A9-10, kind: axiom, label: "A9, A10", section: 1, page: 36, statement: "∼(x¹…xⁿ) ⊣⊢ ∼x¹∨…∨∼xⁿ"}
   - {id: 02-A11, kind: axiom, label: A11, section: 1, page: 36, statement: "xy∨z ⊢ (xy∨z)(y∨∼y)"}
+  - {id: 02-A11s, kind: axiom, label: "A*11 (с. 37)", section: 1, page: 37, statement: "x ∨ ∼yyz ⊢ x — «более простая» схема вместо A11 в S₁", errors: ["смешение с A*11 системы S₁* (с. 45)"]}
+  - {id: 02-A11ss, kind: axiom, label: "A*11 (с. 45)", section: 5, page: 45, statement: "x ∨ ∼xx ⊢ x — схема системы S₁*, заменяет A8 и A11 вместе с R*4"}
   - {id: 02-D1-1, kind: definition, label: "D1 § 1", section: 1, page: 37, statement: "x : y — сокращение x∼y ∨ ∼xy; n-членная"}
   - {id: 02-T1-2, kind: theorem, label: "T1, T2 § 2", section: 2, page: 37, statement: "пп. 1–11: перестановки, xx⊣⊢x, x∨x⊣⊢x, дистрибутивность, x⊣⊢x(p∨∼p), x∨∼ppy⊣⊢x"}
   - {id: 02-D1-2, kind: definition, label: "D1, D2 § 2", section: 2, page: 39, statement: "каноническая форма: n ≥ 2, все элементарные в каждом члене, обе полярности, попарно различны"}
@@ -13,6 +15,5 @@ skills:
   - {id: 02-indep, kind: method, label: "§ 3", section: 3, page: 43, statement: "независимость таблицами и синтаксическими соглашениями"}
   - {id: 02-MT1-4, kind: metatheorem, label: "MT1 § 4", section: 4, page: 45, statement: "множества теорем S¹ и S₁ совпадают"}
 unclear:
-  - "A*11: на с. 37 — x ∨ ∼yyz ⊢ x, на с. 45 — x ∨ ∼xx ⊢ x. Задачи на A*11 не ставятся."
   - "§ 3, с. 44: таблица для R2 не сохраняет R1: p ⊢ ∼∼p (A2) и ∼∼p ⊢ p (A1) в ней тавтологичны, а p ⊢ p — нет. Таблица в прочтении по изображению страницы."
   - "§ 3: таблицы для A5, A6, A9, A10, R3 в прочтении по изображению опровергают и чужие схемы (A5 — A10 при n = 3; A6 — A9 при n = 3; A9 — A11; A10 — A11; R3 — A7; проверка scripts/logic/indep_w.py). Задачи ставятся только на таблицы A1, A3, A4, A11 (и R1 — как вычисление)."
