@@ -25,7 +25,7 @@ LEVELS = range(1, 11)
 
 
 def expand_source(src: str) -> str:
-    """«Очерки, с. 352–353; LSR, с. 495» → полные названия и страницы PDF «Очерков» (страница книги + 5)."""
+    """«Очерки, с. 352–353; LSR, с. 496» → полные названия и страницы PDF (Очерки: +5; LSR: +4)."""
     import re as _re
 
     def pdf(m):
@@ -37,7 +37,9 @@ def expand_source(src: str) -> str:
             pages = _re.sub(r"(\d+)(?:–(\d+))?", pdf, part[len("Очерки, "):])
             out.append(f"А. А. Зиновьев. *Очерки комплексной логики* (2000), {pages}")
         elif part.startswith("LSR"):
-            out.append(f"A. Sinowjew, H. Wessel. *Logische Sprachregeln*, Kap. 14, § 3, {part[len('LSR, '):]}")
+            pages = _re.sub(r"(\d+)(?:–(\d+))?", lambda m: f"{m.group(0)} (PDF {int(m.group(1)) + 4}" +
+                            (f"–{int(m.group(2)) + 4})" if m.group(2) else ")"), part[len("LSR, "):])
+            out.append(f"A. Sinowjew, H. Wessel. *Logische Sprachregeln*, Kap. 14, § 3, {pages}")
         else:
             out.append(part)
     return "; ".join(out)

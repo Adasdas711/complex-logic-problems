@@ -256,14 +256,14 @@ extra:
     order_after: 5
     sources:
       - "А. А. Зиновьев. Очерки комплексной логики. М.: Эдиториал УРСС, 2000. Раздел VIII, гл. 1, § 17 (с. 352–353), § 28 (с. 372–375). В PDF: страница книги + 5."
-      - "A. Sinowjew, H. Wessel. Logische Sprachregeln. Eine Einführung in die Logik. Кап. 14, § 3 «Lokale und universale Aussagen» (с. 495–496)."
+      - "A. Sinowjew, H. Wessel. Logische Sprachregeln. Eine Einführung in die Logik. Кап. 14, § 3 «Lokale und universale Aussagen» (с. 496–497; PDF 500–501)."
     sections:
-      - {num: 1, title: "Локальные и универсальные высказывания; тождество координат", source: "Очерки, с. 352–353; LSR, с. 495", profile: O, quota: 35}
-      - {num: 2, title: "Язык теории логических координат: [xα], условия [xy], переменные s, t, u, v", source: "Очерки, с. 372–373; LSR, с. 495–496", profile: O, quota: 35}
+      - {num: 1, title: "Локальные и универсальные высказывания; тождество координат", source: "Очерки, с. 352–353; LSR, с. 496", profile: O, quota: 35}
+      - {num: 2, title: "Язык теории логических координат: [xα], условия [xy], переменные s, t, u, v", source: "Очерки, с. 372–373; LSR, с. 496–497", profile: O, quota: 35}
       - {num: 3, title: "Аксиомные схемы ТЛК (группы I–VI)", source: "Очерки, с. 373–374", profile: S, quota: 70}
       - {num: 4, title: "Определения локальности и универсальности; неопределённые случаи", source: "Очерки, с. 374–375", profile: I, quota: 35}
       - {num: 5, title: "Условия: правило [xu¹u²] ⊣⊢ [xu¹] и его смешение с [x(u¹∧u²)]", source: "Очерки, с. 375", profile: F, quota: 25}
-      - {num: 6, title: "Диагностика: неучтённые координаты в рассуждениях", source: "Очерки, с. 352–353, 372–375; LSR, с. 495–496", profile: E, quota: 50}
+      - {num: 6, title: "Диагностика: неучтённые координаты в рассуждениях", source: "Очерки, с. 352–353, 372–375; LSR, с. 496–497", profile: E, quota: 50}
 
   - num: 17
     slug: 17-smeshannye-nabory
