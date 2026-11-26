@@ -7,7 +7,7 @@
 Генерируются: docs/01-soderzhanie.md, docs/03-plan.md, docs/06-zanyatiya.md, docs/07-uchebnyj-plan.md,
 docs/progress.md,
 docs/indeks-po-urovnyam.md, docs/indeks-po-tipam.md,
-документы занятий zanyatiya/NN.md
+документы занятий zanyatiya/NN.md, ежемесячные контрольные kontrolnye/NN.md (из data/kontrolnye/KNN.md)
 и таблица разделов в README.md (между пометками sections:start/end).
 Эти файлы руками не правятся.
 """
@@ -16,7 +16,9 @@ from __future__ import annotations
 import sys
 from collections import Counter, defaultdict
 
-from common import (DOCS, ROOT, compute_quotas, compute_sessions, load_book, load_problems,
+import yaml
+
+from common import (CARD_SEP, DATA, DOCS, FRONT_RE, ROOT, Problem, compute_quotas, compute_sessions, load_book, load_problems,
                     load_yaml, problem_title, study_order)
 
 GEN = "<!-- Файл сгенерирован scripts/build.py. Не редактировать вручную. -->\n\n"
@@ -189,7 +191,7 @@ def uchebnyj_plan(chapters, tax) -> str:
 
 ## Контрольные точки
 
-В конце каждого модуля — смешанный набор по всему модулю. Он сдан, если решено не меньше 90 % задач, а среди задач ступеней 1–4 — не меньше 95 %. Если результат ниже, повторить задачи по навыкам с ошибками, а потом решить набор снова. Переходить к следующему модулю стоит только после сдачи: каждый модуль опирается на предыдущие.
+""" + kontrol_section(chapters, tax) + """В конце каждого модуля — смешанный набор по всему модулю. Он сдан, если решено не меньше 90 % задач, а среди задач ступеней 1–4 — не меньше 95 %. Если результат ниже, повторить задачи по навыкам с ошибками, а потом решить набор снова. Переходить к следующему модулю стоит только после сдачи: каждый модуль опирается на предыдущие.
 
 ## Регулярность
 
@@ -320,6 +322,102 @@ def session_sheets(chapters, problems, tax) -> dict:
         files[ROOT / "zanyatiya" / f"{s['num']:02d}.md"] = "".join(out + ans + sol)
     return files
 
+KONTROL = DATA / "kontrolnye"
+KONTROL_TIME = "3 часа"
+KONTROL_PASS = ("Работа сдана, если верно решено не меньше 24 задач из 30 (80 %) и среди задач ступеней 1–4 "
+                "ошибок не больше одной. Задача засчитывается, только если ответ верен и обоснование ссылается "
+                "на нужные определения и правила книги; для задач-диагностик — если названо нарушенное правило.")
+
+
+def load_kontrol() -> dict:
+    """{номер работы: [карточки]} из data/kontrolnye/KNN.md."""
+    import re
+    out = {}
+    for f in sorted(KONTROL.glob("K*.md")):
+        cards = []
+        for chunk in CARD_SEP.split(f.read_text(encoding="utf-8")):
+            chunk = chunk.strip()
+            m = FRONT_RE.match(chunk + "\n") if chunk else None
+            if m:
+                cards.append(Problem(f, yaml.safe_load(m.group(1)) or {}, chunk[m.end():]))
+        out[int(re.sub(r"\D", "", f.stem))] = cards
+    return out
+
+
+def kontrol_ranges(sessions) -> list:
+    """Месяц — 8 занятий; последняя работа охватывает и итоговые занятия."""
+    last = len(sessions)
+    out, a = [], 1
+    while a <= last:
+        b = a + 7 if last - (a + 7) >= 8 else last
+        out.append((a, b))
+        a = b + 1
+    return out
+
+
+def kontrol_section(chapters, tax) -> str:
+    tests = load_kontrol()
+    if not tests:
+        return ""
+    sessions = compute_sessions(chapters)
+    per_week = tax["sessions"]["per_week"]
+    rows = ["Раз в месяц (после каждых восьми занятий) — контрольная работа: 30 новых задач, которых нет в занятиях, "
+            f"время — {KONTROL_TIME}. Около трёх четвертей задач — по материалу месяца, остальные — по прошлым месяцам; "
+            "ступени 1–7, около четверти — диагностика.\n\n"
+            "| Работа | После занятия | Неделя | Материал месяца |\n|---|---|---|---|\n"]
+    for k, (a, b) in enumerate(kontrol_ranges(sessions), 1):
+        if k not in tests:
+            continue
+        chs = sorted({c.num for s in sessions if a <= s["num"] <= b for c, _, _ in s["new"]})
+        mat = ", ".join(f"гл. {n}" if n else "введение" for n in chs) or "повторение"
+        rows.append(f"| [Контрольная {k}](../kontrolnye/{k:02d}.md) | {b} | {(b - 1) // per_week + 1} | {mat} |\n")
+    return "".join(rows) + "\n"
+
+
+def kontrol_sheets(chapters, tax) -> dict:
+    tests = load_kontrol()
+    sessions = compute_sessions(chapters)
+    secs = {(c.num, sec.num): (c, sec) for c in chapters for sec in c.sections}
+    per_week = tax["sessions"]["per_week"]
+    files = {}
+    for k, (a, b) in enumerate(kontrol_ranges(sessions), 1):
+        items = tests.get(k)
+        if not items:
+            continue
+        def where_key(key):
+            c, sec = secs[key]
+            return c.full_title if sec.num == 0 else f"{c.full_title}, {sec.label}"
+        where = lambda p: where_key((p.meta["chapter"], p.meta["section"]))
+        mat = sorted({(p.meta["chapter"], p.meta["section"]) for p in items})
+        cur = {(sec.chapter, sec.num) for s in sessions if a <= s["num"] <= b for _, sec, _ in s["new"]}
+        out = [GEN, f"# Контрольная работа {k}\n\n",
+               f"После занятия {b} (неделя {(b - 1) // per_week + 1}); материал месяца — занятия {a}–{b}. "
+               f"30 задач, время — **{KONTROL_TIME}**. Книгой и своими записями пользоваться можно, "
+               "ответами и решениями занятий — нельзя. Ответы и решения — в конце документа.\n\n",
+               "## Как оценивать\n\n" + KONTROL_PASS + " Если работа не сдана, по таблице ответов найдите параграфы "
+               "с ошибками, повторите их задачи в занятиях и через неделю решите неверные задачи этой работы снова.\n\n",
+               "## Что проверяется\n\n",
+               "По материалу месяца: " + "; ".join(where_key(x) for x in mat if x in cur) + ".\n\n"]
+        prev = [where_key(x) for x in mat if x not in cur]
+        if prev:
+            out.append("Повторение прошлых месяцев: " + "; ".join(prev) + ".\n\n")
+        out.append("## Задачи\n\n")
+        ans = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n# Ответы и решения\n\n## Ответы\n\n"
+               "| № | Ответ | Что повторить при ошибке |\n|---|---|---|\n"]
+        sol = ["\n## Решения\n\n"]
+        for i, p in enumerate(items, 1):
+            parts = card_parts(p)
+            out.append(f"{i}\\. {parts.get('Условие', '')}\n\n")
+            full = parts.get("Ответ", "")
+            simple = "|" not in full and len(full) <= 220
+            short = full.replace("\n", " ") if simple else "см. ниже, в решениях"
+            ans.append(f"| {i} | {short} | {where(p)} |\n")
+            extra = "" if simple else f"Ответ:\n\n{full}\n\nРешение:\n\n"
+            sol.append(f"{i}\\. {extra}{parts.get('Решение', '')}\n\n")
+        files[ROOT / "kontrolnye" / f"{k:02d}.md"] = "".join(out + ans + sol)
+    return files
+
+
 TITLES = {0: "Введение: операторы, термины, высказывания, следование",
           2: "Сильное следование, другой вариант"}
 
@@ -357,6 +455,7 @@ def generate() -> dict:
         ROOT / "README.md": readme(chapters),
     }
     files.update(session_sheets(chapters, problems, tax))
+    files.update(kontrol_sheets(chapters, tax))
     return files
 
 

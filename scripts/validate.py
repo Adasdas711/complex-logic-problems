@@ -85,11 +85,43 @@ def main() -> int:
         if n > s.quota:
             warnings.append(f"{s.key}: задач {n}, квота {s.quota}")
 
+    # Контрольные работы: новые задачи, не повторяющие задачи занятий.
+    import re
+    from build import load_kontrol
+    cond = lambda body: (re.search(r"## Условие(.*?)## Ответ", body, re.S) or [None, body])[1].strip()
+    taught = {cond(p.body) for p in problems}
+    kseen, kcount = Counter(), 0
+    for k, cards in load_kontrol().items():
+        for pr in cards:
+            kcount += 1
+            m = pr.meta
+            rel = f"kontrolnye/{pr.path.name}: {m.get('id', '?')}"
+            missing = [f for f in REQUIRED if f not in m]
+            if missing:
+                errors.append(f"{rel}: нет полей {missing}")
+                continue
+            if not re.fullmatch(rf"K{k:02d}-\d{{2}}", str(m["id"])):
+                errors.append(f"{rel}: номер не в формате K{k:02d}-NN")
+            if (m["chapter"], m["section"]) not in sections:
+                errors.append(f"{rel}: нет параграфа {m['chapter']}.{m['section']}")
+            if m["level"] not in tax["levels"] or m["type"] not in tax["types"]:
+                errors.append(f"{rel}: неизвестная ступень или тип")
+            for block in REQUIRED_BLOCKS:
+                if block not in pr.body:
+                    errors.append(f"{rel}: нет раздела «{block[3:]}»")
+            c = cond(pr.body)
+            if c in taught:
+                errors.append(f"{rel}: условие совпадает с задачей занятия")
+            kseen[c] += 1
+    for c, n in kseen.items():
+        if n > 1:
+            errors.append(f"контрольные: одно условие встречается {n} раз: {c[:60]}…")
+
     for w in warnings:
         print("ПРЕДУПРЕЖДЕНИЕ:", w)
     for e in errors:
         print("ОШИБКА:", e)
-    print(f"Задач: {len(problems)} из {tax['total']}. Ошибок: {len(errors)}, предупреждений: {len(warnings)}.")
+    print(f"Задач: {len(problems)} из {tax['total']}; в контрольных: {kcount}. Ошибок: {len(errors)}, предупреждений: {len(warnings)}.")
     return 1 if errors else 0
 
 
