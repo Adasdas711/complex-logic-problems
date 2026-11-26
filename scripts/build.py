@@ -325,10 +325,13 @@ def session_sheets(chapters, problems, tax) -> dict:
     assigned = assign(chapters, problems)
     started = set()
     files = {}
+    examples = load_primery()
     for s in sessions:
-        items, reading = list(assigned[s["num"]]), []
+        items, reading, fresh = list(assigned[s["num"]]), [], []
         for c, sec, n in s["new"]:
             cont = " (продолжение)" if sec.key in started else ""
+            if sec.key not in started:
+                fresh.append((c, sec))
             started.add(sec.key)
             where = c.full_title if sec.num == 0 else f"{c.full_title}, {sec.label}. {sec.title}"
             if sec.page is not None:
@@ -353,6 +356,16 @@ def session_sheets(chapters, problems, tax) -> dict:
                      else "Страницы книг; в скобках — страницы PDF-скана, где он есть.\n\n"), "\n".join(reading) + "\n\n"]
         if review:
             out.append("Повторение без нового чтения: пройденное до — " + "; ".join(review) + ".\n\n")
+        shown = [(c, sec, examples[(c.num, sec.num)]) for c, sec in fresh if (c.num, sec.num) in examples]
+        if shown:
+            out.append("## Разобранные примеры\n\n"
+                       "По одному примеру на каждый параграф, который начинается в этом занятии. Прочитайте условие, "
+                       "попробуйте решить сами, затем разберите решение шаг за шагом — и только потом переходите к задачам.\n\n")
+            for c, sec, ex in shown:
+                head = c.full_title if sec.num == 0 else f"{c.full_title}, {sec.label}. {sec.title}"
+                parts = card_parts(ex)
+                out.append(f"### {head}\n\n**Задача.** {parts.get('Условие', '')}\n\n**Решение.**\n\n{parts.get('Решение', '')}\n\n"
+                           f"**Ответ.** {parts.get('Ответ', '')}\n\n")
         out.append("## Задачи\n\n")
         ans = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n# Ответы и решения\n\n## Ответы\n\n| № | Ответ |\n|---|---|\n"]
         sol = ["\n## Решения\n\n"]
@@ -373,6 +386,23 @@ KONTROL_TIME = "3 часа"
 KONTROL_PASS = ("Работа сдана, если верно решено не меньше 24 задач из 30 (80 %) и среди задач ступеней 1–4 "
                 "ошибок не больше одной. Задача засчитывается, только если ответ верен и обоснование ссылается "
                 "на нужные определения и правила книги; для задач-диагностик — если названо нарушенное правило.")
+
+
+PRIMERY = DATA / "primery" / "primery.md"
+
+
+def load_primery() -> dict:
+    """{(глава, параграф): карточка разобранного примера} из data/primery/primery.md."""
+    out = {}
+    if not PRIMERY.exists():
+        return out
+    for chunk in CARD_SEP.split(PRIMERY.read_text(encoding="utf-8")):
+        chunk = chunk.strip()
+        m = FRONT_RE.match(chunk + "\n") if chunk else None
+        if m:
+            meta = yaml.safe_load(m.group(1)) or {}
+            out[(meta["chapter"], meta["section"])] = Problem(PRIMERY, meta, chunk[m.end():])
+    return out
 
 
 def load_kontrol() -> dict:

@@ -113,6 +113,19 @@ def main() -> int:
             if c in taught:
                 errors.append(f"{rel}: условие совпадает с задачей занятия")
             kseen[c] += 1
+    # Разобранные примеры: по одному на параграф, условия не совпадают с задачами занятий и контрольных.
+    from build import load_primery
+    examples = load_primery()
+    for key, pr in examples.items():
+        rel = f"primery: {pr.meta.get('id', '?')}"
+        if key not in sections:
+            errors.append(f"{rel}: нет параграфа {key}")
+        for block in REQUIRED_BLOCKS:
+            if block not in pr.body:
+                errors.append(f"{rel}: нет раздела «{block[3:]}»")
+        c = cond(pr.body)
+        if c in taught or c in kseen:
+            errors.append(f"{rel}: условие совпадает с задачей занятия или контрольной")
     for c, n in kseen.items():
         if n > 1:
             errors.append(f"контрольные: одно условие встречается {n} раз: {c[:60]}…")
@@ -121,7 +134,7 @@ def main() -> int:
         print("ПРЕДУПРЕЖДЕНИЕ:", w)
     for e in errors:
         print("ОШИБКА:", e)
-    print(f"Задач: {len(problems)} из {tax['total']}; в контрольных: {kcount}. Ошибок: {len(errors)}, предупреждений: {len(warnings)}.")
+    print(f"Задач: {len(problems)} из {tax['total']}; в контрольных: {kcount}; разобранных примеров: {len(examples)}. Ошибок: {len(errors)}, предупреждений: {len(warnings)}.")
     return 1 if errors else 0
 
 
