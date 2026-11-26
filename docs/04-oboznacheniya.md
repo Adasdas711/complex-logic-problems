@@ -59,6 +59,20 @@
 | $(x \urcorner\!\to y)$ | «признание $x$ не обязывает признать $y$» |
 | $(x ? \to y)$ | «неопределённо, $(x \to y)$ или $(x \urcorner\!\to y)$» |
 
+## Теория терминов и логика классов (гл. 9–10)
+
+| Запись | LaTeX | Читается |
+|---|---|---|
+| $a \rightharpoonup b$ | `a \rightharpoonup b` | «$b$ есть $a$»: термин $b$ включается по значению в $a$ (гл. 9, с. 139) |
+| $a \rightleftharpoons b$ | `a \rightleftharpoons b` | сокращение для $(a \rightharpoonup b)(b \rightharpoonup a)$ (D4 § 1 гл. 9) |
+| $sc$, $pc$ | `sc`, `pc` | универсальный субъект («объект») и универсальный предикат («признак») |
+| $a\alpha \downarrow b$ | `a\alpha \downarrow b` | сокращение для $a \downarrow (a\,\alpha \leftarrow b)$ (D1 § 3 гл. 9) |
+| $Ka$ | `Ka` | «класс $a$» (D1 § 1 гл. 10) |
+| $a \in Kb$ | `a \in Kb` | индивид $a$ включается в класс $b$ |
+| $Ka \subset Kb$ | `Ka \subset Kb` | класс $a$ включается в класс $b$ |
+
+Между высказываниями с $\rightharpoonup$ знак $\to$ — оператор условности: $\vdash (a \rightharpoonup b) \to (\sim b \rightharpoonup \sim a)$.
+
 ## Метазнаки
 
 | Символ | LaTeX | Значение |
