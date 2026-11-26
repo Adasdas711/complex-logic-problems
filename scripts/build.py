@@ -363,8 +363,6 @@ def session_sheets(chapters, problems, tax) -> dict:
             continue
         items.sort(key=lambda p: (p.meta["level"], p.meta["id"]))
         out = [GEN, f"# Занятие {s['num']}. Неделя {week_of(s['num'], tax)}. {chapters_label(s)}\n\n",
-               f"Тема: {session_topic(s)}. {len(items)} задач. "
-               "Решения и ответы — в конце документа; смотрите их только после того, как решите.\n\n",
                "## Что прочитать\n\n"]
         if not reading:
             out.append("Нового чтения нет: занятие целиком повторительное.\n\n")
@@ -377,16 +375,11 @@ def session_sheets(chapters, problems, tax) -> dict:
         shown = [(c, sec, examples[(c.num, sec.num)]) for c, sec in fresh if (c.num, sec.num) in examples]
         out.append("## Примеры решений\n\n")
         if not shown:
-            out.append("Новых параграфов в этом занятии нет — примеры к пройденному материалу даны в занятиях, "
-                       "где эти параграфы начинались.\n\n")
-        else:
-            out.append("По одному примеру на каждый параграф, который начинается в этом занятии. Прочитайте условие, "
-                       "попробуйте решить сами, затем разберите решение шаг за шагом — и только потом переходите к задачам.\n\n")
-            for c, sec, ex in shown:
-                head = c.full_title if sec.num == 0 else f"{c.full_title}, {sec.label}. {sec.title}"
-                parts = card_parts(ex)
-                out.append(f"### {head}\n\n**Задача.** {parts.get('Условие', '')}\n\n**Решение.**\n\n{parts.get('Решение', '')}\n\n"
-                           f"**Ответ.** {parts.get('Ответ', '')}\n\n")
+            out.append("Нет.\n\n")
+        for j, (c, sec, ex) in enumerate(shown, 1):
+            parts = card_parts(ex)
+            out.append(f"**Пример {j}.** {parts.get('Условие', '')}\n\n**Решение.**\n\n{parts.get('Решение', '')}\n\n"
+                       f"**Ответ.** {parts.get('Ответ', '')}\n\n")
         out.append("## Задачи\n\n")
         sol = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n## Ответы и решения\n\n### Решения\n\n"]
         ans = ["\n### Ответы\n\n| № | Ответ |\n|---|---|\n"]
