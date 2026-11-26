@@ -29,11 +29,28 @@ L = G7.L
 ttex = G8.ttex
 
 
+
+def tex_map(s, p):
+    """Заменить однобуквенные лексемы по словарю p; команды LaTeX и индексы (^, _) не трогаются."""
+    s = re.sub(r"(?<![a-z])(sc|pc|nk)(?![a-z])", lambda q: "\\" + {"sc": "SCname", "pc": "PCname", "nk": "NKname"}[q.group(1)], s)
+    toks = re.findall(r"\\[A-Za-z]+|.", s, flags=re.S)
+    out, depth, script = [], 0, False
+    for i, t in enumerate(toks):
+        prev = toks[i - 1] if i else ""
+        if t == "{" and (prev in "^_" or depth):
+            depth += 1
+        elif t == "}" and depth:
+            depth -= 1
+        elif depth == 0 and prev not in ("^", "_"):
+            t = p.get(t, t)
+        out.append(t)
+    return "".join(out).replace("\\SCname", "sc").replace("\\PCname", "pc").replace("\\NKname", "nk")
+
 def permute(strs, letters):
     p = dict(zip(letters, rnd.sample(letters, len(letters))))
 
     def rm(m):
-        return re.sub(r"(?<![\\A-Za-z])([" + letters + r"])(?![A-Za-z])", lambda q: p[q.group(1)], m.group(0))
+        return tex_map(m.group(0), p)
     return [re.sub(r"\$[^$]+\$", rm, s) for s in strs]
 
 
@@ -55,13 +72,38 @@ def rec_card(ch, sec, lvl, typ, pre, D, prefix, src, tags, system=None, k=3, num
                 items([f"${D[x]}$" for x in ks]), answers([f"{prefix}{x}" for x in ks]), src[0].upper() + src[1:] + ".", src, tags, system=system)
 
 
-def sub_vars(s, mapping):
-    """Подстановка вместо метапеременных-слов (x, y, a, b) в TeX-строке."""
-    keys = "".join(mapping)
+def _wrapped(v):
+    if not (v.startswith("(") and v.endswith(")")):
+        return False
+    d = 0
+    for i, ch in enumerate(v):
+        d += (ch == "(") - (ch == ")")
+        if d == 0 and i < len(v) - 1:
+            return False
+    return True
 
-    def rm(q):
-        return mapping[q.group(1)]
-    return re.sub(r"(?<![\\A-Za-z])([" + keys + r"])(?![A-Za-z])", rm, s)
+
+def sub_vars(s, mapping):
+    """Одновременная подстановка вместо однобуквенных метапеременных в TeX-строке.
+
+    Буква заменяется и тогда, когда стоит вплотную к другой букве ($ab$, $xy$, $Ka$); составное выражение
+    рядом с буквой, скобкой или после $\\sim$, $\\downarrow$, $K$ берётся в скобки."""
+    toks = re.findall(r"\\[A-Za-z]+|.", s, flags=re.S)
+    out = []
+    for i, tok in enumerate(toks):
+        if tok not in mapping or (i and toks[i - 1] in "^_"):
+            out.append(tok)
+            continue
+        v = mapping[tok]
+        prev = next((t for t in reversed(toks[:i]) if t.strip()), "")
+        nxt = next((t for t in toks[i + 1:] if t.strip()), "")
+        simple = re.fullmatch(r"[a-z]", v) or _wrapped(v)
+        tight = (re.fullmatch(r"[A-Za-z)?]", prev or "-") or re.fullmatch(r"[a-z(\\]", nxt[:1] or "-")
+                 or prev in ("\\sim", "\\downarrow", "\\urcorner", "\\tilde"))
+        if not simple and tight and not (v.startswith("\\sim") and prev in ("K", "(", "") and not re.fullmatch(r"[a-z(]", nxt[:1] or "-")):
+            v = f"({v})"
+        out.append(v)
+    return "".join(out)
 
 
 # ================================================================ 10.08 нормальные классы
@@ -215,11 +257,11 @@ XP = ["(a \\leftarrow c)", "\\sim(a \\leftarrow c)", "(a \\leftarrow c)(a \\left
 def ae_sub(lvl, typ="D"):
     k = rnd.choice([k for k in AE1 if "^" not in AE1[k]])
     s = AE1[k]
-    has_x = re.search(r"(?<![\\A-Za-z])x(?![A-Za-z])", s)
+    has_x = "x" in re.findall(r"\\[A-Za-z]+|.", s)
     mp = {}
-    if re.search(r"(?<![\\A-Za-z])b(?![A-Za-z])", s):
+    if "b" in re.findall(r"\\[A-Za-z]+|.", s):
         mp["b"] = rnd.choice(["c", "d", "cd", "(c \\vee d)", "\\sim c"])
-    if re.search(r"(?<![\\A-Za-z])a(?![A-Za-z])", s) and not has_x:
+    if "a" in re.findall(r"\\[A-Za-z]+|.", s) and not has_x:
         mp["a"] = rnd.choice(["c", "cd", "\\sim c", "(c \\vee d)"])
     if has_x:
         mp["x"] = rnd.choice(XP)
@@ -602,7 +644,7 @@ def am_sub(lvl, typ="D"):
     mp = {"x": wrapx(X), "y": wrapx(Y)}
     out = sub_vars(s, mp)
     out = out.replace("\\sim (", "\\sim(")
-    has_y = re.search(r"(?<![\\A-Za-z])y(?![A-Za-z])", s)
+    has_y = "y" in re.findall(r"\\[A-Za-z]+|.", s)
     return card(12, 2, lvl, typ, "iso", f"Буквы $z, v$ — высказывания; $a, b$ — термины. Подставьте в схему {k} $S^{{m1}}_n$ (${s}$) вместо $x$ — ${X}$" +
                 (f", вместо $y$ — ${Y}$" if has_y else "") + ".", f"${out}$", "С. 168–170; буквы схем — метапеременные.", "с. 168–170, гл. 12, § 2",
                 "модальность, аксиомы", system="S^m1_n")

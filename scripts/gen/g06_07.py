@@ -14,6 +14,23 @@ import ifq as Q  # noqa: E402
 from ifq import ALL, EL, EX, IF, IFN, IFQ, IMP, C, D, N, V, W, tex, ftex  # noqa: E402
 
 
+
+def tex_map(s, p):
+    """Заменить однобуквенные лексемы по словарю p; команды LaTeX и индексы (^, _) не трогаются."""
+    s = re.sub(r"(?<![a-z])(sc|pc|nk)(?![a-z])", lambda q: "\\" + {"sc": "SCname", "pc": "PCname", "nk": "NKname"}[q.group(1)], s)
+    toks = re.findall(r"\\[A-Za-z]+|.", s, flags=re.S)
+    out, depth, script = [], 0, False
+    for i, t in enumerate(toks):
+        prev = toks[i - 1] if i else ""
+        if t == "{" and (prev in "^_" or depth):
+            depth += 1
+        elif t == "}" and depth:
+            depth -= 1
+        elif depth == 0 and prev not in ("^", "_"):
+            t = p.get(t, t)
+        out.append(t)
+    return "".join(out).replace("\\SCname", "sc").replace("\\PCname", "pc").replace("\\NKname", "nk")
+
 def load(name, seed):
     spec = importlib.util.spec_from_file_location(name, ROOT / "scripts" / "gen" / f"{name}.py")
     m = importlib.util.module_from_spec(spec)
@@ -80,7 +97,7 @@ def permute(c, letters):
 
     def repl_math(m):
         s = m.group(0)
-        return re.sub(r"(?<![\\A-Za-z])([" + "".join(letters) + r"])(?![A-Za-z])", lambda q: perm[q.group(1)], s)
+        return tex_map(s, perm)
     body = re.sub(r"\$[^$]+\$", repl_math, body)
     body = re.sub(r"Буквы \$([a-z](?:, [a-z])+)\$", lambda q: "Буквы $" + ", ".join(sorted(q.group(1).split(", "))) + "$", body)
     return head + body

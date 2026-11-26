@@ -4,6 +4,7 @@
 """
 import importlib.util
 import random
+import re
 import sys
 from itertools import product
 from pathlib import Path
@@ -25,6 +26,23 @@ SEEN = set()
 DIAG = {}
 USED = set()
 
+
+
+def tex_map(s, p):
+    """Заменить однобуквенные лексемы по словарю p; команды LaTeX и индексы (^, _) не трогаются."""
+    s = re.sub(r"(?<![a-z])(sc|pc|nk)(?![a-z])", lambda q: "\\" + {"sc": "SCname", "pc": "PCname", "nk": "NKname"}[q.group(1)], s)
+    toks = re.findall(r"\\[A-Za-z]+|.", s, flags=re.S)
+    out, depth, script = [], 0, False
+    for i, t in enumerate(toks):
+        prev = toks[i - 1] if i else ""
+        if t == "{" and (prev in "^_" or depth):
+            depth += 1
+        elif t == "}" and depth:
+            depth -= 1
+        elif depth == 0 and prev not in ("^", "_"):
+            t = p.get(t, t)
+        out.append(t)
+    return "".join(out).replace("\\SCname", "sc").replace("\\PCname", "pc").replace("\\NKname", "nk")
 
 def condtext(c):
     return c[c.index("## Условие"):c.index("## Ответ")]
@@ -213,8 +231,10 @@ def push_card(sec, lvl, typ="D", step="iso"):
 def which_axiom(sec, lvl):
     names = rnd.sample(["II.1", "II.2", "II.3", "II.4", "V.1", "V.2", "V.3", "V.4", "IV.1", "IV.2", "VI.1", "I.1"], 5)
     sub = {"x": rnd.choice(["p", "q", "r"])}
-    body = ("## Условие\n\nКаким аксиомным схемам ТЛК (Очерки, с. 373–374) соответствуют формулы?\n\n" +
-            "\n".join(f"{L[i]}) ${K.AXIOMS[n].replace('x', sub['x'])}$" for i, n in enumerate(names)) +
+    ren = lambda f: tex_map(f, sub)
+    body = (f"## Условие\n\nБуквы ${sub['x']}, y$ — высказывания; $s, t, u, v$ (с индексами или без) — переменные для координат; "
+            "$a$ — термин. Каким аксиомным схемам ТЛК (Очерки, с. 373–374) соответствуют формулы?\n\n" +
+            "\n".join(f"{L[i]}) ${ren(K.AXIOMS[n])}$" for i, n in enumerate(names)) +
             "\n\n## Ответ\n\n" + "; ".join(f"{L[i]}) {n}" for i, n in enumerate(names)) + "\n\n## Решение\n\nС. 373–374.")
     return card(16, sec, lvl, "R", "iso", "sym", "short", "координаты, аксиомы", body, S16[3])
 

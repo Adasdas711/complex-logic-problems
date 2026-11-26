@@ -112,7 +112,9 @@ def harvest():
                     k = cond_of(c)
                     if not k or not m["level"] or int(m["level"]) > 7 or m["chapter"] in (None, "17"):
                         continue
-                    if freq[k] > 1 or k in existing or k in seen or has_repeat(c):
+                    # гл. 2–4 читаются раньше гл. 5: задачи, опирающиеся на критерии гл. 5, § 2, сюда не берём.
+                    ahead = int(m["chapter"]) in (2, 3, 4) and re.search(r"гл\. 5", c)
+                    if freq[k] > 1 or k in existing or k in seen or has_repeat(c) or ahead:
                         continue
                     seen.add(k)
                     pool[(int(m["chapter"]), int(m["section"]))].append(c)

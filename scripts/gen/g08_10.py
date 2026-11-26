@@ -27,11 +27,28 @@ USED = G7.USED
 L = G7.L
 
 
+
+def tex_map(s, p):
+    """Заменить однобуквенные лексемы по словарю p; команды LaTeX и индексы (^, _) не трогаются."""
+    s = re.sub(r"(?<![a-z])(sc|pc|nk)(?![a-z])", lambda q: "\\" + {"sc": "SCname", "pc": "PCname", "nk": "NKname"}[q.group(1)], s)
+    toks = re.findall(r"\\[A-Za-z]+|.", s, flags=re.S)
+    out, depth, script = [], 0, False
+    for i, t in enumerate(toks):
+        prev = toks[i - 1] if i else ""
+        if t == "{" and (prev in "^_" or depth):
+            depth += 1
+        elif t == "}" and depth:
+            depth -= 1
+        elif depth == 0 and prev not in ("^", "_"):
+            t = p.get(t, t)
+        out.append(t)
+    return "".join(out).replace("\\SCname", "sc").replace("\\PCname", "pc").replace("\\NKname", "nk")
+
 def permute2(strs, letters="abc"):
     p = dict(zip(letters, rnd.sample(letters, len(letters))))
 
     def rm(m):
-        return re.sub(r"(?<![\\A-Za-z])([" + letters + r"])(?![A-Za-z])", lambda q: p[q.group(1)], m.group(0))
+        return tex_map(m.group(0), p)
     return [re.sub(r"\$[^$]+\$", rm, s) for s in strs]
 
 
@@ -708,15 +725,27 @@ def ak_rec(lvl, typ="R"):
 
 def sub_ak(lvl, typ="D"):
     n = rnd.choice(["A2", "A3", "A4", "A6", "A7"])
-    A_, B_, C_ = rnd.sample(["d", "e", "\\sim d", "de", "(d \\vee e)"], 3)
     s = AK1[n]
-    sub = {"a": "@1", "b": "@2", "c": "@3"}
-    out = re.sub(r"(?<![\\A-Za-z])([abc])(?![A-Za-z])", lambda m: sub[m.group(1)], s)
-    out = out.replace("@1", A_).replace("@2", B_).replace("@3", C_)
-    out = out.replace("K\\sim (", "K\\sim(").replace("K" + A_, "K" + (A_ if len(A_) == 1 else f"({A_})" if not A_.startswith("(") else A_))
-    for X in (A_, B_, C_):
-        if len(X) > 1 and not X.startswith("("):
-            out = out.replace(f"K{X}", f"K({X})").replace(f"K\\sim{X}", f"K\\sim({X})")
+    # Связанной квантором букве — только простой термин; остальным — любые различные.
+    bound = set(re.findall(r"\\(?:forall|exists) ([abc])", s))
+    for _ in range(200):
+        A_, B_, C_ = rnd.sample(["d", "e", "\\sim d", "de", "(d \\vee e)"], 3)
+        if all(t in ("d", "e") for v, t in zip("abc", (A_, B_, C_)) if v in bound):
+            break
+    toks = re.findall(r"\\[A-Za-z]+|.", s)
+    mp = {"a": A_, "b": B_, "c": C_}
+    out = ""
+    for i, tok in enumerate(toks):
+        v = mp.get(tok)
+        if v is None:
+            out += tok
+            continue
+        prev = toks[i - 1] if i else ""
+        if prev in ("K", "\\sim") and v not in ("d", "e") and not v.startswith("(") and not v.startswith("\\sim"):
+            v = f"({v})"
+        elif prev == "\\sim" and v.startswith("\\sim"):
+            v = " " + v
+        out += v
     return card(10, 2, lvl, typ, "iso", f"Термины $d$, $e$ — простые. Подставьте в схему {n} системы $S^1_k$ (${s}$) вместо $a$ — ${A_}$, вместо $b$ — ${B_}$" +
                 (f", вместо $c$ — ${C_}$" if "c" in re.sub(r"\\[a-z]+", "", s) else "") + " (кванторы связывают подставленные термины).", f"${out}$",
                 "С. 150; в схемах буквы — метапеременные для терминов.", "с. 150, гл. 10, § 2", "классы, S1k", system="S^1_k")
@@ -841,7 +870,8 @@ def m1002(lvl, d, i):
 # ---- 10.03 S²_k
 def subst_x(x, a, b):
     """y — замена a на b везде в x (высказывания вида u ∈ Kw с ~)."""
-    return re.sub(r"(?<![\\A-Za-z])" + a + r"(?![A-Za-z])", b, x)
+    toks = re.findall(r"\\[A-Za-z]+|.", x)
+    return "".join(b if t == a else t for t in toks)
 
 
 XS = ["(a \\in Kc)", "\\sim(a \\in Kc)", "(c \\in Ka)", "(a \\in Kc)(a \\in Kd)", "(a \\in Kc) \\vee (d \\in Ka)", "(a \\in K\\sim c)", "(\\forall c)(c \\in Ka)",

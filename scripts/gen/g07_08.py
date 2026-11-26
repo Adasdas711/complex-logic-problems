@@ -36,6 +36,23 @@ TQ = "Буквы $a, b$ — термины; $x, y, z, v$ — высказыва�
 
 
 # ---------------------------------------------------------------- оформление
+
+def tex_map(s, p):
+    """Заменить однобуквенные лексемы по словарю p; команды LaTeX и индексы (^, _) не трогаются."""
+    s = re.sub(r"(?<![a-z])(sc|pc|nk)(?![a-z])", lambda q: "\\" + {"sc": "SCname", "pc": "PCname", "nk": "NKname"}[q.group(1)], s)
+    toks = re.findall(r"\\[A-Za-z]+|.", s, flags=re.S)
+    out, depth, script = [], 0, False
+    for i, t in enumerate(toks):
+        prev = toks[i - 1] if i else ""
+        if t == "{" and (prev in "^_" or depth):
+            depth += 1
+        elif t == "}" and depth:
+            depth -= 1
+        elif depth == 0 and prev not in ("^", "_"):
+            t = p.get(t, t)
+        out.append(t)
+    return "".join(out).replace("\\SCname", "sc").replace("\\PCname", "pc").replace("\\NKname", "nk")
+
 def T(f, ctx="top"):
     """TeX в обозначениях книги (кванторы с внутренним отрицанием и неопределённостью, предикация)."""
     k = f[0]
@@ -111,7 +128,7 @@ def perm_letters(s, letters="xyzv"):
     p = dict(zip(letters, rnd.sample(letters, len(letters))))
 
     def rm(m):
-        return re.sub(r"(?<![\\A-Za-z])([" + letters + r"])(?![A-Za-z])", lambda q: p[q.group(1)], m.group(0))
+        return tex_map(m.group(0), p)
     return re.sub(r"\$[^$]+\$", rm, s)
 
 
@@ -1423,7 +1440,7 @@ def m721(lvl, d, i):
         s, n = rnd.choice(S21)
         X = rnd.choice(["(a \\leftarrow b)", "\\sim(a \\leftarrow c)"])
         Y = rnd.choice(["(b \\leftarrow c)", "(a \\leftarrow d)"])
-        g = s.replace("x", "@X").replace("y", "@Y").replace("@X", X).replace("@Y", Y)
+        g = tex_map(s, {"x": X, "y": Y})
         return card(7, 21, lvl, "D", "iso", f"Буквы $a, b, c, d$ — термины. Подставьте в схему {n if n.isdigit() else '(' + n + ')'} § 21 гл. 7 "
                     f"(${s}$) вместо $x$ — ${X}$, вместо $y$ — ${Y}$.", f"${g}$", "С. 131.", "с. 131, гл. 7, § 21", "кванторы и условные высказывания")
     ys = rnd.sample(["(a \\leftarrow b)", "\\sim(a \\leftarrow b)", "(a \\leftarrow b)(a \\leftarrow c)", "(b \\leftarrow c)", "(a \\leftarrow c) \\vee (a \\leftarrow d)"], 2 if lvl == 7 else 1)
