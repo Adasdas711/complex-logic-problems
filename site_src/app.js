@@ -256,7 +256,6 @@ async function viewZ(num) {
     return `<div class="box ex"><div class="rich"><p><b>Пример ${j + 1}.</b></p>${e.cond}</div>
       ${reveal(e, 'a:' + k, 's:' + k)}</div>`;
   }).join('');
-  const solvedN = z.tasks.filter((t) => S.r[key] && S.r[key][t.id]).length;
   const d = doneZ(num);
   $('#view').innerHTML = `
     <section class="card hero">
@@ -265,8 +264,6 @@ async function viewZ(num) {
         ${donePill('doneZ', num, d, 'Готово')}
       </div>
       <h1 class="hero-h">${z.topicH}</h1>
-      <div class="hero-stats"><span>${z.tasks.length} ${plural(z.tasks.length, 'задача', 'задачи', 'задач')}</span><span class="dot"></span><span>${z.examples.length ? z.examples.length + ' ' + plural(z.examples.length, 'пример', 'примера', 'примеров') : 'без примеров'}</span><span class="dot"></span><span class="${solvedN ? 'ok' : ''}">решено ${solvedN} из ${z.tasks.length}</span>
-        <span class="hero-bar"><span style="width:${Math.round(100 * solvedN / Math.max(1, z.tasks.length))}%"></span></span></div>
       ${tests.length || konts.length ? `<div class="hero-links">${tests.map((t) => `<a class="btn gold sm" href="#/t/${t.chapter}" title="Перед занятием — входной тест к ${testShort(t)}">Входной тест</a>`).join('')}${konts.map((k) => `<a class="btn gold sm" href="#/k/${k.k}" title="После занятия — контрольная работа ${k.k}">Контрольная</a>`).join('')}</div>` : ''}
       <div class="pn">
         ${prev ? `<a class="pn-a" href="#/z/${prev.num}"><span class="pn-k">‹ Занятие ${prev.num}</span><span class="pn-t">${prev.topicH}</span></a>` : '<span></span>'}
@@ -276,7 +273,7 @@ async function viewZ(num) {
     <section class="card"><div class="row-between"><h2 class="eyebrow">Что прочитать</h2>${bookSrc}</div>${reading}${review}</section>
     ${z.examples.length ? `<section class="card"><h2 class="eyebrow">Примеры решений</h2>${examples}</section>` : ''}
     <section class="card">
-      <div class="row-between"><h2 class="eyebrow">Задачи · ${z.tasks.length}${solvedN ? ` · решено ${solvedN}` : ''}</h2>
+      <div class="row-between"><h2 class="eyebrow">Задачи</h2>
         <div role="group" aria-label="Где показывать ответы" style="display:flex;align-items:center;gap:8px"><span class="small muted">Ответы</span>
           <div class="seg"><button type="button" data-act="mode" data-m="end" class="${under ? '' : 'on'}">В конце</button><button type="button" data-act="mode" data-m="under" class="${under ? 'on' : ''}">Под задачей</button></div></div></div>
       ${z.tasks.map((t) => taskHtml(t, under, key)).join('')}
