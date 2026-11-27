@@ -155,7 +155,7 @@ function viewKurs() {
     const wide = m.chapters.some((c) => c >= 18) ? ' wide' : '';   // модуль IX — во всю ширину
     if (!nums.length) return `<div class="mod-block${wide}">${head}<p class="muted small">занятия готовятся</p></div>`;
     return `<div class="mod-block${wide}">${head}<div class="tiles">${items.join('')}</div></div>`;
-  }).join('');
+  });
   $('#view').innerHTML = `
     <header class="head home-h"><h1 class="big-h1">Комплексная логика</h1>
       <div class="field home-q">${searchIcon(16)}<input id="main-q" type="search" autocomplete="off" placeholder="Номер или тема занятия" aria-label="Поиск занятия"><button type="button" class="btn sm" id="main-clear" hidden>Очистить</button></div>
@@ -167,7 +167,7 @@ function viewKurs() {
           <li>Ответ открывать после своего решения; задачи с ошибками решить снова через неделю.</li>
           <li>Решили занятие — «Готово». <b class="g">Т</b> — входной тест перед главой, <b class="g">К</b> — контрольная раз в месяц.</li>
         </ul></details></header>
-    <div class="home-mods">${blocks}</div>`;
+    <section class="card home-card"><div class="home-cols"><div class="home-col">${blocks.slice(0, 4).join('')}</div><div class="home-col">${blocks.slice(4, 8).join('')}</div></div>${blocks.slice(8).join('')}</section>`;
   const inp = $('#main-q'), res = $('#main-res'), clear = $('#main-clear');
   const upd = () => {
     const q = inp.value.trim(), found = findSessions(q), hit = new Set(found.map((s) => s.num));
