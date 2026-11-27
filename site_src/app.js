@@ -204,16 +204,20 @@ function viewKurs() {
 }
 
 // ---------- задачи ----------
+const CHEV = '<svg class="chev" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M3.5 2l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function reveal(t, ka, ks) {
+  const a = open.has(ka), s = open.has(ks);
+  const b = (k, on, label) => `<button type="button" class="rv${on ? ' on' : ''}" data-act="open" data-k="${esc(k)}" aria-expanded="${on}">${CHEV}${label}</button>`;
+  return `<div class="reveal">${b(ka, a, 'Ответ')}${t.sol ? b(ks, s, 'Решение') : ''}</div>`
+    + (a ? `<div class="rv-body ans-b rich">${t.ans}</div>` : '')
+    + (s && t.sol ? `<div class="rv-body sol-b rich">${t.sol}</div>` : '');
+}
 function taskHtml(t, under, key) {
   const ok = !!(key && S.r[key] && S.r[key][t.id]);
   const btn = key ? `<button type="button" class="solved${ok ? ' on' : ''}" data-act="solve" data-key="${key}" data-id="${esc(t.id)}" aria-pressed="${ok}" aria-label="Задача ${t.n} решена" title="${ok ? 'Снять отметку' : 'Отметить задачу решённой'}">${ok ? '✓' : ''}</button>` : '';
   let h = `<article class="box" id="t${t.n}"><div class="task-row"><b class="num${ok ? ' ok' : ''}">${t.n}.</b><div class="rich">${t.cond}</div>${btn}</div>`;
   if (under) {
-    const a = open.has('a:' + key + t.id), s = open.has('s:' + key + t.id);
-    h += `<div class="tbtns"><button type="button" class="btn sm" data-act="open" data-k="a:${key}${esc(t.id)}" aria-expanded="${a}">${a ? 'Скрыть ответ' : 'Ответ'}</button>`
-      + (t.sol ? `<button type="button" class="btn sm" data-act="open" data-k="s:${key}${esc(t.id)}" aria-expanded="${s}">${s ? 'Скрыть решение' : 'Решение'}</button>` : '') + '</div>';
-    if (a) h += `<div class="ans"><span class="lbl">Ответ</span><div class="rich">${t.ans}</div></div>`;
-    if (s && t.sol) h += `<div class="sol"><span class="lbl">Решение</span><div class="rich">${t.sol}</div></div>`;
+    h += reveal(t, 'a:' + key + t.id, 's:' + key + t.id);
   }
   return h + '</article>';
 }
@@ -245,10 +249,9 @@ async function viewZ(num) {
     : '<p>Нового чтения нет: занятие целиком повторительное.</p>';
   const review = z.review.length ? `<p class="muted small">Повторение без нового чтения: пройденное до — ${z.review.join('; ')}.</p>` : '';
   const examples = z.examples.map((e, j) => {
-    const k = 'e:' + e.id, o = open.has(k);
+    const k = 'e:' + e.id;
     return `<div class="box ex"><div class="rich"><p><b>Пример ${j + 1}.</b></p>${e.cond}</div>
-      <div class="tbtns"><button type="button" class="btn sm" data-act="open" data-k="${esc(k)}" aria-expanded="${o}">${o ? 'Скрыть решение' : 'Показать решение'}</button></div>
-      ${o ? `<div class="ans"><span class="lbl">Ответ</span><div class="rich">${e.ans}</div></div>${e.sol ? `<div class="sol"><span class="lbl">Решение</span><div class="rich">${e.sol}</div></div>` : ''}` : ''}</div>`;
+      ${reveal(e, 'a:' + k, 's:' + k)}</div>`;
   }).join('');
   const solvedN = z.tasks.filter((t) => S.r[key] && S.r[key][t.id]).length;
   const d = doneZ(num);

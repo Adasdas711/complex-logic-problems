@@ -161,14 +161,20 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .task-row > .rich { flex: 1; min-width: 0; }
 .num { min-width: 28px; font-size: 16px; }
 .num.ok { color: var(--green); }
-.tbtns { display: flex; gap: 8px; padding-left: 40px; }
-.ans, .sol { margin-left: 40px; padding: 10px 14px; border-radius: 10px; }
-.ans { background: #242a26; border: 1px solid #34463a; }
-.ans > .lbl { color: var(--green); }
-.sol { background: #262626; border: 1px solid var(--line2); font-size: 14px; }
-.ex .ans, .ex .sol, .ex .tbtns { margin-left: 0; padding-left: 14px; }
-.ex .tbtns { padding-left: 0; }
-.lbl { display: block; font-weight: 700; margin-bottom: 4px; }
+/* Ответ и решение под задачей: тихие переключатели и блоки с полосой слева */
+.reveal { display: flex; gap: 4px; margin-left: 32px; }
+.ex .reveal { margin-left: -8px; }
+.rv { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 7px; border: 0; background: transparent;
+  color: var(--dim); font-size: 13px; line-height: 20px; transition: color .15s, background .15s; }
+.rv:hover { color: var(--text); background: #262626; }
+.rv.on { color: var(--text); }
+.rv .chev { transition: transform .15s; opacity: .8; }
+.rv.on .chev { transform: rotate(90deg); }
+.rv-body { margin-left: 40px; padding: 2px 0 2px 14px; border-left: 2px solid var(--line2); }
+.ex .rv-body { margin-left: 0; }
+.ans-b { border-left-color: var(--green); }
+.sol-b { color: #cfcfcf; font-size: 14px; }
+.rv-body + .rv-body { margin-top: 4px; }
 .navrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .navrow .mid { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 
@@ -232,11 +238,11 @@ details > .in { padding: 0 16px 16px; display: flex; flex-direction: column; gap
   .stepi { grid-template-columns: 32px 1fr; }
   .stepi > span { grid-column: 2; }
   .reading li { flex-direction: column; gap: 2px; }
-  .tbtns, .ans, .sol { margin-left: 0; padding-left: 0; }
-  .ans, .sol { padding-left: 14px; }
+  .reveal { margin-left: -8px; }
+  .rv-body { margin-left: 0; }
 }
 @media print {
-  .side, .tbtns, .solved, .done, .seg, .navrow, .ntoc { display: none !important; }
+  .side, .reveal, .solved, .done, .seg, .navrow, .ntoc { display: none !important; }
   body { background: #fff; color: #000; }
   .card, .box { background: #fff; border-color: #ccc; box-shadow: none; }
 }
