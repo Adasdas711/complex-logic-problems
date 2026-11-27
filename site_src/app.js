@@ -143,39 +143,30 @@ function viewKurs() {
     const items = [];
     for (const s of ss) {
       for (const t of testBefore(s.num)) {
-        items.push(`<a class="tile gold${doneT(t.chapter) ? ' done' : ''}" href="#/t/${t.chapter}" title="Входной тест к ${testShort(t)}">${doneT(t.chapter) ? '<span class="ck">✓</span>' : ''}<span class="n">Т</span><span class="s">${t.chapter === 16 ? 'тест р. 16' : 'тест гл. ' + t.chapter}</span></a>`);
+        items.push(`<a class="tile gold${doneT(t.chapter) ? ' done' : ''}" href="#/t/${t.chapter}" title="Входной тест к ${testShort(t)}"><span class="n">Т</span></a>`);
       }
-      items.push(`<a class="tile${doneZ(s.num) ? ' done' : ''}" data-n="${s.num}" href="#/z/${s.num}" title="${esc(s.topic)}">${doneZ(s.num) ? '<span class="ck" aria-label="выполнено">✓</span>' : ''}<span class="n">${s.num}</span><span class="s">${esc(s.label)}</span></a>`);
+      items.push(`<a class="tile${doneZ(s.num) ? ' done' : ''}" data-n="${s.num}" href="#/z/${s.num}" title="${s.num}. ${esc(s.topic)}"><span class="n">${s.num}</span></a>`);
       for (const k of kontrolAfter(s.num)) {
-        items.push(`<a class="tile gold${doneK(k.k) ? ' done' : ''}" href="#/k/${k.k}" title="Контрольная работа ${k.k}">${doneK(k.k) ? '<span class="ck">✓</span>' : ''}<span class="n">К</span><span class="s">контр. ${k.k}</span></a>`);
+        items.push(`<a class="tile gold${doneK(k.k) ? ' done' : ''}" href="#/k/${k.k}" title="Контрольная работа ${k.k}"><span class="n">К</span></a>`);
       }
     }
     const nums = ss.map((s) => s.num);
-    if (!nums.length) return `<div class="mod-block"><p>${esc(m.name)} <span>· занятия готовятся</span></p></div>`;
-    return `<div class="mod-block"><p>${esc(m.name)} <span>· занятия ${Math.min(...nums)}–${Math.max(...nums)}</span></p><div class="tiles">${items.join('')}</div></div>`;
+    const head = `<a class="mod-h" href="#/m/${i + 1}"><span class="rn">${ROM(i)}</span>${esc(modTitle(i))}</a>`;
+    if (!nums.length) return `<div class="mod-block">${head}<p class="muted small">занятия готовятся</p></div>`;
+    return `<div class="mod-block">${head}<div class="tiles">${items.join('')}</div></div>`;
   }).join('');
-  const total = IDX.sessions.filter((s) => doneZ(s.num)).length;
   $('#view').innerHTML = `
-    <header class="head"><h1 class="big-h1">Комплексная логика</h1>
-      <p>Задачник по книге А. А. Зиновьева (1970): ${IDX.sessions.length} занятий, ${IDX.kontrol.length} контрольных, ${IDX.tests.length} входных тестов · выполнено занятий: ${total}</p></header>
-    <section class="card">
-      <label for="main-q" class="eyebrow">Поиск занятия</label>
-      <div class="field">${searchIcon(18)}<input id="main-q" type="search" autocomplete="off" placeholder="Номер занятия или слова из названия: 76, кванторы, модальная логика"><button type="button" class="btn sm" id="main-clear" hidden>Очистить</button></div>
+    <header class="head home-h"><h1 class="big-h1">Комплексная логика</h1>
+      <div class="field home-q">${searchIcon(16)}<input id="main-q" type="search" autocomplete="off" placeholder="Номер или тема занятия" aria-label="Поиск занятия"><button type="button" class="btn sm" id="main-clear" hidden>Очистить</button></div>
       <div id="main-res" hidden><p class="small muted" id="main-count" style="margin:0 0 8px"></p><div class="results" id="main-list"></div></div>
-    </section>
-    <section class="card"><h2 class="eyebrow">Как заниматься</h2>
-      <ul class="plain-list">
-        <li>Занятие — 4–6 часов, два раза в неделю: 90 занятий за 45 недель.</li>
-        <li>Порядок: прочитать страницы книги → разобрать примеры решений → решить задачи на бумаге → сверить с ответами.</li>
-        <li>Ответ и решение открывать только после своего решения. Задачи с ошибками — решить снова через неделю.</li>
-        <li>Решили занятие — нажмите «Отметить занятие выполненным»: плитка и модуль в меню станут зелёными.</li>
-        <li>Перед новой главой — входной тест (<b style="color:var(--gold)">Т</b>), раз в месяц — контрольная (<b style="color:var(--gold)">К</b>).</li>
-      </ul></section>
-    <section class="card">
-      <div class="row-between"><h2 class="eyebrow">Занятия 1–${IDX.sessions.length}</h2>
-        <p class="legend"><span class="g">Т</span> входной тест · <span class="g">К</span> контрольная · <span class="ok">✓</span> выполнено</p></div>
-      ${blocks}
-    </section>`;
+      <details class="how"><summary>Как заниматься</summary>
+        <ul class="plain-list">
+          <li>Два занятия в неделю по 4–6 часов.</li>
+          <li>Прочитать страницы книги → разобрать примеры → решить задачи на бумаге → сверить с ответами.</li>
+          <li>Ответ открывать после своего решения; задачи с ошибками решить снова через неделю.</li>
+          <li>Решили занятие — «Готово». <b class="g">Т</b> — входной тест перед главой, <b class="g">К</b> — контрольная раз в месяц.</li>
+        </ul></details></header>
+    <div class="home-mods">${blocks}</div>`;
   const inp = $('#main-q'), res = $('#main-res'), clear = $('#main-clear');
   const upd = () => {
     const q = inp.value.trim(), found = findSessions(q), hit = new Set(found.map((s) => s.num));
