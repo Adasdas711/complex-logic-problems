@@ -62,7 +62,8 @@ def subst(s, mp):
 
 def norm(s):
     """Без пробелов и скобок: сравниваются буквы и операторы, а не расстановка скобок."""
-    return re.sub(r"[\s()]", "", s).replace("\\!", "")
+    s = s.replace("\\widetilde{", "\\tilde{")   # тильда над составным термином: \widetilde{(…)}
+    return re.sub(r"[\s(){}]", "", s).replace("\\!", "")
 
 
 def cases(problems):
@@ -80,9 +81,22 @@ def cases(problems):
         yield p, m.group(1), dict(subs), a
 
 
+def extra_problems():
+    """Карточки контрольных, входных тестов и планового повторения."""
+    from pathlib import Path
+    from types import SimpleNamespace
+    root = Path(__file__).resolve().parent.parent / "data"
+    for d in ("kontrolnye", "vhodnye", "povtorenie"):
+        for f in sorted((root / d).glob("*.md")):
+            for c in f.read_text(encoding="utf-8").split("\n=====\n"):
+                m = re.search(r"^id: (\S+)", c, re.M)
+                if m and "## Условие" in c:
+                    yield SimpleNamespace(meta={"id": m[1].strip('"')}, body=c[c.index("## Условие"):])
+
+
 def main():
     bad = 0
-    for p, s, mp, a in cases(load_problems()):
+    for p, s, mp, a in cases(list(load_problems()) + list(extra_problems())):
         got = subst(s, mp)
         ans = re.fullmatch(r"\$([^$]+)\$\.?", a.strip())
         if not ans:

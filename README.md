@@ -63,6 +63,7 @@ data/zadachi/<ГГ>.md   задачи: один служебный файл на
 data/primery/primery.md разобранные примеры: по одному на параграф (показываются в занятии, где параграф начинается)
 data/povtorenie/povtorenie.md задачи планового повторения: каждый параграф через неделю и через месяц (scripts/gen/povtorenie.py)
 data/kontrolnye/KNN.md задачи контрольных работ (не повторяют задачи занятий; scripts/gen/kontrolnye.py)
+data/vhodnye/VNN.md    входные тесты к главам: 8–10 задач на то, что глава NN берёт из прежних (scripts/gen/vhodnye.py)
 docs/                  документация и сгенерированные указатели
 templates/zadacha.md   шаблон карточки
 scripts/validate.py    проверка карточек

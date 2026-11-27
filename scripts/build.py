@@ -85,6 +85,12 @@ def kontrol_name(k: int, after: int, tax) -> str:
     return _clean(f"{after:02d}к. Неделя {week_of(after, tax)} Контрольная работа {k}") + ".md"
 
 
+def vhod_name(ch: int, first: int, tax) -> str:
+    """Входной тест к главе: после занятия first − 1, перед занятием first (буква «т» — после контрольной «к»)."""
+    what = "разделу 16" if ch == 16 else f"главе {ch}"
+    return _clean(f"{first - 1:02d}т. Неделя {week_of(first, tax)} Входной тест к {what}") + ".md"
+
+
 def link(name: str, prefix: str = "../zanyatiya/") -> str:
     return prefix + quote(name)
 
@@ -191,6 +197,18 @@ def plan(chapters, tax) -> str:
     return "".join(out)
 
 
+def cross_note(chapters) -> str:
+    """Сколько межглавных задач (тег «межглавная») в повторении и в каких занятиях."""
+    probs = [p for p in load_problems() if "id" in p.meta]
+    where = session_of(chapters, probs)
+    nums = sorted(where[p.meta["id"]] for p in probs if "межглавная" in (p.meta.get("tags") or []) and p.meta["id"] in where)
+    if not nums:
+        return ""
+    return (f"В повторении занятий {nums[0]}–{nums[-1]} — **{len(nums)} межглавных задач**: перенос между системами "
+            "разных глав (кванторы и модальности, существование и модальности, условные высказывания и физическое "
+            "следование, приложение и теория кванторов) и сравнение классических случаев разных глав.\n\n")
+
+
 def zanyatiya(chapters, tax) -> str:
     sessions = compute_sessions(chapters)
     size, per_week = tax["sessions"]["size"], tax["sessions"]["per_week"]
@@ -204,6 +222,7 @@ def zanyatiya(chapters, tax) -> str:
            "правила нужно узнавать вперемешку, а не по одному;\n"
            "- около четверти задач в обеих частях — **диагностика**: найти, что не так, и назвать нарушенное правило.\n\n"
            "Последние занятия целиком состоят из смешанных наборов — это итоговое повторение.\n\n"
+           + cross_note(chapters) +
            "| № | Неделя | Новый материал | Повторение | Задач |\n|---|---|---|---|---|\n"]
     for s in sessions:
         new = "; ".join(f"{sec.key} {sec.title[:40]} ({n})" for c, sec, n in s["new"]) or "—"
@@ -258,7 +277,7 @@ def uchebnyj_plan(chapters, tax) -> str:
 
 ## Контрольные точки
 
-""" + kontrol_section(chapters, tax) + """В конце каждого модуля — смешанный набор по всему модулю. Он сдан, если решено не меньше 90 % задач, а среди задач ступеней 1–4 — не меньше 95 %. Если результат ниже, повторить задачи по навыкам с ошибками, а потом решить набор снова. Переходить к следующему модулю стоит только после сдачи: каждый модуль опирается на предыдущие.
+""" + kontrol_section(chapters, tax) + vhod_section(chapters, tax) + """В конце каждого модуля — смешанный набор по всему модулю. Он сдан, если решено не меньше 90 % задач, а среди задач ступеней 1–4 — не меньше 95 %. Если результат ниже, повторить задачи по навыкам с ошибками, а потом решить набор снова. Переходить к следующему модулю стоит только после сдачи: каждый модуль опирается на предыдущие.
 
 ## Регулярность
 
@@ -350,6 +369,7 @@ def session_sheets(chapters, problems, tax) -> dict:
     files = {}
     examples = load_primery()
     spaced = load_povtorenie()
+    vhod = load_vhod()
     hide_from = next((x["num"] for x in sessions if any(c.num == HIDE_FROM_CHAPTER for c, _, _ in x["new"])), 10 ** 6)
     for s in sessions:
         items, reading, fresh = list(assigned[s["num"]]) + spaced.get(s["num"], []), [], []
@@ -379,6 +399,11 @@ def session_sheets(chapters, problems, tax) -> dict:
                      else "Страницы книг; в скобках — страницы PDF-скана, где он есть.\n\n"), "\n".join(reading) + "\n\n"]
         if review:
             out.append("Повторение без нового чтения: пройденное до — " + "; ".join(review) + ".\n\n")
+        for c, sec in fresh:
+            if c.num in vhod and sec.num == c.sections[0].num:
+                what = "разделу 16" if c.num == 16 else f"главе {c.num}"
+                out.append(f"Перед занятием — [входной тест к {what}]({link(vhod_name(c.num, s['num'], tax), '')}): "
+                           "если он не сдан, сначала повторите указанные в нём параграфы.\n\n")
         shown = [(c, sec, examples[(c.num, sec.num)]) for c, sec in fresh if (c.num, sec.num) in examples]
         out.append("## Примеры решений\n\n")
         if not shown:
@@ -580,6 +605,111 @@ def kontrol_sheets(chapters, tax) -> dict:
     return files
 
 
+VHOD = DATA / "vhodnye"
+VHOD_TIME = "45–60 минут"
+VHOD_PASS = ("Тест сдан, если ошибок не больше одной. Задача засчитывается, только если ответ верен и обоснование "
+             "ссылается на нужные определения и правила книги. Если ошибок больше, по таблице ответов найдите параграфы "
+             "с ошибками, перечитайте их и решите заново их задачи из указанных занятий — и только потом начинайте главу.")
+
+
+def load_vhod() -> dict:
+    """{номер главы: [карточки входного теста]} из data/vhodnye/VNN.md."""
+    import re
+    out = {}
+    for f in sorted(VHOD.glob("V*.md")) if VHOD.exists() else []:
+        cards = []
+        for chunk in CARD_SEP.split(f.read_text(encoding="utf-8")):
+            chunk = chunk.strip()
+            m = FRONT_RE.match(chunk + "\n") if chunk else None
+            if m:
+                cards.append(Problem(f, yaml.safe_load(m.group(1)) or {}, chunk[m.end():]))
+        out[int(re.sub(r"\D", "", f.stem))] = cards
+    return out
+
+
+def chapter_starts(sessions) -> dict:
+    """{глава: номер занятия, в котором она начинается}."""
+    out = {}
+    for s in sessions:
+        for c, _, _ in s["new"]:
+            out.setdefault(c.num, s["num"])
+    return out
+
+
+def studied_in(sessions) -> dict:
+    """{(глава, параграф): [занятия, где идут его задачи как новый материал]}."""
+    out = defaultdict(list)
+    for s in sessions:
+        for _, sec, _ in s["new"]:
+            out[(sec.chapter, sec.num)].append(s["num"])
+    return out
+
+
+def vhod_section(chapters, tax) -> str:
+    tests = load_vhod()
+    if not tests:
+        return ""
+    sessions = compute_sessions(chapters)
+    starts = chapter_starts(sessions)
+    titles = {c.num: c.full_title for c in chapters}
+    secs = {(c.num, sec.num): sec for c in chapters for sec in c.sections}
+    rows = ["Перед каждой главой (кроме Введения) — входной тест: 8–10 новых задач на то, что глава берёт из прежних глав. "
+            f"Время — {VHOD_TIME}. Если тест не сдан, таблица ответов показывает, какие параграфы повторить.\n\n"
+            "| Тест | Перед занятием | Неделя | Что проверяется |\n|---|---|---|---|\n"]
+    for ch in sorted(tests, key=lambda n: starts.get(n, 0)):
+        first = starts[ch]
+        keys = sorted({(p.meta["chapter"], p.meta["section"]) for p in tests[ch]})
+        what = "; ".join(secs[k].key for k in keys)
+        rows.append(f"| [{titles[ch]}]({link(vhod_name(ch, first, tax))}) | {first} | {week_of(first, tax)} | {what} |\n")
+    return "".join(rows) + "\n"
+
+
+def vhod_sheets(chapters, tax) -> dict:
+    tests = load_vhod()
+    sessions = compute_sessions(chapters)
+    starts = chapter_starts(sessions)
+    where_studied = studied_in(sessions)
+    names = {s["num"]: session_name(s, tax) for s in sessions}
+    secs = {(c.num, sec.num): (c, sec) for c in chapters for sec in c.sections}
+    titles = {c.num: c.full_title for c in chapters}
+    files = {}
+    for ch, items in tests.items():
+        first = starts[ch]
+
+        def where(p):
+            c, sec = secs[(p.meta["chapter"], p.meta["section"])]
+            nums = where_studied.get((c.num, sec.num), [])
+            label = c.full_title if sec.num == 0 else f"{c.full_title}, {sec.label}"
+            pages = f", {sec.pages}" if sec.page is not None else ""
+            occ = ", ".join(f"[{n}]({link(names[n], '')})" for n in nums)
+            return f"{label}{pages}" + (f"; занятия {occ}" if occ else "")
+        keys = sorted({(p.meta["chapter"], p.meta["section"]) for p in items})
+        out = [GEN, f"# Входной тест к главе {ch}. {titles[ch].split('. ', 1)[-1]}\n\n" if ch != 16 else
+               f"# Входной тест к разделу 16. {titles[ch].split('. ', 1)[-1]}\n\n",
+               f"Перед занятием [{first}]({link(names[first], '')}) (неделя {week_of(first, tax)}). "
+               f"{len(items)} задач на то, что {'раздел' if ch == 16 else 'глава'} берёт из прежних глав. "
+               f"Время — **{VHOD_TIME}**. Решайте без книги и без своих записей: тест проверяет, что осталось "
+               "в памяти. Решения и ответы — в конце документа.\n\n",
+               "## Как оценивать\n\n" + VHOD_PASS + "\n\n",
+               "## Что проверяется\n\n" + "".join(f"- {where_key}\n" for where_key in
+                                                     dict.fromkeys(where(p) for p in sorted(items, key=lambda p: (p.meta['chapter'], p.meta['section'])))) + "\n",
+               "## Задачи\n\n"]
+        sol = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n## Ответы и решения\n\n### Решения\n\n"]
+        ans = ["\n### Ответы\n\n| № | Ответ | Что повторить при ошибке |\n|---|---|---|\n"]
+        for i, p in enumerate(items, 1):
+            parts = card_parts(p)
+            out.append(f"{i}\\. {parts.get('Условие', '')}\n\n")
+            full = parts.get("Ответ", "")
+            simple = "|" not in full and len(full) <= 220
+            short = full.replace("\n", " ") if simple else f"см. решение {i}"
+            c, sec = secs[(p.meta["chapter"], p.meta["section"])]
+            ans.append(f"| {i} | {short} | {sec.key} {sec.title} |\n")
+            extra = "" if simple else f"\n\nОтвет:\n\n{full}"
+            sol.append(f"{i}\\. {parts.get('Решение', '')}{extra}\n\n")
+        files[SHEETS / vhod_name(ch, first, tax)] = "".join(out + sol + ans)
+    return files
+
+
 TITLES = {0: "Введение: операторы, термины, высказывания, следование",
           2: "Сильное следование, другой вариант"}
 
@@ -619,6 +749,7 @@ def generate() -> dict:
     }
     files.update(session_sheets(chapters, problems, tax))
     files.update(kontrol_sheets(chapters, tax))
+    files.update(vhod_sheets(chapters, tax))
     return files
 
 

@@ -143,6 +143,34 @@ def main() -> int:
                 errors.append(f"{rel}: условие совпадает с задачей занятия, контрольной или примером")
             rseen[c] += 1
     errors += [f"повторение: одно условие встречается {n} раз" for n in rseen.values() if n > 1]
+    # Входные тесты: новые задачи по параграфам прежних глав.
+    from build import load_vhod
+    vseen, vcount = Counter(), 0
+    for ch, cards in load_vhod().items():
+        if not 8 <= len(cards) <= 10:
+            warnings.append(f"vhodnye/V{ch:02d}: задач {len(cards)}, нужно 8–10")
+        for pr in cards:
+            vcount += 1
+            m = pr.meta
+            rel = f"vhodnye/{pr.path.name}: {m.get('id', '?')}"
+            missing = [f for f in REQUIRED if f not in m]
+            if missing:
+                errors.append(f"{rel}: нет полей {missing}")
+                continue
+            if not re.fullmatch(rf"V{ch:02d}-\d{{2}}", str(m["id"])) or m.get("test_for") != ch:
+                errors.append(f"{rel}: номер не в формате V{ch:02d}-NN или нет test_for: {ch}")
+            if (m["chapter"], m["section"]) not in sections:
+                errors.append(f"{rel}: нет параграфа {m['chapter']}.{m['section']}")
+            if m["level"] not in tax["levels"] or m["type"] not in tax["types"]:
+                errors.append(f"{rel}: неизвестная ступень или тип")
+            for block in REQUIRED_BLOCKS:
+                if block not in pr.body:
+                    errors.append(f"{rel}: нет раздела «{block[3:]}»")
+            c = cond(pr.body)
+            if c in taught or c in kseen or c in ex_conds or c in rseen:
+                errors.append(f"{rel}: условие совпадает с задачей занятия, контрольной, примером или повторением")
+            vseen[c] += 1
+    errors += [f"входные тесты: одно условие встречается {n} раз" for n in vseen.values() if n > 1]
     for c, n in kseen.items():
         if n > 1:
             errors.append(f"контрольные: одно условие встречается {n} раз: {c[:60]}…")
@@ -151,7 +179,7 @@ def main() -> int:
         print("ПРЕДУПРЕЖДЕНИЕ:", w)
     for e in errors:
         print("ОШИБКА:", e)
-    print(f"Задач: {len(problems)} из {tax['total']}; в контрольных: {kcount}; разобранных примеров: {len(examples)}; повторения: {sum(rseen.values())}. Ошибок: {len(errors)}, предупреждений: {len(warnings)}.")
+    print(f"Задач: {len(problems)} из {tax['total']}; в контрольных: {kcount}; разобранных примеров: {len(examples)}; повторения: {sum(rseen.values())}; во входных тестах: {vcount}. Ошибок: {len(errors)}, предупреждений: {len(warnings)}.")
     return 1 if errors else 0
 
 

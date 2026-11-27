@@ -229,15 +229,20 @@ def prov(k, a, b):
 
 # ---------------------------------------------------------------- карточки
 def cards():
-    for f in sorted(glob.glob(str(ROOT / "data/zadachi/*.md"))):
+    files = sorted(glob.glob(str(ROOT / "data/zadachi/*.md")))
+    for d in ("kontrolnye", "vhodnye", "povtorenie"):
+        files += sorted(glob.glob(str(ROOT / f"data/{d}/*.md")))
+    for f in files:
         for c in open(f, encoding="utf-8").read().split("\n=====\n"):
             m = re.search(r'^id: "?([^"\s]+)', c, re.M)
+            chm = re.search(r"^chapter: (\d+)", c, re.M)
             if not m or "## Условие" not in c:
                 continue
             cond_, rest = c.split("## Условие", 1)[1].split("## Ответ", 1)
             ans, sol = rest.split("## Решение", 1) if "## Решение" in rest else (rest, "")
             typ = re.search(r"^type: (\S+)", c, re.M)
-            yield m[1], (typ[1] if typ else ""), cond_.strip(), ans.strip(), sol.strip()
+            cid = m[1] if re.match(r"\d\d\.", m[1]) else f"{int(chm[1]):02d}:{m[1]}" if chm else m[1]
+            yield cid, (typ[1] if typ else ""), cond_.strip(), ans.strip(), sol.strip()
 
 
 SYS = [(r"S\^\{?s\}?(?![_\w])", "s"), (r"S\^\{?1\}?(?![_\w])", "s"), (r"S_\{?1\}?(?!\^)", "s"),

@@ -4,6 +4,7 @@
   python3 scripts/lint.py            — сводка по видам замечаний
   python3 scripts/lint.py -v KIND    — все замечания вида KIND
   python3 scripts/lint.py -k         — то же для задач контрольных (data/kontrolnye)
+  python3 scripts/lint.py -t         — то же для задач входных тестов (data/vhodnye)
 """
 import re
 import sys
@@ -85,6 +86,9 @@ def main():
     if "-k" in sys.argv:  # задачи контрольных работ
         from build import load_kontrol
         probs = [p for cards in load_kontrol().values() for p in cards]
+    elif "-t" in sys.argv:  # задачи входных тестов
+        from build import load_vhod
+        probs = [p for cards in load_vhod().values() for p in cards]
     else:
         probs = [p for p in load_problems() if "id" in p.meta]
     found = defaultdict(list)

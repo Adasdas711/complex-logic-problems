@@ -659,7 +659,7 @@ def rmod(lvl, typ="D", sec=2, sysn="S^{m1}_n", sysk="S^m1_n", src="с. 170, гл
     r = rnd.choice(["R1", "R2"])
     op = "N" if r == "R1" else "M"
     return card(12, sec, lvl, typ, "iso", f"{MO} В $S^s$ доказуема ${Q.ftex(a, b)}$. Какую формулу $S^{{{'m1' if sec == 2 else 'm0'}}}_n$ даёт правило {r} "
-                f"(${'если' } x \\vdash y$, то ${op}(\\downarrow x) \\vdash {op}(\\downarrow y)$)? Почему исходная формула доказуема в $S^s$?",
+                f"(если $x \\vdash y$, то ${op}(\\downarrow x) \\vdash {op}(\\downarrow y)$)? Почему исходная формула доказуема в $S^s$?",
                 f"${op}(\\downarrow {wrapx(Q.tex(a))}) \\vdash {op}(\\downarrow {wrapx(Q.tex(b))})$",
                 f"{r} (с. {170 if sec == 2 else 174}). Исходная формула — сильная тавтология: тавтология, и в заключение не входят элементарные высказывания, "
                 "отсутствующие в посылке (гл. 5, § 2).", src, "модальность, правила", system=sysk)
