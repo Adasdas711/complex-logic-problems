@@ -19,7 +19,7 @@ SYM = {
     "geq": "≥", "leq": "≤", "ge": "≥", "le": "≤", "neq": "≠", "ne": "≠", "equiv": "≡",
     "ldots": "…", "dots": "…", "cdots": "⋯", "times": "×", "neg": "¬", "infty": "∞",
     "alpha": "α", "beta": "β", "gamma": "γ", "delta": "δ", "varepsilon": "ε", "epsilon": "ε",
-    "lambda": "λ", "mu": "μ", "pi": "π", "sigma": "σ", "tau": "τ", "varphi": "φ", "phi": "φ", "psi": "ψ",
+    "lambda": "λ", "mu": "μ", "pi": "π", "sigma": "σ", "tau": "τ", "varphi": "φ", "phi": "φ", "psi": "ψ", "Phi": "Φ",
     "quad": " ", "qquad": "  ",
     "Leftarrow": "⇐", "langle": "⟨", "rangle": "⟩", "mid": "∣", "parallel": "∥", "pm": "±",
     "geqslant": "⩾", "leqslant": "⩽", "square": "□",

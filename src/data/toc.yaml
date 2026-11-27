@@ -277,40 +277,40 @@ extra:
       - {num: 2, title: "Эмпирические предметы", source: "ЛФ, с. 54–55", profile: O, quota: 7}
       - {num: 3, title: "Абстрактные предметы", source: "ЛФ, с. 55–57", profile: O, quota: 13}
       - {num: 4, title: "Индивиды", source: "ЛФ, с. 57–58", profile: O, quota: 7}
-      - {num: 5, title: "Предикаты величин и степени истинности", source: "ЛФ, с. 58–60", profile: O, quota: 13}
-      - {num: 6, title: "Классы (множества)", source: "ЛФ, с. 60–64", profile: O, quota: 26}
+      - {num: 5, title: "Предикаты величин и степени истинности", source: "ЛФ, с. 58–60", profile: O, quota: 43}
+      - {num: 6, title: "Классы (множества)", source: "ЛФ, с. 60–64", profile: O, quota: 74}
       - {num: 7, title: "Скопления", source: "ЛФ, с. 64–65", profile: O, quota: 7}
       - {num: 8, title: "Состояния, события", source: "ЛФ, с. 65", profile: O, quota: 4}
-      - {num: 9, title: "Существование", source: "ЛФ, с. 65–69", profile: O, quota: 26}
+      - {num: 9, title: "Существование", source: "ЛФ, с. 65–69", profile: O, quota: 59}
       - {num: 10, title: "Модальные предикаты", source: "ЛФ, с. 69–70", profile: O, quota: 7}
-      - {num: 11, title: "Возможность", source: "ЛФ, с. 70–72", profile: O, quota: 13}
-      - {num: 12, title: "Случайность", source: "ЛФ, с. 72–73", profile: O, quota: 7}
-      - {num: 13, title: "Фатализм", source: "ЛФ, с. 73–74", profile: F, quota: 7}
+      - {num: 11, title: "Возможность", source: "ЛФ, с. 70–72", profile: O, quota: 52}
+      - {num: 12, title: "Случайность", source: "ЛФ, с. 72–73", profile: O, quota: 21}
+      - {num: 13, title: "Фатализм", source: "ЛФ, с. 73–74", profile: F, quota: 9}
       - {num: 14, title: "Модальные операторы", source: "ЛФ, с. 74–75", profile: O, quota: 7}
       - {num: 15, title: "Актуальное и потенциальное", source: "ЛФ, с. 75", profile: O, quota: 4}
-      - {num: 16, title: "Измерение возможности", source: "ЛФ, с. 75–77", profile: O, quota: 13}
+      - {num: 16, title: "Измерение возможности", source: "ЛФ, с. 75–77", profile: O, quota: 45}
       - {num: 17, title: "Отношения", source: "ЛФ, с. 77–78", profile: O, quota: 7}
-      - {num: 18, title: "Сравнение", source: "ЛФ, с. 78–80", profile: O, quota: 13}
-      - {num: 19, title: "Отношение порядка", source: "ЛФ, с. 80–82", profile: O, quota: 13}
-      - {num: 20, title: "Отношение «между»", source: "ЛФ, с. 82", profile: O, quota: 4}
+      - {num: 18, title: "Сравнение", source: "ЛФ, с. 78–80", profile: O, quota: 58}
+      - {num: 19, title: "Отношение порядка", source: "ЛФ, с. 80–82", profile: O, quota: 45}
+      - {num: 20, title: "Отношение «между»", source: "ЛФ, с. 82", profile: O, quota: 19}
       - {num: 21, title: "Существование отношений", source: "ЛФ, с. 82–83", profile: O, quota: 7}
       - {num: 22, title: "Отношение чисел и величин", source: "ЛФ, с. 83–84", profile: O, quota: 7}
-      - {num: 23, title: "Упорядоченный ряд", source: "ЛФ, с. 84–86", profile: O, quota: 13}
-      - {num: 24, title: "Соприкосновение", source: "ЛФ, с. 86–87", profile: O, quota: 7}
+      - {num: 23, title: "Упорядоченный ряд", source: "ЛФ, с. 84–86", profile: O, quota: 32}
+      - {num: 24, title: "Соприкосновение", source: "ЛФ, с. 86–87", profile: O, quota: 21}
       - {num: 25, title: "Непрерывность и прерывность эмпирического ряда", source: "ЛФ, с. 87–88", profile: O, quota: 7}
       - {num: 26, title: "Начало и конец ряда", source: "ЛФ, с. 88–90", profile: O, quota: 13}
       - {num: 27, title: "Интервал", source: "ЛФ, с. 90–91", profile: O, quota: 7}
       - {num: 28, title: "Протяжённость", source: "ЛФ, с. 91–93", profile: O, quota: 13}
       - {num: 29, title: "Абстрактные ряды", source: "ЛФ, с. 93–95", profile: O, quota: 13}
       - {num: 30, title: "Конечные и бесконечные ряды", source: "ЛФ, с. 95–96", profile: O, quota: 7}
-      - {num: 31, title: "Структура", source: "ЛФ, с. 96–100", profile: O, quota: 26}
+      - {num: 31, title: "Структура", source: "ЛФ, с. 96–100", profile: O, quota: 50}
       - {num: 32, title: "Существование структуры", source: "ЛФ, с. 100", profile: O, quota: 4}
       - {num: 33, title: "Протяжённость структуры", source: "ЛФ, с. 100–101", profile: O, quota: 7}
       - {num: 34, title: "Соответствие", source: "ЛФ, с. 101–102", profile: O, quota: 6}
-      - {num: 35, title: "Соответствие классов", source: "ЛФ, с. 102–105", profile: O, quota: 20}
+      - {num: 35, title: "Соответствие классов", source: "ЛФ, с. 102–105", profile: O, quota: 48}
       - {num: 36, title: "Функция", source: "ЛФ, с. 105", profile: O, quota: 4}
-      - {num: 37, title: "Упорядоченные состояния", source: "ЛФ, с. 105–106", profile: O, quota: 6}
-      - {num: 38, title: "Условные высказывания с отношением порядка", source: "ЛФ, с. 106–107", profile: O, quota: 6}
+      - {num: 37, title: "Упорядоченные состояния", source: "ЛФ, с. 105–106", profile: O, quota: 30}
+      - {num: 38, title: "Условные высказывания с отношением порядка", source: "ЛФ, с. 106–107", profile: O, quota: 7}
       - {num: 39, title: "Функциональная зависимость", source: "ЛФ, с. 107–108", profile: O, quota: 6}
       - {num: 40, title: "Связи", source: "ЛФ, с. 108–109", profile: O, quota: 6}
       - {num: 41, title: "О некоторых уточнениях в теории классов", source: "ЛФ, с. 109–111", profile: O, quota: 13}
