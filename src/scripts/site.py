@@ -16,6 +16,7 @@
 
 Запуск: python3 src/scripts/site.py [--check]   (--check: данные актуальны, ничего не пишет)
 """
+import hashlib
 import json
 import re
 import shutil
@@ -142,14 +143,32 @@ def main() -> int:
     if check:
         for p in stale + extra:
             print("устарел:", p.relative_to(REPO))
-        print("Проверено: данные сайта актуальны." if not stale and not extra else
-              "Данные сайта устарели: python3 src/scripts/site.py")
-        return 1 if stale or extra else 0
+        if stale or extra:
+            print("Данные сайта устарели: python3 src/scripts/site.py")
+            return 1
     for p in extra:
         p.unlink()
     for p in stale:
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(FILES[p], encoding="utf-8")
+
+    # index.html: версия у app.css и app.js (хэш содержимого) — браузер берёт новые файлы сразу после обновления
+
+    page = REPO / "index.html"
+    html_old = page.read_text(encoding="utf-8")
+    html_new = html_old
+    for name in ("app.css", "app.js"):
+        v = hashlib.sha1((REPO / "site_src" / name).read_bytes()).hexdigest()[:8]
+        html_new = re.sub(rf'site_src/{re.escape(name)}(\?v=\w+)?"', f'site_src/{name}?v={v}"', html_new)
+    if html_new != html_old:
+        if check:
+            print("устарел: index.html (версия app.css/app.js)")
+            return 1
+        page.write_text(html_new, encoding="utf-8")
+
+    if check:
+        print("Проверено: данные сайта актуальны.")
+        return 0
 
     # _site/ — то, что публикуется: index.html из корня и site_src/ без README
     if out.exists():

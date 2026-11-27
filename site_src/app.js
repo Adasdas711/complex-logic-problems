@@ -28,7 +28,7 @@ const $ = (sel, root = document) => root.querySelector(sel);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function get(path) {
   if (!cache[path]) {
-    cache[path] = fetch(DATA + path).then((r) => { if (!r.ok) throw new Error(path); return r.json(); })
+    cache[path] = fetch(DATA + path, { cache: 'no-cache' }).then((r) => { if (!r.ok) throw new Error(path); return r.json(); })
       .catch((e) => { delete cache[path]; throw e; });
   }
   return cache[path];
