@@ -301,20 +301,25 @@ function viewMod(m) {
     return;
   }
   const d = ss.filter((s) => doneZ(s.num)).length;
-  const rows = [];
+  const CK = '<span class="ck">✓</span>';
+  const row = (href, n, text, done, gold) =>
+    `<a class="mrow${gold ? ' gold' : ''}${done ? ' fin' : ''}" href="${href}"><b>${n}</b><span>${text}</span>${done ? CK : ''}</a>`;
+  const groups = [];
   for (const s of ss) {
-    for (const t of testBefore(s.num)) rows.push(`<a class="rowi gold${doneT(t.chapter) ? ' done' : ''}" href="#/t/${t.chapter}"><b>Т</b><span>Входной тест к ${testShort(t)}</span><span class="meta">${doneT(t.chapter) ? '<span class="ok">✓ выполнен</span>' : 'перед занятием ' + s.num}</span></a>`);
-    rows.push(`<a class="rowi${doneZ(s.num) ? ' done' : ''}" href="#/z/${s.num}"><b>${s.num}</b><span>${s.topicH}</span><span class="meta">${doneZ(s.num) ? '<span class="ok">✓ выполнено</span>' : 'неделя ' + s.week}</span></a>`);
-    for (const k of kontrolAfter(s.num)) rows.push(`<a class="rowi gold${doneK(k.k) ? ' done' : ''}" href="#/k/${k.k}"><b>К</b><span>Контрольная работа ${k.k}</span><span class="meta">${doneK(k.k) ? '<span class="ok">✓ выполнена</span>' : 'после занятия ' + s.num}</span></a>`);
+    if (!groups.length || groups[groups.length - 1].week !== s.week) groups.push({ week: s.week, rows: [] });
+    const g = groups[groups.length - 1].rows;
+    for (const t of testBefore(s.num)) g.push(row(`#/t/${t.chapter}`, 'Т', `Входной тест к ${testShort(t)}`, doneT(t.chapter), true));
+    g.push(row(`#/z/${s.num}`, s.num, s.topicH, doneZ(s.num)));
+    for (const k of kontrolAfter(s.num)) g.push(row(`#/k/${k.k}`, 'К', `Контрольная ${k.k}`, doneK(k.k), true));
   }
-  const chs = mod.chapters.map((c) => (c === 0 ? 'Введение' : c === 16 ? 'раздел 16' : 'гл. ' + c)).join(', ');
+  const cg = (a, w) => (a.length ? w + ' ' + a.join(', ') : '');
+  const chs = [mod.chapters.includes(0) ? 'Введение' : '', cg(mod.chapters.filter((c) => c > 0 && c < 16), 'гл.'),
+    cg(mod.chapters.filter((c) => c >= 16), mod.chapters.filter((c) => c >= 16).length > 1 ? 'разделы' : 'раздел')].filter(Boolean).join(', ');
   $('#view').innerHTML = `
-    <section class="card"><p class="eyebrow">Модуль ${ROM(m)} · занятия ${Math.min(...nums)}–${Math.max(...nums)} · недели ${Math.min(...weeks)}–${Math.max(...weeks)}</p>
-      <h1>${esc(modTitle(m))}</h1><p class="muted">Материал: ${chs}.</p>
-      <p><b>К концу модуля:</b> ${esc(mod.goal)}</p>
-      <div class="progress"><p>Выполнено занятий: <b>${d} из ${ss.length}</b></p><span class="bar"><span style="width:${Math.round(100 * d / ss.length)}%"></span></span></div></section>
-    <section class="card"><h2 class="eyebrow">Занятия и проверки</h2><div class="rows">${rows.join('')}</div></section>
-    <section class="card"><div class="navrow">${m > 0 ? `<a class="btn" href="#/m/${m}">‹ Модуль ${ROM(m - 1)}</a>` : '<span></span>'}${m < IDX.modules.length - 1 ? `<a class="btn" href="#/m/${m + 2}">Модуль ${ROM(m + 1)} ›</a>` : '<span></span>'}</div></section>`;
+    <header class="head mhead"><p class="eyebrow">Модуль ${ROM(m)} · ${chs}${d ? ` · <span class="${d === ss.length ? 'ok' : ''}">${d === ss.length ? '✓' : d + '/' + ss.length}</span>` : ''}</p>
+      <h1>${esc(modTitle(m))}</h1><p>${esc(mod.goal)}</p></header>
+    <div class="mlist">${groups.map((g) => `<section><p class="mweek">Неделя ${g.week}</p>${g.rows.join('')}</section>`).join('')}</div>
+    <nav class="mnav">${m > 0 ? `<a href="#/m/${m}">‹ ${esc(modTitle(m - 1))}</a>` : '<span></span>'}${m < IDX.modules.length - 1 ? `<a href="#/m/${m + 2}">${esc(modTitle(m + 1))} ›</a>` : '<span></span>'}</nav>`;
   document.title = `Модуль ${ROM(m)} — Комплексная логика`;
 }
 

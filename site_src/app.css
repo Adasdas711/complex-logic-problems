@@ -144,8 +144,21 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .rowi .meta { font-size: 12px; color: var(--muted); text-align: right; }
 .rowi .sub { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
 .rowi .ok { color: var(--green); font-weight: 600; font-size: 12px; }
-.progress p { margin: 0 0 6px; }
-.progress .bar { height: 6px; margin: 0; }
+/* Экран модуля */
+.mhead p:last-child { max-width: 760px; line-height: 1.5; }
+.mhead .eyebrow .ok { color: var(--green); }
+.mlist { display: flex; flex-direction: column; gap: 18px; padding: 0 4px; }
+.mweek { margin: 0 0 4px; font-size: 12px; color: var(--dim); }
+.mrow { display: flex; align-items: baseline; gap: 14px; padding: 9px 10px; margin: 0 -10px; border-radius: 9px; color: #d6d6d6; }
+.mrow:hover { background: #222; color: var(--text); }
+.mrow > b { flex: none; min-width: 28px; font-weight: 600; font-size: 14px; color: var(--green); font-variant-numeric: tabular-nums; }
+.mrow.gold > b { color: var(--gold); }
+.mrow > span { flex: 1; min-width: 0; font-size: 15px; }
+.mrow .ck { flex: none; font-size: 13px; color: var(--green); }
+.mrow.fin > span { color: var(--dim); }
+.mnav { display: flex; justify-content: space-between; gap: 16px; padding: 8px 4px 0; border-top: 1px solid #2a2a2a; font-size: 13.5px; }
+.mnav a { color: var(--muted); }
+.mnav a:hover { color: var(--text); }
 
 /* Отметка «выполнено»: лёгкая таблетка с кружком */
 .pill { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 13px 0 9px; border-radius: 999px; font-size: 13px; font-weight: 500;
