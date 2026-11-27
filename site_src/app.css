@@ -130,17 +130,19 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .how summary:hover { color: var(--text); }
 .how .plain-list { margin: 10px 0 0; font-size: 14px; color: var(--muted); }
 .how .g { color: var(--gold); }
-.home-mods { display: flex; flex-direction: column; gap: 26px; padding: 6px 4px 0; }
+.home-mods { columns: 2; column-gap: 40px; padding: 6px 4px 0; }
+.home-mods > .mod-block { break-inside: avoid; padding-bottom: 26px; }
+.home-mods > .mod-block.wide { column-span: all; padding-top: 6px; }
 .mod-block { display: flex; flex-direction: column; gap: 10px; }
 .mod-h { display: flex; align-items: baseline; gap: 10px; font-size: 15px; font-weight: 600; color: #d6d6d6; width: fit-content; }
 .mod-h:hover { color: var(--text); }
 .mod-h .rn { min-width: 26px; font-size: 12px; font-weight: 500; color: var(--dim); }
 .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 6px; }
-.tile { display: flex; align-items: center; justify-content: center; height: 40px; border-radius: 9px; border: 1px solid #2c2c2c;
-  color: #cfcfcf; font-variant-numeric: tabular-nums; transition: opacity .15s; }
-.tile:hover { border-color: #4a4a4a; color: var(--text); }
+.tile { display: flex; align-items: center; justify-content: center; height: 40px; border-radius: 9px; border: 1px solid #303030;
+  background: var(--card); color: #d6d6d6; font-variant-numeric: tabular-nums; transition: opacity .15s; }
+.tile:hover { background: #2d2d2d; border-color: #4a4a4a; color: var(--text); }
 .tile .n { font-size: 14px; font-weight: 600; }
-.tile.gold { color: var(--gold); border-color: rgba(232, 217, 168, 0.22); }
+.tile.gold { color: var(--gold); background: var(--gold-bg); border-color: rgba(232, 217, 168, 0.25); }
 .tile.done { background: var(--green-bg); border-color: #2f4636; color: var(--green); }
 .tile.dim { opacity: .2; }
 
@@ -308,6 +310,7 @@ details > .in { padding: 0 16px 16px; display: flex; flex-direction: column; gap
   .main { width: 100%; padding: 20px 14px 48px; }
   .rowi { grid-template-columns: 40px 1fr; }
   .mlist { columns: 1; }
+  .home-mods { columns: 1; }
   .rowi .meta { grid-column: 2; text-align: left; }
   .stepi { grid-template-columns: 32px 1fr; }
   .stepi > span { grid-column: 2; }

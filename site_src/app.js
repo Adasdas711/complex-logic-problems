@@ -152,8 +152,9 @@ function viewKurs() {
     }
     const nums = ss.map((s) => s.num);
     const head = `<a class="mod-h" href="#/m/${i + 1}"><span class="rn">${ROM(i)}</span>${esc(modTitle(i))}</a>`;
-    if (!nums.length) return `<div class="mod-block">${head}<p class="muted small">занятия готовятся</p></div>`;
-    return `<div class="mod-block">${head}<div class="tiles">${items.join('')}</div></div>`;
+    const wide = m.chapters.some((c) => c >= 18) ? ' wide' : '';   // модуль IX — во всю ширину
+    if (!nums.length) return `<div class="mod-block${wide}">${head}<p class="muted small">занятия готовятся</p></div>`;
+    return `<div class="mod-block${wide}">${head}<div class="tiles">${items.join('')}</div></div>`;
   }).join('');
   $('#view').innerHTML = `
     <header class="head home-h"><h1 class="big-h1">Комплексная логика</h1>
