@@ -246,10 +246,13 @@ def uchebnyj_plan(chapters, tax) -> str:
 | Часть | Время | Что делать |
 |---|---|---|
 | Чтение | 30 мин | Параграфы книги, которые изучаются сегодня |
-| Разобранные примеры | 30 мин | По одному на каждый новый навык; разобрать и пересказать себе каждый шаг |
-| Новые задачи | 2,5–3,5 ч | Около 35 задач по лестнице: дополнение решения, однотипные задачи, вариации, задачи без известного ответа, перенос |
-| Повторение | 40 мин | Около 5 задач из смешанного набора по прошлым главам |
+| Примеры решений | 30 мин | По одному на каждый новый параграф; разобрать и пересказать себе каждый шаг. С главы 6 решение примера скрыто: сначала попробовать решить самому, потом открыть |
+| Задачи | 3–4 ч | 40 задач занятия и от 0 до 7 задач планового повторения |
 | Разбор ошибок | 20 мин | Для каждой ошибки записать, какое правило нарушено; задачи с ошибками решить повторно на следующем занятии |
+
+Задачи идут не блоками, а вперемешку. Первые четыре задачи каждого нового параграфа стоят подряд сразу после его примера. Дальше задачи разных параграфов и типов чередуются, чтобы для каждой задачи приходилось самому выбирать нужное правило. Внутри параграфа сохраняется порядок от простых к сложным.
+
+Каждый параграф возвращается дважды: через неделю (два занятия спустя) и через месяц (восемь занятий спустя) — по одной новой задаче. Эти задачи не повторяют задач занятий и контрольных.
 
 Около четверти задач в каждом занятии — диагностические: «что здесь не так и какое правило нарушено».
 
@@ -344,8 +347,10 @@ def session_sheets(chapters, problems, tax) -> dict:
     started = set()
     files = {}
     examples = load_primery()
+    spaced = load_povtorenie()
+    hide_from = next((x["num"] for x in sessions if any(c.num == HIDE_FROM_CHAPTER for c, _, _ in x["new"])), 10 ** 6)
     for s in sessions:
-        items, reading, fresh = list(assigned[s["num"]]), [], []
+        items, reading, fresh = list(assigned[s["num"]]) + spaced.get(s["num"], []), [], []
         for c, sec, n in s["new"]:
             cont = " (продолжение)" if sec.key in started else ""
             if sec.key not in started:
@@ -378,8 +383,11 @@ def session_sheets(chapters, problems, tax) -> dict:
             out.append("Нет.\n\n")
         for j, (c, sec, ex) in enumerate(shown, 1):
             parts = card_parts(ex)
-            out.append(f"**Пример {j}.** {parts.get('Условие', '')}\n\n**Решение.**\n\n{parts.get('Решение', '')}\n\n"
-                       f"**Ответ.** {parts.get('Ответ', '')}\n\n")
+            body = f"**Решение.**\n\n{parts.get('Решение', '')}\n\n**Ответ.** {parts.get('Ответ', '')}\n\n"
+            if s["num"] >= hide_from:
+                body = f"<details>\n<summary>Решение</summary>\n\n{body}</details>\n\n"
+            out.append(f"**Пример {j}.** {parts.get('Условие', '')}\n\n{body}")
+        items = interleave(items, [(c.num, sec.num) for c, sec in fresh])
         out.append("## Задачи\n\n")
         sol = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n## Ответы и решения\n\n### Решения\n\n"]
         ans = ["\n### Ответы\n\n| № | Ответ |\n|---|---|\n"]
@@ -403,6 +411,65 @@ KONTROL_PASS = ("Работа сдана, если верно решено не 
 
 
 PRIMERY = DATA / "primery" / "primery.md"
+POVTORENIE = DATA / "povtorenie" / "povtorenie.md"
+# С какой главы (в порядке изучения) решение примера скрыто: сначала попробовать решить самому.
+HIDE_FROM_CHAPTER = 6
+
+
+def load_povtorenie() -> dict:
+    """{занятие: [задачи планового повторения]} из data/povtorenie/povtorenie.md."""
+    out = defaultdict(list)
+    if not POVTORENIE.exists():
+        return out
+    for chunk in CARD_SEP.split(POVTORENIE.read_text(encoding="utf-8")):
+        chunk = chunk.strip()
+        m = FRONT_RE.match(chunk + "\n") if chunk else None
+        if m:
+            meta = yaml.safe_load(m.group(1)) or {}
+            out[meta["session"]].append(Problem(POVTORENIE, meta, chunk[m.end():]))
+    return out
+
+
+def interleave(items, fresh_keys, warmup=4):
+    """Порядок задач занятия.
+
+    Первые `warmup` задач каждого начинающегося параграфа идут подряд (после его примера), остальные задачи всех
+    параграфов — продолжающихся, новых и повторения — перемешиваются так, чтобы соседние задачи по возможности
+    относились к разным параграфам, а внутри параграфа — к разным типам. Внутри параграфа сохраняется порядок
+    лестницы (по возрастанию ступени)."""
+    key = lambda p: (p.meta["chapter"], p.meta["section"])
+    groups = defaultdict(list)
+    for p in items:
+        groups[key(p)].append(p)
+    for g in groups.values():
+        g.sort(key=lambda p: (p.meta["level"], str(p.meta.get("id"))))
+    head = []
+    for k in fresh_keys:
+        if k in groups:
+            head += groups[k][:warmup]
+            groups[k] = groups[k][warmup:]
+    # Задачи повторения — одна общая группа, чтобы они расходились по всему занятию, а не стояли подряд.
+    rev = [p for k in list(groups) for p in groups[k] if str(p.meta.get("id", "")).startswith("R-")]
+    for k in list(groups):
+        groups[k] = [p for p in groups[k] if not str(p.meta.get("id", "")).startswith("R-")]
+    if rev:
+        groups["повторение"] = rev
+    # Равномерное распределение: i-я задача группы из n получает место (i + 0.5) / n.
+    order = sorted(((i + 0.5) / len(g), gi, i, p) for gi, g in enumerate(groups.values()) for i, p in enumerate(g))
+    rest = [p for *_, p in order]
+    # Соседние задачи одного параграфа и типа разводим, меняя местами с ближайшей подходящей.
+    sig = lambda p: (key(p), p.meta["type"])
+    prev = head[-1] if head else None
+    for i in range(len(rest)):
+        if prev is not None and sig(rest[i]) == sig(prev):
+            for j in range(i + 1, min(i + 6, len(rest))):
+                if sig(rest[j]) != sig(prev) and (j + 1 >= len(rest) or sig(rest[i]) != sig(rest[j + 1]) or True):
+                    if key(rest[j]) == key(rest[i]) and rest[j].meta["level"] < rest[i].meta["level"] - 1:
+                        continue
+                    rest[i], rest[j] = rest[j], rest[i]
+                    break
+        prev = rest[i]
+    return head + rest
 
 
 def load_primery() -> dict:

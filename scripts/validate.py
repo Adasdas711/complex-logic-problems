@@ -126,6 +126,23 @@ def main() -> int:
         c = cond(pr.body)
         if c in taught or c in kseen:
             errors.append(f"{rel}: условие совпадает с задачей занятия или контрольной")
+    # Плановое повторение: новые задачи, не совпадающие с задачами занятий, контрольных и примерами.
+    from build import load_povtorenie
+    rseen = Counter()
+    ex_conds = {cond(pr.body) for pr in examples.values()}
+    for t, cards in load_povtorenie().items():
+        for pr in cards:
+            rel = f"povtorenie: {pr.meta.get('id', '?')}"
+            if (pr.meta.get("chapter"), pr.meta.get("section")) not in sections:
+                errors.append(f"{rel}: нет параграфа")
+            for block in REQUIRED_BLOCKS:
+                if block not in pr.body:
+                    errors.append(f"{rel}: нет раздела «{block[3:]}»")
+            c = cond(pr.body)
+            if c in taught or c in kseen or c in ex_conds:
+                errors.append(f"{rel}: условие совпадает с задачей занятия, контрольной или примером")
+            rseen[c] += 1
+    errors += [f"повторение: одно условие встречается {n} раз" for n in rseen.values() if n > 1]
     for c, n in kseen.items():
         if n > 1:
             errors.append(f"контрольные: одно условие встречается {n} раз: {c[:60]}…")
@@ -134,7 +151,7 @@ def main() -> int:
         print("ПРЕДУПРЕЖДЕНИЕ:", w)
     for e in errors:
         print("ОШИБКА:", e)
-    print(f"Задач: {len(problems)} из {tax['total']}; в контрольных: {kcount}; разобранных примеров: {len(examples)}. Ошибок: {len(errors)}, предупреждений: {len(warnings)}.")
+    print(f"Задач: {len(problems)} из {tax['total']}; в контрольных: {kcount}; разобранных примеров: {len(examples)}; повторения: {sum(rseen.values())}. Ошибок: {len(errors)}, предупреждений: {len(warnings)}.")
     return 1 if errors else 0
 
 
