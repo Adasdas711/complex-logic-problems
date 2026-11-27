@@ -202,7 +202,7 @@ function reveal(t, ka, ks) {
 function taskHtml(t, under, key) {
   const ok = !!(key && S.r[key] && S.r[key][t.id]);
   const btn = key ? `<button type="button" class="solved${ok ? ' on' : ''}" data-act="solve" data-key="${key}" data-id="${esc(t.id)}" aria-pressed="${ok}" aria-label="Задача ${t.n} решена" title="${ok ? 'Снять отметку' : 'Отметить задачу решённой'}">${ok ? '✓' : ''}</button>` : '';
-  let h = `<article class="box" id="t${t.n}"><div class="task-row"><b class="num${ok ? ' ok' : ''}">${t.n}.</b><div class="rich">${t.cond}</div>${btn}</div>`;
+  let h = `<article class="box" id="t${t.n}"><div class="task-row"><b class="num${ok ? ' ok' : ''}">${t.n}.${t.level >= 8 ? '<span class="star" title="Трудная задача">★</span>' : ''}</b><div class="rich">${t.cond}</div>${btn}</div>`;
   if (under) {
     h += reveal(t, 'a:' + key + t.id, 's:' + key + t.id);
   }

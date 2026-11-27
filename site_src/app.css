@@ -209,6 +209,7 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .task-row > .rich { flex: 1; min-width: 0; }
 .num { min-width: 28px; font-size: 16px; }
 .num.ok { color: var(--green); }
+.star { display: block; font-size: 12px; color: var(--gold); line-height: 1; margin-top: 4px; }
 /* Ответ и решение под задачей: тихие переключатели и блоки с полосой слева */
 .reveal { display: flex; gap: 4px; margin-left: 32px; }
 .ex .reveal { margin-left: -8px; }
