@@ -91,6 +91,7 @@ function renderSide() {
     const ss = modSessions(i), d = ss.filter((s) => doneZ(s.num)).length, all = ss.length;
     const nums = ss.map((s) => s.num);
     const on = act === 'mod' && route.m === i || act === 'z' && route.mod === i;
+    if (!all) return `<a class="nav${on ? ' on' : ''}" href="#/m/${i + 1}"><span class="t1">${esc(m.name)}</span><span class="t2"><span>занятия готовятся</span></span></a>`;
     return `<a class="nav${on ? ' on' : ''}" href="#/m/${i + 1}"><span class="t1">${esc(m.name)}</span>
       <span class="t2"><span>занятия ${Math.min(...nums)}–${Math.max(...nums)}</span><span class="pr${d === all ? ' ok' : ''}">${d === all ? '✓ выполнено' : 'выполнено ' + d + ' из ' + all}</span></span>
       <span class="bar"><span style="width:${Math.round(100 * d / all)}%"></span></span></a>`;
@@ -156,6 +157,7 @@ function viewKurs() {
       }
     }
     const nums = ss.map((s) => s.num);
+    if (!nums.length) return `<div class="mod-block"><p>${esc(m.name)} <span>· занятия готовятся</span></p></div>`;
     return `<div class="mod-block"><p>${esc(m.name)} <span>· занятия ${Math.min(...nums)}–${Math.max(...nums)}</span></p><div class="tiles">${items.join('')}</div></div>`;
   }).join('');
   const total = IDX.sessions.filter((s) => doneZ(s.num)).length;
@@ -287,6 +289,12 @@ function viewMod(m) {
   const mod = IDX.modules[m];
   if (!mod) return notFound();
   const ss = modSessions(m), nums = ss.map((s) => s.num), weeks = ss.map((s) => s.week);
+  if (!ss.length) {
+    $('#view').innerHTML = `<section class="card"><p class="eyebrow">Модуль ${ROM(m)}</p><h1>${esc(modTitle(m))}</h1>
+      <p><b>К концу модуля:</b> ${esc(mod.goal)}</p><p class="muted">Занятия этого модуля готовятся и появятся здесь, как только будут написаны задачи.</p></section>`;
+    document.title = `Модуль ${ROM(m)} — Комплексная логика`;
+    return;
+  }
   const d = ss.filter((s) => doneZ(s.num)).length;
   const rows = [];
   for (const s of ss) {

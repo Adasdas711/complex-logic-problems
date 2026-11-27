@@ -70,11 +70,14 @@ def main() -> int:
     where = studied_in(sessions)
 
 
+    late = {c.num for c in chapters if c.after_course}
+    last_main = max(i for i, m in enumerate(toc["modules"]) if not set(m["chapters"]) & late)
+
     def module_of(chs):
         for i, m in enumerate(toc["modules"]):
             if chs and chs[0] in m["chapters"]:
                 return i
-        return len(toc["modules"]) - 1
+        return last_main   # итоговые занятия без нового материала
 
     def repeat(p):
         c, s = secs[(p.meta["chapter"], p.meta["section"])]

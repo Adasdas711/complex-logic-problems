@@ -67,6 +67,7 @@ class Chapter:
     mixed: bool = False
     order_after: int | None = None
     sources: list = field(default_factory=list)
+    after_course: bool = False   # раздел идёт после основного курса (свои занятия, основной курс не меняется)
 
     @property
     def label(self) -> str:
@@ -96,7 +97,8 @@ def load_book() -> list[Chapter]:
         s.end_page = e
     for ex in toc.get("extra", []):
         c = Chapter(ex["num"], ex["slug"], ex["title"], [], extra=True, mixed=ex.get("mixed", False),
-                    order_after=ex.get("order_after"), sources=ex.get("sources", []))
+                    order_after=ex.get("order_after"), sources=ex.get("sources", []),
+                    after_course=ex.get("after_course", False))
         if c.mixed:
             c.sections = [Section(c.num, 0, "", "X", fixed=ex["quota"])]   # разворачивается в compute_quotas
         else:
@@ -107,11 +109,13 @@ def load_book() -> list[Chapter]:
 
 
 def study_order(chapters: list[Chapter]) -> list[Chapter]:
-    """Порядок прохождения: главы книги, дополнительные разделы — после указанной главы."""
+    """Порядок прохождения: главы книги, дополнительные разделы — после указанной главы;
+    разделы after_course — в конце, после основного курса."""
     out = []
     for c in (c for c in chapters if not c.extra):
         out.append(c)
-        out.extend(x for x in chapters if x.extra and not x.mixed and x.order_after == c.num)
+        out.extend(x for x in chapters if x.extra and not x.mixed and not x.after_course and x.order_after == c.num)
+    out.extend(x for x in chapters if x.after_course)
     return out
 
 
@@ -150,7 +154,7 @@ def compute_quotas(chapters: list[Chapter]) -> None:
     # Смешанные наборы: по одному после каждой главы/раздела, пропорционально объёму этапа.
     if mixed:
         total_mixed = mixed.sections[0].fixed
-        stages = study_order(chapters)
+        stages = [c for c in study_order(chapters) if not c.after_course]
         sizes = _largest_remainder({c.num: sum(s.quota for s in c.sections) for c in stages}, total_mixed)
         mixed.sections = []
         for i, c in enumerate(stages, 1):
@@ -166,15 +170,16 @@ def compute_quotas(chapters: list[Chapter]) -> None:
 
 
 def compute_sessions(chapters: list[Chapter]) -> list[dict]:
-    """Расписание занятий: в каждом занятии новый материал и смешанное повторение пройденного."""
+    """Расписание занятий: в каждом занятии новый материал и смешанное повторение пройденного.
+    Разделы after_course идут отдельной частью после основного курса (part 2) и его не меняют."""
     tax = load_yaml("taxonomy.yaml")
     size = tax["sessions"]["size"]
     mixed = next((c for c in chapters if c.mixed), None)
-    total = sum(s.quota for c in chapters for s in c.sections)
+    total = sum(s.quota for c in chapters if not c.after_course for s in c.sections)
     mixed_total = sum(s.quota for s in mixed.sections) if mixed else 0
     per_mixed = round(size * mixed_total / total)
 
-    new_stream = [(c, s) for c in study_order(chapters) for s in c.sections]
+    new_stream = [(c, s) for c in study_order(chapters) if not c.after_course for s in c.sections]
     left = {s.key: s.quota for _, s in new_stream}
     mixed_left = {s.key: s.quota for s in (mixed.sections if mixed else [])}
     unlocked: list = []
@@ -213,14 +218,34 @@ def compute_sessions(chapters: list[Chapter]) -> list[dict]:
         if not sess["new"] and not sess["mixed"]:
             break
         sessions.append(sess)
-    # Короткий хвост (меньше половины занятия) присоединяется к предыдущему занятию.
+    _merge_tail(sessions, size)
+    for s in sessions:
+        s["part"] = 1
+
+    # Часть 2: разделы после основного курса — только новый материал, подряд.
+    part2 = []
+    stream = [(c, s, s.quota) for c in study_order(chapters) if c.after_course for s in c.sections]
+    sess = None
+    for c, s, q in stream:
+        while q > 0:
+            if sess is None or sum(t for *_, t in sess["new"]) >= size:
+                sess = {"num": len(sessions) + len(part2) + 1, "new": [], "mixed": [], "part": 2}
+                part2.append(sess)
+            take = min(q, size - sum(t for *_, t in sess["new"]))
+            sess["new"].append((c, s, take))
+            q -= take
+    _merge_tail(part2, size)
+    return sessions + part2
+
+
+def _merge_tail(sessions: list, size: int) -> None:
+    """Короткий хвост (меньше половины занятия) присоединяется к предыдущему занятию."""
     if len(sessions) > 1:
         last = sessions[-1]
         if sum(t for *_, t in last["new"]) + sum(t for _, t in last["mixed"]) < size / 2:
             sessions[-2]["new"] += last["new"]
             sessions[-2]["mixed"] += last["mixed"]
             sessions.pop()
-    return sessions
 
 
 @dataclass

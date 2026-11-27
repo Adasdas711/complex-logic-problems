@@ -265,6 +265,103 @@ extra:
       - {num: 5, title: "Условия: правило [xu¹u²] ⊣⊢ [xu¹] и его смешение с [x(u¹∧u²)]", source: "Очерки, с. 375", profile: F, quota: 25}
       - {num: 6, title: "Диагностика: неучтённые координаты в рассуждениях", source: "Очерки, с. 352–353, 372–375; LSR, с. 496–497", profile: E, quota: 50}
 
+  # «Логическая физика» (1972): после основного курса — модуль IX, занятия 91 и далее.
+  - num: 18
+    slug: 18-logicheskie-tipy-terminov
+    title: Логические типы терминов и предметов
+    after_course: true
+    sources:
+      - "А. А. Зиновьев. Логическая физика. М.: Наука, 1972. Глава вторая «Логические типы терминов и предметов» (с. 54–110). В PDF: страница книги + 1."
+    sections:
+      - {num: 1, title: "Логические типы субъектов и предметов", source: "ЛФ, с. 54", profile: O, quota: 4}
+      - {num: 2, title: "Эмпирические предметы", source: "ЛФ, с. 54–55", profile: O, quota: 7}
+      - {num: 3, title: "Абстрактные предметы", source: "ЛФ, с. 55–57", profile: O, quota: 13}
+      - {num: 4, title: "Индивиды", source: "ЛФ, с. 57–58", profile: O, quota: 7}
+      - {num: 5, title: "Предикаты величин и степени истинности", source: "ЛФ, с. 58–60", profile: O, quota: 13}
+      - {num: 6, title: "Классы (множества)", source: "ЛФ, с. 60–64", profile: O, quota: 26}
+      - {num: 7, title: "Скопления", source: "ЛФ, с. 64–65", profile: O, quota: 7}
+      - {num: 8, title: "Состояния, события", source: "ЛФ, с. 65", profile: O, quota: 4}
+      - {num: 9, title: "Существование", source: "ЛФ, с. 65–69", profile: O, quota: 26}
+      - {num: 10, title: "Модальные предикаты", source: "ЛФ, с. 69–70", profile: O, quota: 7}
+      - {num: 11, title: "Возможность", source: "ЛФ, с. 70–72", profile: O, quota: 13}
+      - {num: 12, title: "Случайность", source: "ЛФ, с. 72–73", profile: O, quota: 7}
+      - {num: 13, title: "Фатализм", source: "ЛФ, с. 73–74", profile: F, quota: 7}
+      - {num: 14, title: "Модальные операторы", source: "ЛФ, с. 74–75", profile: O, quota: 7}
+      - {num: 15, title: "Актуальное и потенциальное", source: "ЛФ, с. 75", profile: O, quota: 4}
+      - {num: 16, title: "Измерение возможности", source: "ЛФ, с. 75–77", profile: O, quota: 13}
+      - {num: 17, title: "Отношения", source: "ЛФ, с. 77–78", profile: O, quota: 7}
+      - {num: 18, title: "Сравнение", source: "ЛФ, с. 78–80", profile: O, quota: 13}
+      - {num: 19, title: "Отношение порядка", source: "ЛФ, с. 80–82", profile: O, quota: 13}
+      - {num: 20, title: "Отношение «между»", source: "ЛФ, с. 82", profile: O, quota: 4}
+      - {num: 21, title: "Существование отношений", source: "ЛФ, с. 82–83", profile: O, quota: 7}
+      - {num: 22, title: "Отношение чисел и величин", source: "ЛФ, с. 83–84", profile: O, quota: 7}
+      - {num: 23, title: "Упорядоченный ряд", source: "ЛФ, с. 84–86", profile: O, quota: 13}
+      - {num: 24, title: "Соприкосновение", source: "ЛФ, с. 86–87", profile: O, quota: 7}
+      - {num: 25, title: "Непрерывность и прерывность эмпирического ряда", source: "ЛФ, с. 87–88", profile: O, quota: 7}
+      - {num: 26, title: "Начало и конец ряда", source: "ЛФ, с. 88–90", profile: O, quota: 13}
+      - {num: 27, title: "Интервал", source: "ЛФ, с. 90–91", profile: O, quota: 7}
+      - {num: 28, title: "Протяжённость", source: "ЛФ, с. 91–93", profile: O, quota: 13}
+      - {num: 29, title: "Абстрактные ряды", source: "ЛФ, с. 93–95", profile: O, quota: 13}
+      - {num: 30, title: "Конечные и бесконечные ряды", source: "ЛФ, с. 95–96", profile: O, quota: 7}
+      - {num: 31, title: "Структура", source: "ЛФ, с. 96–100", profile: O, quota: 26}
+      - {num: 32, title: "Существование структуры", source: "ЛФ, с. 100", profile: O, quota: 4}
+      - {num: 33, title: "Протяжённость структуры", source: "ЛФ, с. 100–101", profile: O, quota: 7}
+      - {num: 34, title: "Соответствие", source: "ЛФ, с. 101–102", profile: O, quota: 6}
+      - {num: 35, title: "Соответствие классов", source: "ЛФ, с. 102–105", profile: O, quota: 20}
+      - {num: 36, title: "Функция", source: "ЛФ, с. 105", profile: O, quota: 4}
+      - {num: 37, title: "Упорядоченные состояния", source: "ЛФ, с. 105–106", profile: O, quota: 6}
+      - {num: 38, title: "Условные высказывания с отношением порядка", source: "ЛФ, с. 106–107", profile: O, quota: 6}
+      - {num: 39, title: "Функциональная зависимость", source: "ЛФ, с. 107–108", profile: O, quota: 6}
+      - {num: 40, title: "Связи", source: "ЛФ, с. 108–109", profile: O, quota: 6}
+      - {num: 41, title: "О некоторых уточнениях в теории классов", source: "ЛФ, с. 109–111", profile: O, quota: 13}
+
+  - num: 19
+    slug: 19-empiricheskie-predmety
+    title: Эмпирические предметы
+    after_course: true
+    sources:
+      - "А. А. Зиновьев. Логическая физика. М.: Наука, 1972. Глава третья «Эмпирические предметы» (с. 111–189). В PDF: страница книги + 1."
+    sections:
+      - {num: 1, title: "Логические типы эмпирических предметов", source: "ЛФ, с. 111–112", profile: O, quota: 5}
+      - {num: 2, title: "Эмпирические тела", source: "ЛФ, с. 112–113", profile: O, quota: 5}
+      - {num: 3, title: "Изменение", source: "ЛФ, с. 113–115", profile: O, quota: 10}
+      - {num: 4, title: "Пространство и время", source: "ЛФ, с. 115–117", profile: O, quota: 10}
+      - {num: 5, title: "Пространственно-временные отношения", source: "ЛФ, с. 117–122", profile: O, quota: 25}
+      - {num: 6, title: "Кванторы для времени и пространства", source: "ЛФ, с. 122", profile: O, quota: 4}
+      - {num: 7, title: "Время существования эмпирического индивида", source: "ЛФ, с. 122–125", profile: O, quota: 15}
+      - {num: 8, title: "Существование пространства и времени", source: "ЛФ, с. 125–127", profile: O, quota: 10}
+      - {num: 9, title: "Положение индивида в пространстве и времени", source: "ЛФ, с. 127", profile: O, quota: 4}
+      - {num: 10, title: "Тот же самый индивид", source: "ЛФ, с. 127–130", profile: O, quota: 15}
+      - {num: 11, title: "Изменение пространства и времени", source: "ЛФ, с. 130–134", profile: O, quota: 20}
+      - {num: 12, title: "Необратимость времени", source: "ЛФ, с. 134–135", profile: O, quota: 5}
+      - {num: 13, title: "Об отношении порождения", source: "ЛФ, с. 135–136", profile: O, quota: 5}
+      - {num: 14, title: "Непрерывность пространства и времени", source: "ЛФ, с. 136–138", profile: O, quota: 10}
+      - {num: 15, title: "Инвариантность пространства и времени", source: "ЛФ, с. 138", profile: O, quota: 4}
+      - {num: 16, title: "Тождество и различие места и времени", source: "ЛФ, с. 138–139", profile: O, quota: 5}
+      - {num: 17, title: "Предицирование изменений", source: "ЛФ, с. 139–141", profile: O, quota: 10}
+      - {num: 18, title: "Перемещение", source: "ЛФ, с. 141–142", profile: O, quota: 5}
+      - {num: 19, title: "Парадокс движения", source: "ЛФ, с. 142–144", profile: F, quota: 10}
+      - {num: 20, title: "Процесс", source: "ЛФ, с. 144–146", profile: O, quota: 10}
+      - {num: 21, title: "Минимальная протяжённость", source: "ЛФ, с. 146–151", profile: O, quota: 25}
+      - {num: 22, title: "Скорость", source: "ЛФ, с. 151–153", profile: O, quota: 10}
+      - {num: 23, title: "Парадоксы Зенона", source: "ЛФ, с. 153–154", profile: F, quota: 5}
+      - {num: 24, title: "Кванты пространства, времени и движения", source: "ЛФ, с. 154–155", profile: O, quota: 5}
+      - {num: 25, title: "Мир в целом", source: "ЛФ, с. 155–158", profile: O, quota: 15}
+      - {num: 26, title: "Эмпирические связи", source: "ЛФ, с. 158–159", profile: O, quota: 5}
+      - {num: 27, title: "Предикаты тенденций", source: "ЛФ, с. 159–160", profile: O, quota: 5}
+      - {num: 28, title: "Парадоксы связей", source: "ЛФ, с. 160–162", profile: F, quota: 10}
+      - {num: 29, title: "Условные предикаты", source: "ЛФ, с. 162–163", profile: O, quota: 5}
+      - {num: 30, title: "Воздействие", source: "ЛФ, с. 163–167", profile: O, quota: 20}
+      - {num: 31, title: "Причина", source: "ЛФ, с. 167–171", profile: O, quota: 20}
+      - {num: 32, title: "Виды причинных связей", source: "ЛФ, с. 171–172", profile: O, quota: 5}
+      - {num: 33, title: "Детерминизм и индетерминизм", source: "ЛФ, с. 172–173", profile: O, quota: 5}
+      - {num: 34, title: "Другие виды связей", source: "ЛФ, с. 173–174", profile: O, quota: 5}
+      - {num: 35, title: "Система связей", source: "ЛФ, с. 174–175", profile: O, quota: 5}
+      - {num: 36, title: "О логической ситуации в микрофизике", source: "ЛФ, с. 175–180", profile: F, quota: 24}
+      - {num: 37, title: "О прогнозах", source: "ЛФ, с. 180–183", profile: O, quota: 15}
+      - {num: 38, title: "Эвристические гипотезы", source: "ЛФ, с. 183–188", profile: O, quota: 24}
+      - {num: 39, title: "Общие утверждения о Мире и физические допущения", source: "ЛФ, с. 188–189", profile: O, quota: 5}
+
   - num: 17
     slug: 17-smeshannye-nabory
     title: Смешанные наборы для повторения
@@ -297,3 +394,6 @@ modules:
   - name: "VIII. Семантика и итоговое повторение"
     chapters: [15]
     goal: "Приписывать значения формулам с кванторами по правилам Приложения. Решать смешанные задачи на весь курс."
+  - name: "IX. Логическая физика"
+    chapters: [18, 19]
+    goal: "Логически корректно употреблять термины пространства, времени, изменения, движения, связи и причины по «Логической физике»: отличать следствия из определений терминов от физических утверждений, разбирать парадоксы движения и связей."

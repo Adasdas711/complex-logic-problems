@@ -60,7 +60,7 @@ def chapters_label(s) -> str:
     nums = list(dict.fromkeys(c.num for c, _, _ in s["new"]))
     if not nums:
         return "Итоговое повторение"
-    special = {0: "Введение", 15: "приложение", 16: "раздел 16"}
+    special = {0: "Введение", 15: "приложение", 16: "раздел 16", 18: "раздел 18", 19: "раздел 19"}
     regular = [n for n in nums if n not in special]
     parts = []
     if 0 in nums:
@@ -68,7 +68,7 @@ def chapters_label(s) -> str:
     if regular:
         word = "глава" if len(regular) == 1 else "главы"
         parts.append(f"{word} " + ", ".join(map(str, regular)))
-    parts += [special[n] for n in nums if n in (15, 16)]
+    parts += [special[n] for n in nums if n in (15, 16, 18, 19)]
     text = ", ".join(parts)
     return text[0].upper() + text[1:]
 
@@ -87,7 +87,7 @@ def kontrol_name(k: int, after: int, tax) -> str:
 
 def vhod_name(ch: int, first: int, tax) -> str:
     """Входной тест к главе: после занятия first − 1, перед занятием first (буква «т» — после контрольной «к»)."""
-    what = "разделу 16" if ch == 16 else f"главе {ch}"
+    what = f"разделу {ch}" if ch >= 16 else f"главе {ch}"
     return _clean(f"{first - 1:02d}т. Неделя {week_of(first, tax)} Входной тест к {what}") + ".md"
 
 
@@ -108,6 +108,10 @@ def expand_source(src: str) -> str:
         if part.startswith("Очерки"):
             pages = _re.sub(r"(\d+)(?:–(\d+))?", pdf, part[len("Очерки, "):])
             out.append(f"А. А. Зиновьев. *Очерки комплексной логики* (2000), {pages}")
+        elif part.startswith("ЛФ"):
+            pages = _re.sub(r"(\d+)(?:–(\d+))?", lambda m: f"{m.group(0)} (PDF {int(m.group(1)) + 1}" +
+                            (f"–{int(m.group(2)) + 1})" if m.group(2) else ")"), part[len("ЛФ, "):])
+            out.append(f"А. А. Зиновьев. *Логическая физика* (1972), {pages}")
         elif part.startswith("LSR"):
             pages = _re.sub(r"(\d+)(?:–(\d+))?", lambda m: f"{m.group(0)} (PDF {int(m.group(1)) + 4}" +
                             (f"–{int(m.group(2)) + 4})" if m.group(2) else ")"), part[len("LSR, "):])
@@ -238,9 +242,11 @@ def uchebnyj_plan(chapters, tax) -> str:
     per_week = tax["sessions"]["per_week"]
     week = lambda n: (n - 1) // per_week + 1
     rows = []
+    late = {c.num for c in chapters if c.after_course}
+    last_main = max(i for i, m in enumerate(modules) if not set(m["chapters"]) & late)
     for i, m in enumerate(modules):
         nums = [s["num"] for s in sessions if any(c.num in m["chapters"] for c, _, _ in s["new"])]
-        if i == len(modules) - 1:   # итоговые занятия без нового материала — в последний модуль
+        if i == last_main:   # итоговые занятия без нового материала — в последний модуль основного курса
             nums += [s["num"] for s in sessions if not s["new"]]
         a, b = min(nums), max(nums)
         new = sum(n for s in sessions for c, _, n in s["new"] if c.num in m["chapters"])
@@ -390,7 +396,7 @@ def session_models(chapters, problems, tax) -> list:
             continue
         items.sort(key=lambda p: (p.meta["level"], p.meta["id"]))
         tests = [{"chapter": c.num, "file": vhod_name(c.num, s["num"], tax),
-                  "what": "разделу 16" if c.num == 16 else f"главе {c.num}"}
+                  "what": f"разделу {c.num}" if c.num >= 16 else f"главе {c.num}"}
                  for c, sec in fresh if c.num in vhod and sec.num == c.sections[0].num]
         shown = [examples[(c.num, sec.num)] for c, sec in fresh if (c.num, sec.num) in examples]
         out.append({
@@ -547,13 +553,16 @@ def load_kontrol() -> dict:
 
 
 def kontrol_ranges(sessions) -> list:
-    """Месяц — 8 занятий; последняя работа охватывает и итоговые занятия."""
-    last = len(sessions)
-    out, a = [], 1
-    while a <= last:
-        b = a + 7 if last - (a + 7) >= 8 else last
-        out.append((a, b))
-        a = b + 1
+    """Месяц — 8 занятий; последняя работа части охватывает и её итоговые занятия.
+    Основной курс и разделы после него (part 2) делятся на месяцы отдельно."""
+    out = []
+    for part in sorted({s.get("part", 1) for s in sessions}):
+        nums = [s["num"] for s in sessions if s.get("part", 1) == part]
+        a, last = nums[0], nums[-1]
+        while a <= last:
+            b = a + 7 if last - (a + 7) >= 8 else last
+            out.append((a, b))
+            a = b + 1
     return out
 
 
@@ -702,7 +711,7 @@ def vhod_sheets(chapters, tax) -> dict:
         out = [GEN, f"# Входной тест к главе {ch}. {titles[ch].split('. ', 1)[-1]}\n\n" if ch != 16 else
                f"# Входной тест к разделу 16. {titles[ch].split('. ', 1)[-1]}\n\n",
                f"Перед занятием [{first}]({link(names[first], '')}) (неделя {week_of(first, tax)}). "
-               f"{len(items)} задач на то, что {'раздел' if ch == 16 else 'глава'} берёт из прежних глав. "
+               f"{len(items)} задач на то, что {'раздел' if ch >= 16 else 'глава'} берёт из прежних глав. "
                f"Время — **{VHOD_TIME}**. Решайте без книги и без своих записей: тест проверяет, что осталось "
                "в памяти. Решения и ответы — в конце документа.\n\n",
                "## Как оценивать\n\n" + VHOD_PASS + "\n\n",
