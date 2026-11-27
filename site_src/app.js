@@ -82,36 +82,38 @@ function renderSide() {
   const side = $('#side');
   side.classList.toggle('collapsed', !S.side);
   if (!S.side) {
-    side.innerHTML = `<button type="button" class="btn side-btn" data-act="side" aria-label="Развернуть меню" title="Развернуть меню">›</button>`;
+    side.innerHTML = `<button type="button" class="side-btn" data-act="side" aria-label="Развернуть меню" title="Развернуть меню">›</button>`;
     return;
   }
   const act = route.page;
+  // счётчик справа: «2/14», «✓» — когда всё выполнено; пока ничего не начато — пусто
+  const cnt = (d, all) => (all && d === all ? '<span class="c ok">✓</span>' : d ? `<span class="c">${d}/${all}</span>` : '');
+  const item = (href, on, label, extra = '', title = '') =>
+    `<a class="nav${on ? ' on' : ''}" href="${href}"${title ? ` title="${esc(title)}"` : ''}>${label}${extra}</a>`;
   const mods = IDX.modules.map((m, i) => {
     const ss = modSessions(i), d = ss.filter((s) => doneZ(s.num)).length, all = ss.length;
     const nums = ss.map((s) => s.num);
     const on = act === 'mod' && route.m === i || act === 'z' && route.mod === i;
-    if (!all) return `<a class="nav${on ? ' on' : ''}" href="#/m/${i + 1}"><span class="t1">${esc(m.name)}</span><span class="t2"><span>занятия готовятся</span></span></a>`;
-    return `<a class="nav${on ? ' on' : ''}" href="#/m/${i + 1}"><span class="t1">${esc(m.name)}</span>
-      <span class="t2"><span>занятия ${Math.min(...nums)}–${Math.max(...nums)}</span><span class="pr${d === all ? ' ok' : ''}">${d === all ? '✓ выполнено' : 'выполнено ' + d + ' из ' + all}</span></span>
-      <span class="bar"><span style="width:${Math.round(100 * d / all)}%"></span></span></a>`;
+    const mm = m.name.match(/^([IVXLC]+)\.\s*(.*)$/);
+    const label = mm ? `<span class="rn">${mm[1]}</span><span class="t">${esc(mm[2])}</span>` : `<span class="t">${esc(m.name)}</span>`;
+    const tip = all ? `занятия ${Math.min(...nums)}–${Math.max(...nums)}` : 'занятия готовятся';
+    return item(`#/m/${i + 1}`, on, label, cnt(d, all), tip);
   }).join('');
   const kd = IDX.kontrol.filter((k) => doneK(k.k)).length, td = IDX.tests.filter((t) => doneT(t.chapter)).length;
   side.innerHTML = `
-    <div class="side-top"><button type="button" class="btn side-btn" data-act="side">‹ Свернуть</button></div>
-    <div class="side-search">
-      <label for="side-q">Поиск занятия</label>
-      <div class="field">${searchIcon()}<input id="side-q" type="search" autocomplete="off" placeholder="Номер или название"></div>
+    <div class="side-top">
+      <div class="field">${searchIcon(14)}<input id="side-q" type="search" autocomplete="off" placeholder="Поиск" aria-label="Поиск занятия по номеру или названию"></div>
+      <button type="button" class="side-btn" data-act="side" aria-label="Свернуть меню" title="Свернуть меню">‹</button>
       <div class="drop" id="side-drop" hidden></div>
     </div>
-    <a class="nav${act === 'kurs' ? ' on' : ''}" href="#/"><span class="t1">Курс</span><span class="t2"><span>все занятия, поиск</span></span></a>
-    <p class="side-h">Модули</p>${mods}
-    <p class="side-h">Проверка</p>
-    <a class="nav${act === 'kontr' || act === 'k' ? ' on' : ''}" href="#/k"><span class="t1">Контрольные</span><span class="t2"><span>${IDX.kontrol.length} работ · <span class="${kd === IDX.kontrol.length ? 'ok' : ''}">выполнено ${kd}</span></span></span></a>
-    <a class="nav${act === 'vhod' || act === 't' ? ' on' : ''}" href="#/t"><span class="t1">Входные тесты</span><span class="t2"><span>${IDX.tests.length} тестов · <span class="${td === IDX.tests.length ? 'ok' : ''}">выполнено ${td}</span></span></span></a>
-    <p class="side-h">Справка</p>
-    <a class="nav${act === 'oboz' ? ' on' : ''}" href="#/oboz"><span class="t1">Обозначения</span><span class="t2"><span>символы книги</span></span></a>
-    <a class="nav${act === 'ustr' ? ' on' : ''}" href="#/ustr"><span class="t1">Как устроены задачи</span><span class="t2"><span>ступени и типы</span></span></a>
-    <p class="side-note">Отметки «выполнено» хранятся только в этом браузере.</p>`;
+    ${item('#/', act === 'kurs', '<span class="t">Все занятия</span>')}
+    <div class="side-sep"></div>${mods}
+    <div class="side-sep"></div>
+    ${item('#/k', act === 'kontr' || act === 'k', '<span class="t">Контрольные</span>', cnt(kd, IDX.kontrol.length))}
+    ${item('#/t', act === 'vhod' || act === 't', '<span class="t">Входные тесты</span>', cnt(td, IDX.tests.length))}
+    <div class="side-sep"></div>
+    ${item('#/oboz', act === 'oboz', '<span class="t">Обозначения</span>')}
+    ${item('#/ustr', act === 'ustr', '<span class="t">Как устроены задачи</span>')}`;
   const inp = $('#side-q'), drop = $('#side-drop');
   inp.addEventListener('input', () => {
     const q = inp.value, found = findSessions(q);
