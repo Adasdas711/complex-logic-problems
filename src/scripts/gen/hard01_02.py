@@ -50,6 +50,9 @@ def size(f):
 
 
 # ---------- шаги вывода от одной посылки ----------
+ALLOW_T = True   # False — только аксиомные схемы (задачи § 1, до теоремных схем § 2)
+
+
 def moves(q):
     """Схемы, применимые к формуле q как к посылке: [(имя, заключение)]."""
     out = []
@@ -57,8 +60,8 @@ def moves(q):
         out.append(("A2", q[1][1]))
     if q[0] == "conj" and len(q[1]) == 2:
         a, b = q[1]
-        out += [("A3", a), ("T1", b), ("A4", C(b, a))]
-        if a == b:
+        out += [("A3", a), ("A4", C(b, a))] + ([("T1", b)] if ALLOW_T else [])
+        if a == b and ALLOW_T:
             out.append(("T4", a))
     if q[0] == "neg" and q[1][0] == "conj" and len(q[1][1]) == 2:
         a, b = q[1][1]
@@ -66,7 +69,7 @@ def moves(q):
     if q[0] == "neg" and q[1][0] == "dis" and len(q[1][1]) == 2:
         a, b = q[1][1]
         out.append(("A9", D(C(a, b), C(N(a), N(b)))))
-    if q[0] == "dis" and len(q[1]) == 2:
+    if q[0] == "dis" and len(q[1]) == 2 and ALLOW_T:
         a, b = q[1]
         out.append(("T6", D(b, a)))
     if q[0] in ("v", "neg") and size(q) < 6:
