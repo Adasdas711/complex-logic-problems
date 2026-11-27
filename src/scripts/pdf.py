@@ -4,8 +4,8 @@
 Задачи и примеры — на первых страницах; «Ответы и решения» начинаются с новой страницы, ответы — тоже с новой.
 Скрытые решения примеров в печатной версии показаны полностью.
 
-  python3 scripts/pdf.py            — все документы в pdf/
-  python3 scripts/pdf.py 01 08к     — только указанные (по началу имени файла)
+  python3 src/scripts/pdf.py            — все документы в pdf/
+  python3 src/scripts/pdf.py 01 08к     — только указанные (по началу имени файла)
 
 Нужны pandoc и xelatex; шрифты DejaVu.
 """
@@ -16,7 +16,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]   # корень репозитория
 SRC = ROOT / "zanyatiya"
 OUT = ROOT / "pdf"
 

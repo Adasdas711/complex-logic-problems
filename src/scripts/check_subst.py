@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Пересчёт ответов задач «Подставьте в схему …»: одновременная подстановка по отдельным буквам.
 
-  python3 scripts/check_subst.py        — список расхождений
+  python3 src/scripts/check_subst.py        — список расхождений
 """
 import re
 import sys
@@ -105,7 +105,8 @@ def main():
             bad += 1
             print(f"{p.meta['id']}\n  схема: {s}\n  замена: {mp}\n  ответ: {ans.group(1)}\n  пересчёт: {got}")
     print("расхождений:", bad, file=sys.stderr)
+    return 1 if bad else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

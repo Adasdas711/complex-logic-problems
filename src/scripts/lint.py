@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Проверка содержания карточек (сверх validate.py): разметка формул, подпункты, повторы, ссылки.
 
-  python3 scripts/lint.py            — сводка по видам замечаний
-  python3 scripts/lint.py -v KIND    — все замечания вида KIND
-  python3 scripts/lint.py -k         — то же для задач контрольных (data/kontrolnye)
-  python3 scripts/lint.py -t         — то же для задач входных тестов (data/vhodnye)
+  python3 src/scripts/lint.py            — сводка по видам замечаний
+  python3 src/scripts/lint.py -v KIND    — все замечания вида KIND
+  python3 src/scripts/lint.py -k         — то же для задач контрольных (data/kontrolnye)
+  python3 src/scripts/lint.py -t         — то же для задач входных тестов (data/vhodnye)
 """
 import re
 import sys

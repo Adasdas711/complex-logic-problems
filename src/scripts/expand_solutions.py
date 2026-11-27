@@ -8,8 +8,8 @@
   • подстановка в схему («Подставьте в схему …», «Запишите пример схемы …») — что на что заменяется;
   • диагностика вида «Студент: F — пример L» — схема L, то, что F из неё не получается, и схема, из которой F получается.
 
-  python3 scripts/expand_solutions.py [файлы карточек …]   — по умолчанию data/zadachi/*.md и data/kontrolnye/*.md
-  python3 scripts/expand_solutions.py --dry                  — только отчёт
+  python3 src/scripts/expand_solutions.py [файлы карточек …]   — по умолчанию data/zadachi/*.md и data/kontrolnye/*.md
+  python3 src/scripts/expand_solutions.py --dry                  — только отчёт
 """
 import contextlib
 import importlib.util

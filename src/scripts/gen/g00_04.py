@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Серии задач к Введению, § 4 «Термины» (с. 5–6): ступени 1–3.
 
-Пишет черновик drafts/00.04-gen.md; затем: python3 scripts/split_cards.py drafts/00.04-gen.md --remove
+Пишет черновик drafts/00.04-gen.md; затем: python3 src/scripts/split_cards.py drafts/00.04-gen.md --remove
 Повторный запуск с тем же зерном даёт те же задачи.
 """
 import random

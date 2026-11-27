@@ -8,7 +8,7 @@
 на каждый параграф перечня, около четверти — диагностика.
 
 Пишет data/vhodnye/VNN.md (NN — номер главы); документы собирает scripts/build.py.
-Запуск: python3 scripts/gen/vhodnye.py [--pool] (с --pool — только показать, сколько задач в пуле).
+Запуск: python3 src/scripts/gen/vhodnye.py [--pool] (с --pool — только показать, сколько задач в пуле).
 """
 import random
 import re

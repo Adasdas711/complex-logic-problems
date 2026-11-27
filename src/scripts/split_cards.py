@@ -8,7 +8,7 @@
 Номера в параграфе назначаются по возрастанию ступени, после уже существующих карточек.
 Существующие карточки не меняются: новые дописываются в конец файла главы.
 
-  python3 scripts/split_cards.py drafts/00.04.md [...] [--remove]
+  python3 src/scripts/split_cards.py drafts/00.04.md [...] [--remove]
 """
 from __future__ import annotations
 

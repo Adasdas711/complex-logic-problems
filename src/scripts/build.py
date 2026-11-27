@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Генерация оглавлений, плана и расписания занятий из data/*.yaml и карточек задач.
 
-  python3 scripts/build.py          — пересобрать файлы
-  python3 scripts/build.py --check  — проверить, что сгенерированные файлы актуальны
+  python3 src/scripts/build.py          — пересобрать файлы
+  python3 src/scripts/build.py --check  — проверить, что сгенерированные файлы актуальны
 
 Генерируются: docs/01-soderzhanie.md, docs/03-plan.md, docs/06-zanyatiya.md, docs/07-uchebnyj-plan.md,
 docs/progress.md,
@@ -21,12 +21,12 @@ from urllib.parse import quote
 
 import yaml
 
-from common import (CARD_SEP, DATA, DOCS, FRONT_RE, ROOT, Problem, compute_quotas, compute_sessions, load_book, load_problems,
+from common import (CARD_SEP, DATA, DOCS, FRONT_RE, REPO, ROOT, Problem, compute_quotas, compute_sessions, load_book, load_problems,
                     load_yaml, problem_title, study_order)
 
-GEN = "<!-- Файл сгенерирован scripts/build.py. Не редактировать вручную. -->\n\n"
+GEN = "<!-- Файл сгенерирован src/scripts/build.py. Не редактировать вручную. -->\n\n"
 LEVELS = range(1, 11)
-SHEETS = ROOT / "zanyatiya"
+SHEETS = REPO / "zanyatiya"
 
 
 def _clean(name: str) -> str:
@@ -91,7 +91,7 @@ def vhod_name(ch: int, first: int, tax) -> str:
     return _clean(f"{first - 1:02d}т. Неделя {week_of(first, tax)} Входной тест к {what}") + ".md"
 
 
-def link(name: str, prefix: str = "../zanyatiya/") -> str:
+def link(name: str, prefix: str = "../../zanyatiya/") -> str:
     return prefix + quote(name)
 
 
@@ -154,7 +154,7 @@ def plan(chapters, tax) -> str:
            "Квота параграфа книги пропорциональна его объёму в страницах с весами для плотных мест "
            f"(от {tax['quota']['min_per_section']} до {tax['quota']['max_per_section']} задач). "
            "Перед работой над главой квоты уточняются по числу определений, аксиом и правил в ней. "
-           "Числа меняются правкой `data/toc.yaml` и `data/taxonomy.yaml` и пересборкой.\n\n"]
+           "Числа меняются правкой `src/data/toc.yaml` и `src/data/taxonomy.yaml` и пересборкой.\n\n"]
     tot, diag = Counter(), 0
     rows = []
     for c in chapters:
@@ -361,16 +361,16 @@ def session_of(chapters, problems) -> dict:
     return {p.meta["id"]: n for n, items in assign(chapters, problems).items() for p in items}
 
 
-def session_sheets(chapters, problems, tax) -> dict:
-    """Один документ на занятие: что прочитать, примеры решений, задачи, затем решения и ответы."""
+def session_models(chapters, problems, tax) -> list:
+    """Содержимое каждого занятия — общее для документов занятий (zanyatiya/) и сайта (site.py)."""
     sessions = compute_sessions(chapters)
     assigned = assign(chapters, problems)
     started = set()
-    files = {}
     examples = load_primery()
     spaced = load_povtorenie()
     vhod = load_vhod()
     hide_from = next((x["num"] for x in sessions if any(c.num == HIDE_FROM_CHAPTER for c, _, _ in x["new"])), 10 ** 6)
+    out = []
     for s in sessions:
         items, reading, fresh = list(assigned[s["num"]]) + spaced.get(s["num"], []), [], []
         for c, sec, n in s["new"]:
@@ -382,43 +382,58 @@ def session_sheets(chapters, problems, tax) -> dict:
             if sec.page is not None:
                 pdf = (f"PDF {sec.page + 1}" if sec.end_page <= sec.page
                        else f"PDF {sec.page + 1}–{sec.end_page + 1}")
-                reading.append(f"- {where}{cont} — {sec.pages} ({pdf})")
+                reading.append({"where": where + cont, "pages": sec.pages, "pdf": pdf, "text": f"{where}{cont} — {sec.pages} ({pdf})"})
             else:
-                reading.append(f"- {where}{cont} — {expand_source(sec.source)}")
-        review = [m.title.replace("После: ", "") for m, _ in s["mixed"]]
+                src = expand_source(sec.source)
+                reading.append({"where": where + cont, "pages": src, "pdf": "", "text": f"{where}{cont} — {src}"})
         if not items:
             continue
         items.sort(key=lambda p: (p.meta["level"], p.meta["id"]))
-        out = [GEN, f"# Занятие {s['num']}. Неделя {week_of(s['num'], tax)}. {chapters_label(s)}\n\n",
-               "## Что прочитать\n\n"]
-        if not reading:
+        tests = [{"chapter": c.num, "file": vhod_name(c.num, s["num"], tax),
+                  "what": "разделу 16" if c.num == 16 else f"главе {c.num}"}
+                 for c, sec in fresh if c.num in vhod and sec.num == c.sections[0].num]
+        shown = [examples[(c.num, sec.num)] for c, sec in fresh if (c.num, sec.num) in examples]
+        out.append({
+            "num": s["num"], "week": week_of(s["num"], tax), "label": chapters_label(s), "topic": session_topic(s),
+            "file": session_name(s, tax), "book1970": any(sec.page is not None for _, sec, _ in s["new"]),
+            "reading": reading, "review": [m.title.replace("После: ", "") for m, _ in s["mixed"]],
+            "tests": tests, "examples": shown, "hide_examples": s["num"] >= hide_from,
+            "chapters": list(dict.fromkeys(c.num for c, _, _ in s["new"])),
+            "items": interleave(items, [(c.num, sec.num) for c, sec in fresh]),
+        })
+    return out
+
+
+def session_sheets(chapters, problems, tax) -> dict:
+    """Один документ на занятие: что прочитать, примеры решений, задачи, затем решения и ответы."""
+    files = {}
+    for m in session_models(chapters, problems, tax):
+        out = [GEN, f"# Занятие {m['num']}. Неделя {m['week']}. {m['label']}\n\n", "## Что прочитать\n\n"]
+        if not m["reading"]:
             out.append("Нового чтения нет: занятие целиком повторительное.\n\n")
         else:
             out += [("А. А. Зиновьев. *Комплексная логика*. М.: Наука, 1970. "
-                     "Страницы книги; в скобках — страницы PDF-скана.\n\n" if any(sec.page is not None for _, sec, _ in s["new"])
-                     else "Страницы книг; в скобках — страницы PDF-скана, где он есть.\n\n"), "\n".join(reading) + "\n\n"]
-        if review:
-            out.append("Повторение без нового чтения: пройденное до — " + "; ".join(review) + ".\n\n")
-        for c, sec in fresh:
-            if c.num in vhod and sec.num == c.sections[0].num:
-                what = "разделу 16" if c.num == 16 else f"главе {c.num}"
-                out.append(f"Перед занятием — [входной тест к {what}]({link(vhod_name(c.num, s['num'], tax), '')}): "
-                           "если он не сдан, сначала повторите указанные в нём параграфы.\n\n")
-        shown = [(c, sec, examples[(c.num, sec.num)]) for c, sec in fresh if (c.num, sec.num) in examples]
+                     "Страницы книги; в скобках — страницы PDF-скана.\n\n" if m["book1970"]
+                     else "Страницы книг; в скобках — страницы PDF-скана, где он есть.\n\n"),
+                    "\n".join("- " + r["text"] for r in m["reading"]) + "\n\n"]
+        if m["review"]:
+            out.append("Повторение без нового чтения: пройденное до — " + "; ".join(m["review"]) + ".\n\n")
+        for v in m["tests"]:
+            out.append(f"Перед занятием — [входной тест к {v['what']}]({link(v['file'], '')}): "
+                       "если он не сдан, сначала повторите указанные в нём параграфы.\n\n")
         out.append("## Примеры решений\n\n")
-        if not shown:
+        if not m["examples"]:
             out.append("Нет.\n\n")
-        for j, (c, sec, ex) in enumerate(shown, 1):
+        for j, ex in enumerate(m["examples"], 1):
             parts = card_parts(ex)
             body = f"**Решение.**\n\n{parts.get('Решение', '')}\n\n**Ответ.** {parts.get('Ответ', '')}\n\n"
-            if s["num"] >= hide_from:
+            if m["hide_examples"]:
                 body = f"<details>\n<summary>Решение</summary>\n\n{body}</details>\n\n"
             out.append(f"**Пример {j}.** {parts.get('Условие', '')}\n\n{body}")
-        items = interleave(items, [(c.num, sec.num) for c, sec in fresh])
         out.append("## Задачи\n\n")
         sol = ["\n---\n\n&nbsp;\n\n&nbsp;\n\n&nbsp;\n\n## Ответы и решения\n\n### Решения\n\n"]
         ans = ["\n### Ответы\n\n| № | Ответ |\n|---|---|\n"]
-        for i, p in enumerate(items, 1):
+        for i, p in enumerate(m["items"], 1):
             parts = card_parts(p)
             out.append(f"{i}\\. {parts.get('Условие', '')}\n\n")
             full = parts.get("Ответ", "")
@@ -427,7 +442,7 @@ def session_sheets(chapters, problems, tax) -> dict:
             ans.append(f"| {i} | {short} |\n")
             extra = "" if simple else f"\n\nОтвет:\n\n{full}"
             sol.append(f"{i}\\. {parts.get('Решение', '')}{extra}\n\n")
-        files[SHEETS / session_name(s, tax)] = "".join(out + sol + ans)
+        files[SHEETS / m["file"]] = "".join(out + sol + ans)
     return files
 
 KONTROL = DATA / "kontrolnye"
@@ -715,7 +730,7 @@ TITLES = {0: "Введение: операторы, термины, высказ
 
 
 def readme(chapters) -> str:
-    text = (ROOT / "README.md").read_text(encoding="utf-8")
+    text = (REPO / "README.md").read_text(encoding="utf-8")
     rows = ["<!-- sections:start -->\n| № | Раздел | Задач |\n|---|---|---|\n"]
     order = study_order(chapters) + [c for c in chapters if c.mixed]
     for c in order:
@@ -745,7 +760,7 @@ def generate() -> dict:
                                                  {l: f"{l}. {d['name']}" for l, d in tax["levels"].items()}, where, names),
         DOCS / "indeks-po-tipam.md": index_by(problems, "type", "Задачи по типам",
                                               {t: f"{t} — {n}" for t, n in tax["types"].items()}, where, names),
-        ROOT / "README.md": readme(chapters),
+        REPO / "README.md": readme(chapters),
     }
     files.update(session_sheets(chapters, problems, tax))
     files.update(kontrol_sheets(chapters, tax))
@@ -758,23 +773,23 @@ def main() -> int:
     stale = []
     files = generate()
     # Лишние файлы в папках документов (старые имена) удаляются; при --check считаются устаревшими.
-    for folder in (SHEETS, ROOT / "kontrolnye"):
+    for folder in (SHEETS,):
         for f in sorted(folder.glob("*.md")) if folder.exists() else []:
             if f not in files:
                 if check:
-                    stale.append(f.relative_to(ROOT).as_posix() + " (лишний)")
+                    stale.append(f.relative_to(REPO).as_posix() + " (лишний)")
                 else:
                     f.unlink()
     for path, text in files.items():
         old = path.read_text(encoding="utf-8") if path.exists() else None
         if old != text:
             if check:
-                stale.append(path.relative_to(ROOT).as_posix())
+                stale.append(path.relative_to(REPO).as_posix())
             else:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(text, encoding="utf-8")
     if check and stale:
-        print("Устарели сгенерированные файлы (запустите scripts/build.py):\n  " + "\n  ".join(stale))
+        print("Устарели сгенерированные файлы (запустите src/scripts/build.py):\n  " + "\n  ".join(stale))
         return 1
     print("Проверено: файлы актуальны." if check else "Готово.")
     return 0

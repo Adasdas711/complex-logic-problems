@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Проверка задач: формат карточки, коды классификации, уникальность номеров, квоты.
 
-Запуск: python3 scripts/validate.py
+Запуск: python3 src/scripts/validate.py
 Код возврата 1, если есть ошибки. Предупреждения ошибкой не считаются.
 """
 from __future__ import annotations

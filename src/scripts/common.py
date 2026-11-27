@@ -9,6 +9,7 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
+REPO = ROOT.parent          # корень репозитория: zanyatiya/, site_src/, README.md
 DATA = ROOT / "data"
 DOCS = ROOT / "docs"
 
