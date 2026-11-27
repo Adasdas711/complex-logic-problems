@@ -206,7 +206,7 @@ function viewKurs() {
 // ---------- задачи ----------
 function taskHtml(t, under, key) {
   const ok = !!(key && S.r[key] && S.r[key][t.id]);
-  const btn = key ? `<button type="button" class="solved${ok ? ' on' : ''}" data-act="solve" data-key="${key}" data-id="${esc(t.id)}" aria-label="Отметить задачу ${t.n} решённой">${ok ? '✓ Решена' : 'Решена?'}</button>` : '';
+  const btn = key ? `<button type="button" class="solved${ok ? ' on' : ''}" data-act="solve" data-key="${key}" data-id="${esc(t.id)}" aria-pressed="${ok}" aria-label="Задача ${t.n} решена" title="${ok ? 'Снять отметку' : 'Отметить задачу решённой'}">✓</button>` : '';
   let h = `<article class="box" id="t${t.n}"><div class="task-row"><b class="num${ok ? ' ok' : ''}">${t.n}.</b><div class="rich">${t.cond}</div>${btn}</div>`;
   if (under) {
     const a = open.has('a:' + key + t.id), s = open.has('s:' + key + t.id);
