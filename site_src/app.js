@@ -230,11 +230,22 @@ async function viewZ(num) {
   const under = S.mode === 'under', key = 'z' + num;
   const prev = IDX.sessions.find((x) => x.num === num - 1), next = IDX.sessions.find((x) => x.num === num + 1);
   const tests = testBefore(num), konts = kontrolAfter(num);
+  const readItem = (r, i) => {
+    let w = r.whereH, cont = false;
+    if (w.endsWith(' (продолжение)')) { w = w.slice(0, -14); cont = true; }
+    const cut = w.indexOf(', § ');
+    const ch = cut > 0 ? w.slice(0, cut) : '', par = cut > 0 ? w.slice(cut + 2) : w;
+    return `<li class="read-i"><span class="read-n">${i + 1}</span><div class="read-b">${ch ? `<span class="read-ch">${ch}</span>` : ''}
+      <span class="read-p">${par}${cont ? ' <span class="cont">продолжение</span>' : ''}</span></div>
+      <div class="read-pg"><span class="pg">${esc(r.pages)}</span>${r.pdf ? `<span class="pdf">${esc(r.pdf)}</span>` : ''}</div></li>`;
+  };
+  const BOOK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7"/></svg>';
+  const LOOP = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.3L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.3L3 16"/><path d="M3 21v-5h5"/></svg>';
   const reading = z.reading.length
-    ? `<p class="muted small">${z.book1970 ? 'А. А. Зиновьев. <i>Комплексная логика</i>. М.: Наука, 1970. ' : ''}Страницы книги; в скобках — страницы PDF-скана${z.book1970 ? '' : ', где он есть'}.</p>
-       <ul class="reading">${z.reading.map((r) => `<li><span>${r.whereH}</span><span style="white-space:nowrap"><b>${esc(r.pages)}</b> <span class="muted">${r.pdf ? '(' + esc(r.pdf) + ')' : ''}</span></span></li>`).join('')}</ul>`
-    : '<p>Нового чтения нет: занятие целиком повторительное.</p>';
-  const review = z.review.length ? `<p class="muted small">Повторение без нового чтения: пройденное до — ${z.review.join('; ')}.</p>` : '';
+    ? `<ol class="read-list">${z.reading.map(readItem).join('')}</ol>`
+    : '<p class="muted">Нового чтения нет: занятие целиком повторительное.</p>';
+  const bookSrc = z.reading.length ? `<span class="book-src">${BOOK}${z.book1970 ? 'А. А. Зиновьев · <i>Комплексная логика</i> · 1970' : 'страницы книг; PDF — где есть скан'}</span>` : '';
+  const review = z.review.length ? `<div class="review-note">${LOOP}<span>Повторение без нового чтения: ${z.review.join('; ')}</span></div>` : '';
   const examples = z.examples.map((e, j) => {
     const k = 'e:' + e.id;
     return `<div class="box ex"><div class="rich"><p><b>Пример ${j + 1}.</b></p>${e.cond}</div>
@@ -243,17 +254,21 @@ async function viewZ(num) {
   const solvedN = z.tasks.filter((t) => S.r[key] && S.r[key][t.id]).length;
   const d = doneZ(num);
   $('#view').innerHTML = `
-    <section class="card">
-      <p class="eyebrow">Занятие ${num} · неделя ${s.week} · модуль ${ROM(s.module)}</p>
-      <div class="row-top"><h1>${z.topicH}</h1><button type="button" class="done${d ? ' on' : ''}" data-act="doneZ" data-n="${num}">${d ? '✓ Занятие выполнено' : 'Отметить занятие выполненным'}</button></div>
-      <div class="navrow">
-        ${prev ? `<a class="btn" href="#/z/${prev.num}">‹ Занятие ${prev.num}</a>` : '<span></span>'}
-        <span class="mid">${tests.map((t) => `<a class="btn gold" href="#/t/${t.chapter}">Перед занятием — входной тест к ${testShort(t)}</a>`).join('')}
-          ${konts.map((k) => `<a class="btn gold" href="#/k/${k.k}">После занятия — контрольная работа ${k.k}</a>`).join('')}</span>
-        ${next ? `<a class="btn" href="#/z/${next.num}">Занятие ${next.num} ›</a>` : '<span></span>'}
+    <section class="card hero">
+      <div class="hero-top">
+        <div class="tags"><span class="tag">Занятие ${num}</span><span class="tag">Неделя ${s.week}</span><a class="tag tag-link" href="#/m/${s.module + 1}">Модуль ${ROM(s.module)} · ${esc(modTitle(s.module))}</a></div>
+        <button type="button" class="done${d ? ' on' : ''}" data-act="doneZ" data-n="${num}">${d ? '✓ Занятие выполнено' : 'Отметить выполненным'}</button>
+      </div>
+      <h1 class="hero-h">${z.topicH}</h1>
+      <div class="hero-stats"><span>${z.tasks.length} ${plural(z.tasks.length, 'задача', 'задачи', 'задач')}</span><span class="dot"></span><span>${z.examples.length ? z.examples.length + ' ' + plural(z.examples.length, 'пример', 'примера', 'примеров') : 'без примеров'}</span><span class="dot"></span><span class="${solvedN ? 'ok' : ''}">решено ${solvedN} из ${z.tasks.length}</span>
+        <span class="hero-bar"><span style="width:${Math.round(100 * solvedN / Math.max(1, z.tasks.length))}%"></span></span></div>
+      ${tests.length || konts.length ? `<div class="hero-links">${tests.map((t) => `<a class="btn gold sm" href="#/t/${t.chapter}">Перед занятием — входной тест к ${testShort(t)}</a>`).join('')}${konts.map((k) => `<a class="btn gold sm" href="#/k/${k.k}">После занятия — контрольная работа ${k.k}</a>`).join('')}</div>` : ''}
+      <div class="pn">
+        ${prev ? `<a class="pn-a" href="#/z/${prev.num}"><span class="pn-k">‹ Занятие ${prev.num}</span><span class="pn-t">${prev.topicH}</span></a>` : '<span></span>'}
+        ${next ? `<a class="pn-a r" href="#/z/${next.num}"><span class="pn-k">Занятие ${next.num} ›</span><span class="pn-t">${next.topicH}</span></a>` : '<span></span>'}
       </div>
     </section>
-    <section class="card"><h2 class="eyebrow">Что прочитать</h2>${reading}${review}</section>
+    <section class="card"><div class="row-between"><h2 class="eyebrow">Что прочитать</h2>${bookSrc}</div>${reading}${review}</section>
     ${z.examples.length ? `<section class="card"><h2 class="eyebrow">Примеры решений</h2>${examples}</section>` : ''}
     <section class="card">
       <div class="row-between"><h2 class="eyebrow">Задачи · ${z.tasks.length}${solvedN ? ` · решено ${solvedN}` : ''}</h2>
