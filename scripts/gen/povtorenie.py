@@ -6,7 +6,8 @@
 занятий, контрольных и примеров решений; ступени 2–6; задача не опирается на главы и параграфы, которые к целевому
 занятию ещё не начаты. Около четверти — диагностика (тип E).
 
-Пишет data/povtorenie/povtorenie.md (карточки с полем session — номер занятия); в документ занятия задачи попадают
+Пишет data/povtorenie/povtorenie.md; точки, закрытые ручными задачами из data/povtorenie/ruchnye.md, пропускает
+(карточки с полем session — номер занятия); в документ занятия задачи попадают
 через scripts/build.py и перемешиваются с остальными.
 """
 import random
@@ -95,7 +96,10 @@ def main():
     start, taught = started_by(sessions)
     pool = harvest()
     rnd = random.Random(2027)
-    plan = sorted((t + d, key) for key, t in start.items() for d in GAPS if t + d <= last)
+    manual = ROOT / "data" / "povtorenie" / "ruchnye.md"
+    done = {(int(t), (int(c), int(p))) for t, c, p in
+            re.findall(r'id: "R-(\d+)-(\d+)\.(\d+)"', manual.read_text(encoding="utf-8"))} if manual.exists() else set()
+    plan = sorted((t + d, key) for key, t in start.items() for d in GAPS if t + d <= last and (t + d, key) not in done)
     out, e_count, used_skel = [], 0, defaultdict(set)
     for n, (t, key) in enumerate(plan):
         cands = [c for c in pool.get(key, []) if not ahead(c, key[0], taught[t]) and K.skeleton(c) not in used_skel[key]]

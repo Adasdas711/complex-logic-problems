@@ -419,16 +419,19 @@ HIDE_FROM_CHAPTER = 6
 
 
 def load_povtorenie() -> dict:
-    """{занятие: [задачи планового повторения]} из data/povtorenie/povtorenie.md."""
+    """{занятие: [задачи планового повторения]} из data/povtorenie/*.md.
+
+    povtorenie.md пишет scripts/gen/povtorenie.py; ruchnye.md — задачи, написанные вручную для параграфов,
+    у которых генератор не дал новой задачи (генератор этот файл не трогает).
+    """
     out = defaultdict(list)
-    if not POVTORENIE.exists():
-        return out
-    for chunk in CARD_SEP.split(POVTORENIE.read_text(encoding="utf-8")):
-        chunk = chunk.strip()
-        m = FRONT_RE.match(chunk + "\n") if chunk else None
-        if m:
-            meta = yaml.safe_load(m.group(1)) or {}
-            out[meta["session"]].append(Problem(POVTORENIE, meta, chunk[m.end():]))
+    for path in sorted(POVTORENIE.parent.glob("*.md")):
+        for chunk in CARD_SEP.split(path.read_text(encoding="utf-8")):
+            chunk = chunk.strip()
+            m = FRONT_RE.match(chunk + "\n") if chunk else None
+            if m:
+                meta = yaml.safe_load(m.group(1)) or {}
+                out[meta["session"]].append(Problem(path, meta, chunk[m.end():]))
     return out
 
 
