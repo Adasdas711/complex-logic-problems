@@ -282,7 +282,7 @@ async function viewZ(num) {
     <nav class="foot-nav" aria-label="Соседние занятия">
       ${prev ? `<a class="foot-a" href="#/z/${prev.num}" title="Занятие ${prev.num}">‹ Назад</a>` : '<span></span>'}
       ${donePill('doneZ', num, d, 'Готово')}
-      ${next ? `<a class="foot-a" href="#/z/${next.num}" title="Занятие ${next.num}">Далее ›</a>` : '<span></span>'}</nav>`;
+      ${next ? `<a class="foot-a r" href="#/z/${next.num}" title="Занятие ${next.num}">Далее ›</a>` : '<span></span>'}</nav>`;
   document.title = `Занятие ${num} — Комплексная логика`;
 }
 
