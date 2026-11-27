@@ -239,7 +239,8 @@ async function viewZ(num) {
     const ch = cut > 0 ? w.slice(0, cut) : '', par = cut > 0 ? w.slice(cut + 2) : w;
     return `<li class="read-i"><span class="read-n">${i + 1}</span><div class="read-b">${ch ? `<span class="read-ch">${ch}</span>` : ''}
       <span class="read-p">${par}${cont ? ' <span class="cont">продолжение</span>' : ''}</span></div>
-      <div class="read-pg"><span class="pg">${esc(r.pages)}</span>${r.pdf ? `<span class="pdf">${esc(r.pdf)}</span>` : ''}</div></li>`;
+      ${r.src ? `<div class="read-pg read-src">${r.src.map((x) => `<div class="src1"><span class="bk">${x.book}</span>${x.pages ? `<span class="pg">${esc(x.pages)}</span>` : ''}${x.pdf ? `<span class="pdf">${esc(x.pdf)}</span>` : ''}</div>`).join('')}</div>`
+        : `<div class="read-pg"><span class="pg">${esc(r.pages)}</span>${r.pdf ? `<span class="pdf">${esc(r.pdf)}</span>` : ''}</div>`}</li>`;
   };
   const BOOK = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7"/></svg>';
   const LOOP = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.3L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.3L3 16"/><path d="M3 21v-5h5"/></svg>';

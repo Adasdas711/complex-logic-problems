@@ -197,6 +197,10 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .read-pg { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; white-space: nowrap; }
 .read-pg .pg { font-size: 14px; font-weight: 700; color: var(--green); }
 .read-pg .pdf { font-size: 12px; color: var(--dim); }
+.read-src { white-space: normal; min-width: 260px; max-width: 50%; gap: 8px; text-align: right; }
+.read-src .pg { white-space: nowrap; }
+.read-src .src1 { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.read-src .bk { font-size: 12px; color: var(--dim); }
 .review-note { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px; font-size: 13px; color: var(--muted);
   background: #202020; border: 1px dashed #3a3a3a; }
 
@@ -289,6 +293,8 @@ details > .in { padding: 0 16px 16px; display: flex; flex-direction: column; gap
   .reading li { flex-direction: column; gap: 2px; }
   .read-i { grid-template-columns: 26px 1fr; }
   .read-pg { grid-column: 2; flex-direction: row; gap: 8px; align-items: baseline; }
+  .read-src { min-width: 0; max-width: none; flex-direction: column; align-items: flex-start; text-align: left; }
+  .read-src .src1 { align-items: flex-start; }
   .pn { grid-template-columns: 1fr; }
   .hero-h { font-size: 26px; }
   .reveal { margin-left: -8px; }

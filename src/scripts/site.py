@@ -18,6 +18,7 @@
 """
 import hashlib
 import json
+import html
 import re
 import shutil
 import sys
@@ -32,6 +33,28 @@ from html_fmt import UNKNOWN, md, title  # noqa: E402
 DATA_DIR = REPO / "site_src" / "data"
 FILES: dict = {}
 
+
+
+def reading_item(r: dict) -> dict:
+    """Пункт «Что прочитать». Для книг кроме «Комплексной логики» в pages приходит вся строка источника
+    («А. А. Зиновьев. *Очерки…* (2000), с. 372–373 (PDF 377–378); A. Sinowjew, …») — разбираем её на
+    источники {book, pages, pdf}, чтобы сайт показывал книгу, страницы и PDF отдельно и без markdown."""
+    out = dict(r, whereH=title(r["where"]))
+    if r.get("pdf") or "*" not in r.get("pages", ""):
+        return out
+    src = []
+    for part in re.split(r";\s+", r["pages"]):
+        m = re.match(r"^(?P<author>.*?)\.\s*\*(?P<title>[^*]+)\*(?:\s*\((?P<year>\d{4})\))?,?\s*(?P<rest>.*)$", part)
+        if not m:
+            src.append({"book": html.escape(part), "pages": "", "pdf": ""})
+            continue
+        rest = m["rest"]
+        pdf = ", ".join(re.findall(r"\(PDF ([^)]+)\)", rest))
+        pages = re.sub(r"\s*\(PDF [^)]+\)", "", rest).strip(" ,")
+        book = f"{html.escape(m['author'])} · <i>{html.escape(m['title'])}</i>" + (f" · {m['year']}" if m["year"] else "")
+        src.append({"book": book, "pages": pages, "pdf": f"PDF {pdf}" if pdf else ""})
+    out["src"] = src
+    return out
 
 def card(p, n=None):
     parts = card_parts(p)
@@ -94,7 +117,7 @@ def main() -> int:
         write(DATA_DIR / "z" / f"{m['num']:02d}.json", {
             "num": m["num"], "week": m["week"], "label": m["label"], "topic": m["topic"], "topicH": title(m["topic"]),
             "module": mod, "book1970": m["book1970"],
-            "reading": [dict(r, whereH=title(r["where"])) for r in m["reading"]],
+            "reading": [reading_item(r) for r in m["reading"]],
             "review": [title(r) for r in m["review"]],
             "tests": [{"chapter": v["chapter"], "what": v["what"]} for v in m["tests"]],
             "examples": [card(e) for e in m["examples"]], "hideExamples": m["hide_examples"],
