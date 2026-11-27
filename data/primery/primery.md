@@ -1901,7 +1901,7 @@ tags: [кванторы, непарадоксальность]
 а) $(\forall a)(a \leftarrow b)(\exists a)(a \leftarrow c) \vdash (\exists a)((a \leftarrow b)(a \leftarrow c))$
 б) $(\forall a)(a \leftarrow b) \vdash (a \leftarrow c)$
 в) $(\forall a)(a \leftarrow b) \vdash (\exists a)(a \leftarrow c)$
-г) $(\forall a)(a \leftarrow b) \vdash \sim (\exists a)(\sim (a \leftarrow b))$
+г) $(\forall a)(a \leftarrow b) \vdash \sim (\exists a)\sim (a \leftarrow b)$
 
 ## Ответ
 
@@ -3443,7 +3443,7 @@ tags: [модальность, вывод]
 
 ## Условие
 
-Буквы $x, y$ — высказывания; $M$ — «возможно», $N$ — «необходимо», $C$ — «случайно»; $\alpha$ — наличие $\urcorner$ или $?$ или отсутствие обоих. Буквы $z, v$ — высказывания. Выведите следствие T2 § 3 гл. 12 при $x = \sim z$, $y = (a \leftarrow b)$.
+Буквы $x, y$ — высказывания; $M$ — «возможно», $N$ — «необходимо», $C$ — «случайно»; $\alpha$ — наличие $\urcorner$ или $?$ или отсутствие обоих. Буквы $z, v$ — высказывания. Буквы $a, b$ — термины. Выведите следствие T2 § 3 гл. 12 при $x = \sim z$, $y = (a \leftarrow b)$.
 
 ## Ответ
 

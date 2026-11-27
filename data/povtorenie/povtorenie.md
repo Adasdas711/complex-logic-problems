@@ -3216,7 +3216,7 @@ tags: [кванторы, свободные термины]
 
 ## Условие
 
-Буквы $a, b, c, d$ — термины (субъекты и одноместные предикаты); $x, y$ — высказывания. Дано высказывание $(\forall a)(\forall b)(\sim (b \leftarrow c))$. Для каждого термина укажите: свободен ли он в высказывании по D4 и есть ли у него свободные вхождения по D5 (§ 1 гл. 7, с. 98–99).
+Буквы $a, b, c, d$ — термины (субъекты и одноместные предикаты); $x, y$ — высказывания. Дано высказывание $(\forall a)(\forall b)\sim (b \leftarrow c)$. Для каждого термина укажите: свободен ли он в высказывании по D4 и есть ли у него свободные вхождения по D5 (§ 1 гл. 7, с. 98–99).
 
 ## Ответ
 
@@ -3388,7 +3388,7 @@ tags: [кванторы, непарадоксальность]
 
 Буквы $a, b, c, d$ — термины (субъекты и одноместные предикаты); $x, y$ — высказывания. Удовлетворяют ли формулы условию непарадоксальности MT1 § 3 гл. 7: в заключение не входят элементарные высказывания (в смысле теории кванторов), отсутствующие в посылке?
 
-а) $\sim (\exists a)(\sim (a \leftarrow b)) \vdash (\forall a)(a \leftarrow b)$
+а) $\sim (\exists a)\sim (a \leftarrow b) \vdash (\forall a)(a \leftarrow b)$
 б) $(\forall a)(a \leftarrow b)(\exists a)(a \leftarrow c) \vdash (\exists a)((a \leftarrow b)(a \leftarrow c))$
 в) $(a \leftarrow b) \vdash (\exists a)(a \leftarrow c)$
 г) $(\forall a)(a \leftarrow b) \vdash (\exists a)(a \leftarrow c)$
@@ -3703,7 +3703,7 @@ tags: [кванторы, A5]
 а) $(\exists b)((a \leftarrow d) \vee (c \leftarrow a)) \vdash (\forall b)((a \leftarrow d) \vee (c \leftarrow a))$
 б) $(\exists b)(\forall a)(a \leftarrow c) \vdash (\forall b)(\forall a)(a \leftarrow c)$
 в) $(\exists b)(\forall a)(d \leftarrow c) \vdash (\forall b)(\forall a)(d \leftarrow c)$
-г) $(\exists b)(\sim (b \leftarrow d)) \vdash (\forall b)(\sim (b \leftarrow d))$
+г) $(\exists b)\sim (b \leftarrow d) \vdash (\forall b)\sim (b \leftarrow d)$
 
 ## Ответ
 
@@ -6813,7 +6813,7 @@ tags: [модальность, вывод]
 
 ## Условие
 
-Буквы $x, y$ — высказывания; $M$ — «возможно», $N$ — «необходимо», $C$ — «случайно»; $\alpha$ — наличие $\urcorner$ или $?$ или отсутствие обоих. Буквы $z, v$ — высказывания. Выведите следствие T1 § 3 гл. 12 при $x = \sim z$, $y = (a \leftarrow b)$.
+Буквы $x, y$ — высказывания; $M$ — «возможно», $N$ — «необходимо», $C$ — «случайно»; $\alpha$ — наличие $\urcorner$ или $?$ или отсутствие обоих. Буквы $z, v$ — высказывания. Буквы $a, b$ — термины. Выведите следствие T1 § 3 гл. 12 при $x = \sim z$, $y = (a \leftarrow b)$.
 
 ## Ответ
 
