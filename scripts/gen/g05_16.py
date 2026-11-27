@@ -791,7 +791,7 @@ def cond6(lvl, typ="R"):
 
 
 def antec(lvl, typ="D"):
-    pairs = [("((x \\wedge y) \\rightarrow z)", "$x \\wedge y$", "$z$"), ("(\\sim x \\urcorner\\!\\rightarrow y)", "$\\sim x$", "$y$"),
+    pairs = [("(xy \\rightarrow z)", "$xy$", "$z$"), ("(\\sim x \\urcorner\\!\\rightarrow y)", "$\\sim x$", "$y$"),
              ("(x? \\rightarrow (y \\vee z))", "$x$", "$y \\vee z$"), ("((x \\rightarrow y) \\rightarrow x)", "$x \\rightarrow y$", "$x$")]
     pick = rnd.sample(pairs, 3)
     body = ("## Условие\n\nНазовите антецедент и консеквент (D2 § 1 гл. 6, с. 82).\n\n" +
