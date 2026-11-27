@@ -203,6 +203,31 @@ details > .in { padding: 0 16px 16px; display: flex; flex-direction: column; gap
 .stepi > b:first-child { color: var(--green); font-size: 18px; }
 .stepi > span { color: var(--muted); }
 
+/* Плавающее оглавление задач справа — как в Notion (тёмная тема):
+   чёрточки 16×2, промежуток 12, текущая — #d3d3d3 со свечением, остальные — #fffceb4e;
+   при наведении — панель со списком; цвета и тени из темы Notion */
+.ntoc { position: fixed; z-index: 80; top: 50%; right: 0; transform: translateY(-50%); }
+.ntoc-dashes { display: flex; flex-direction: column; gap: 12px; width: 56px; max-height: 400px; overflow-y: hidden;
+  padding: 0 8px 12px 20px; box-sizing: border-box; transition: opacity 200ms ease; }
+.ntoc-d { cursor: pointer; }
+.ntoc-d > div { background-color: #fffceb4e; height: 2px; width: 16px; border-radius: 2px; flex: none;
+  transition: background 0.2s, box-shadow 0.2s; box-shadow: none; }
+.ntoc-d > div.ok { background-color: #4f8a63; }
+.ntoc-d.on > div { background-color: #d3d3d3; box-shadow: 0 0 3px #d3d3d3; }
+.ntoc-panel { position: absolute; top: 50%; right: 8px; transform: translateY(-50%); width: 260px; max-height: 400px; display: flex;
+  background: #202020; border-radius: 12px; box-shadow: 0 0 0 1px #383836, 0 14px 28px -6px #19191933, 0 2px 4px -1px #1919191e;
+  opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 200ms ease, visibility 200ms; }
+.ntoc:hover .ntoc-panel { opacity: 1; visibility: visible; pointer-events: auto; }
+.ntoc:hover .ntoc-dashes { opacity: 0; }
+.ntoc-list { overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 1px; width: 100%; scrollbar-width: thin; scrollbar-color: #383836 transparent; }
+.ntoc-i { display: block; flex: none; padding: 4px 8px; border-radius: 6px; font-size: 14px; line-height: 20px; color: #ada9a3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background 20ms ease-in; }
+.ntoc-i:hover { background: #ffffeb1a; color: #f0efed; }
+.ntoc-i.on { color: #2783de; }
+.ntoc-n { display: inline-block; min-width: 26px; color: inherit; font-weight: 600; }
+.ntoc-i.ok .ntoc-n { color: var(--green); }
+@media (max-width: 1320px) { .ntoc { display: none; } }
+
 @media (max-width: 900px) {
   .app { flex-direction: column; }
   .side, .side.collapsed { position: static; width: 100%; height: auto; border-right: 0; border-bottom: 1px solid #2c2c2c; }

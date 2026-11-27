@@ -329,7 +329,7 @@ async function viewCheck(kind, id) {
   const data = await get(`${kind}/${pad(id)}.json`);
   if (route.page !== kind || route.n !== id) return;
   const d = kind === 'k' ? doneK(id) : doneT(id);
-  const tasks = data.tasks.map((t) => `<article class="box"><div class="task-row"><b class="num">${t.n}.</b><div class="rich">${t.cond}</div></div></article>`).join('');
+  const tasks = data.tasks.map((t) => `<article class="box" id="t${t.n}"><div class="task-row"><b class="num">${t.n}.</b><div class="rich">${t.cond}</div></div></article>`).join('');
   const head = kind === 'k'
     ? `<p class="eyebrow gold">Контрольная работа ${id} · неделя ${meta.week}</p><h1>${esc(meta.label)}</h1>
        <p class="muted">После занятия ${meta.after} · материал занятий ${meta.from}–${meta.after} · ${data.tasks.length} задач · время — <b style="color:var(--text)">${esc(data.time)}</b> · книгой и записями пользоваться можно</p>`
@@ -387,6 +387,63 @@ async function viewUstr() {
 }
 function notFound() {
   $('#view').innerHTML = `<section class="card"><h1>Страница не найдена</h1><p><a class="btn" href="#/">К курсу</a></p></section>`;
+}
+
+
+// ---------- плавающее оглавление задач справа (как в Notion) ----------
+let tocScroll = null;
+function buildToc() {
+  const old = document.getElementById('ntoc');
+  if (old) old.remove();
+  if (tocScroll) { window.removeEventListener('scroll', tocScroll); tocScroll = null; }
+  const arts = [...document.querySelectorAll('#view article[id^="t"]')];
+  if (arts.length < 2) return;
+  const solved = (a) => !!a.querySelector('.solved.on');
+  const label = (a) => {
+    const n = a.querySelector('.num').textContent.trim();
+    const p = a.querySelector('.rich');
+    const tmp = document.createElement('div');
+    tmp.innerHTML = p ? p.innerHTML.replace(/<br\s*\/?>|<\/p>|<\/td>|<\/th>/g, ' ') : '';
+    let txt = tmp.textContent.replace(/\s+/g, ' ').trim();
+    // обозначения в начале условия («Буквы x, y — высказывания; ….») в оглавлении пропускаем
+    const m = txt.match(/^(Буквы|Обозначения|Здесь|Пусть)(?=[\s:]).*?[.;:]\s+(?=[А-ЯЁ«])/);
+    if (m && m[0].length < txt.length - 10) txt = txt.slice(m[0].length);
+    return { n, txt };
+  };
+  const box = document.createElement('div');
+  box.id = 'ntoc';
+  box.className = 'ntoc';
+  box.setAttribute('aria-label', 'Задачи');
+  box.innerHTML = `<div class="ntoc-dashes">${arts.map((a, i) => `<div class="ntoc-d" data-i="${i}"><div class="${solved(a) ? 'ok' : ''}"></div></div>`).join('')}</div>
+    <div class="ntoc-panel" role="navigation"><div class="ntoc-list">${arts.map((a, i) => {
+      const l = label(a);
+      return `<a class="ntoc-i${solved(a) ? ' ok' : ''}" href="#${a.id}" data-i="${i}"><span class="ntoc-n">${l.n}</span>${esc(l.txt)}</a>`;
+    }).join('')}</div></div>`;
+  document.body.appendChild(box);
+  const dashes = [...box.querySelectorAll('.ntoc-d')], items = [...box.querySelectorAll('.ntoc-i')];
+  const dashCol = box.querySelector('.ntoc-dashes'), list = box.querySelector('.ntoc-list');
+  box.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-i]');
+    if (!el) return;
+    e.preventDefault();
+    arts[+el.dataset.i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  let cur = -1;
+  tocScroll = () => {
+    const line = window.innerHeight * 0.3;
+    let k = 0;
+    arts.forEach((a, i) => { if (a.getBoundingClientRect().top <= line) k = i; });
+    if (k === cur) return;
+    cur = k;
+    dashes.forEach((d, i) => d.classList.toggle('on', i === k));
+    items.forEach((d, i) => d.classList.toggle('on', i === k));
+    const d = dashes[k];
+    if (d) dashCol.scrollTop = Math.max(0, d.offsetTop - dashCol.clientHeight / 2);
+    const it = items[k];
+    if (it && !box.matches(':hover')) list.scrollTop = Math.max(0, it.offsetTop - list.clientHeight / 2);
+  };
+  window.addEventListener('scroll', tocScroll, { passive: true });
+  tocScroll();
 }
 
 // ---------- события ----------
@@ -448,6 +505,7 @@ async function show() {
 async function rerender(side) {
   const y = window.scrollY;
   await show();
+  buildToc();
   if (side) renderSide();
   window.scrollTo(0, y);
 }
@@ -456,6 +514,7 @@ async function onHash() {
   renderSide();
   await show();
   window.scrollTo(0, 0);
+  buildToc();
 }
 
 (async function start() {
