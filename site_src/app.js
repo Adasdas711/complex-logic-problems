@@ -251,7 +251,6 @@ async function viewZ(num) {
       ${o ? `<div class="ans"><span class="lbl">Ответ</span><div class="rich">${e.ans}</div></div>${e.sol ? `<div class="sol"><span class="lbl">Решение</span><div class="rich">${e.sol}</div></div>` : ''}` : ''}</div>`;
   }).join('');
   const solvedN = z.tasks.filter((t) => S.r[key] && S.r[key][t.id]).length;
-  const chips = z.tasks.map((t) => `<button type="button" class="chip${S.r[key] && S.r[key][t.id] ? ' ok' : ''}" data-act="goto" data-n="${t.n}">${t.n}</button>`).join('');
   const d = doneZ(num);
   $('#view').innerHTML = `
     <section class="card">
@@ -270,7 +269,6 @@ async function viewZ(num) {
       <div class="row-between"><h2 class="eyebrow">Задачи · ${z.tasks.length}${solvedN ? ` · решено ${solvedN}` : ''}</h2>
         <div role="group" aria-label="Где показывать ответы" style="display:flex;align-items:center;gap:8px"><span class="small muted">Ответы</span>
           <div class="seg"><button type="button" data-act="mode" data-m="end" class="${under ? '' : 'on'}">В конце</button><button type="button" data-act="mode" data-m="under" class="${under ? 'on' : ''}">Под задачей</button></div></div></div>
-      <nav class="chips" aria-label="К задаче"><span>К задаче</span>${chips}</nav>
       ${z.tasks.map((t) => taskHtml(t, under, key)).join('')}
     </section>
     ${under ? '' : `<section class="card"><h2 class="eyebrow">Ответы и решения</h2><p class="muted small">Свёрнуты: откройте после своего решения.</p>${answersBlock(z.tasks, false)}</section>`}
@@ -452,7 +450,6 @@ document.addEventListener('click', (e) => {
   if (!b) return;
   const act = b.dataset.act, n = +b.dataset.n;
   if (act === 'side') { S.side = !S.side; save(); renderSide(); return; }
-  if (act === 'goto') { const el = document.getElementById('t' + n); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
   if (act === 'open') { const k = b.dataset.k; open.has(k) ? open.delete(k) : open.add(k); rerender(); return; }
   if (act === 'mode') { S.mode = b.dataset.m; save(); rerender(); return; }
   if (act === 'solve') {
