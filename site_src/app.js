@@ -72,8 +72,8 @@ const doneT = (c) => !!S.t[c];
 function modSessions(m) { return IDX.sessions.filter((s) => s.module === m); }
 function testBefore(num) { return IDX.tests.filter((t) => t.before === num); }
 function kontrolAfter(num) { return IDX.kontrol.filter((k) => k.after === num); }
-const testTo = (t) => (t.chapter === 16 ? 'К разделу 16' : 'К главе ' + t.chapter) + '. ' + t.titleH.replace(/^(Глава|Раздел) \d+\. /, '');
-const testShort = (t) => (t.chapter === 16 ? 'разделу 16' : 'главе ' + t.chapter);
+const testTo = (t) => (t.chapter >= 16 ? 'К разделу ' + t.chapter : 'К главе ' + t.chapter) + '. ' + t.titleH.replace(/^(Глава|Раздел) \d+\. /, '');
+const testShort = (t) => (t.chapter >= 16 ? 'разделу ' : 'главе ') + t.chapter;
 
 const searchIcon = (s = 16) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="#8c8c8c" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>`;
 
@@ -342,7 +342,7 @@ async function viewCheck(kind, id) {
     ? `<p class="eyebrow gold">Контрольная работа ${id} · неделя ${meta.week}</p><h1>${esc(meta.label)}</h1>
        <p class="muted">После занятия ${meta.after} · материал занятий ${meta.from}–${meta.after} · ${data.tasks.length} задач · время — <b style="color:var(--text)">${esc(data.time)}</b> · книгой и записями пользоваться можно</p>`
     : `<p class="eyebrow gold">Входной тест · перед занятием ${meta.before} · неделя ${meta.week}</p><h1>${testTo(meta)}</h1>
-       <p class="muted">${data.tasks.length} ${plural(data.tasks.length, 'задача', 'задачи', 'задач')} на то, что глава берёт из прежних · время — <b style="color:var(--text)">${esc(data.time)}</b> · без книги и записей</p>`;
+       <p class="muted">${data.tasks.length} ${plural(data.tasks.length, 'задача', 'задачи', 'задач')} на то, что ${data.chapter >= 16 ? 'раздел' : 'глава'} берёт из прежних · время — <b style="color:var(--text)">${esc(data.time)}</b> · без книги и записей</p>`;
   const back = kind === 'k' ? '<a class="foot-a" href="#/k">‹ Все</a>' : '<a class="foot-a" href="#/t">‹ Все</a>';
   const go = kind === 't' ? `<a class="foot-a" href="#/z/${meta.before}" title="Занятие ${meta.before}">Занятие ›</a>` : '';
   $('#view').innerHTML = `
