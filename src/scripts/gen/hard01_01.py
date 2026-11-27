@@ -144,6 +144,8 @@ def main():
         c = h.diag_card(num)[1]
         c["source"] = SRC
         cards[num] = c
+    for num in (21, 26):
+        cards.pop(num)          # эти номера заняты задачами ступеней 8–10 из hard01_rest.py
     for c in cards.values():
         c["sol"] = c["sol"].replace("Схемы — с. 15–18; правила — с. 17.", "Схемы — с. 15–16; правила — с. 17.")
         assert not h.test_like(c["cond"]), c["cond"][:80]
