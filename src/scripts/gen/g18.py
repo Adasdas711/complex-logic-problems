@@ -3,10 +3,11 @@
 
 § 5 степени истинности, § 6 классы, § 9 существование, § 11 возможность, § 16 вероятность,
 § 18 сравнение (аксиомы C1–C7), § 23–26 ряды, § 31 структуры, § 35 соответствие классов.
-Ответы вычисляются по определениям книги. Пишет drafts/18-gen.md; все карточки generated: true.
+Ответы вычисляются по определениям книги; условия проходят через g18_open (без «тестовой» формы). Пишет drafts/18-gen.md; все карточки generated: true.
 """
 import itertools
 import random
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -860,6 +861,9 @@ def g35():
 
 def main():
     cards = g05() + g06() + g09() + g11() + g16() + g18() + g23_26() + g31() + g35()
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from g18_open import process_card  # условия без «тестовой» формы
+    cards = [process_card(c) for c in cards]
     path = ROOT / "drafts" / "18-gen.md"
     path.parent.mkdir(exist_ok=True)
     path.write_text("\n=====\n\n".join(cards), encoding="utf-8")
