@@ -210,7 +210,7 @@ def subst_card(num, name, yes):
 def deriv_card(num):
     lines = build_ok(rnd.choice([9, 10, 11]), least=8)
     a, b = lines[-1][0], lines[-1][1]
-    cond = f"{CONV} Выведите в $S^1$ формулу ${ftex(a, b)}$. {REF}"
+    cond = f"{CONV} Выведите в $S^1$ формулу ${ftex(a, b)}$, пользуясь аксиомными схемами, теоремными схемами § 2 и правилами $S^1$."
     ans = f"Например, вывод в {len(lines)} строк (см. решение); последняя строка — ${ftex(a, b)}$ [{why_text(lines[-1][2])}]."
     sol = show(lines) + "\n\nСхемы — с. 15–18; правила R1, R2 — с. 17."
     return num, dict(level=7 if len(lines) >= 10 else 6, type="D", step="open", form="sym", answer="proof",
@@ -243,7 +243,7 @@ def diag_card(num):
     p, q = sorted([i, j])
     fix = {i: lines[i][2], j: lines[j][2]}
     cond = (f"{CONV} В выводе формулы ${ftex(lines[-1][0], lines[-1][1])}$ ровно два основания указаны неверно. "
-            f"Найдите их, объясните, почему каждое неверно, и исправьте.\n\n{show(bad)}\n\n{REF}")
+            f"Найдите их, объясните, почему каждое неверно, и исправьте.\n\n{show(bad)}")
     ans = (f"Шаг {p + 1}: верно [{why_text(fix[p])}]; шаг {q + 1}: верно [{why_text(fix[q])}].")
     exp = []
     for k in (p, q):
@@ -258,6 +258,130 @@ def diag_card(num):
     assert not check2(lines)
     return num, dict(level=6, type="E", step="vary", form="sym", answer="text", source="с. 15–18, гл. 1, § 2",
                      tags="S1, вывод, диагностика", cond=cond, ans=ans, sol=sol)
+
+
+def show_hidden(lines, hide_why, hide_f):
+    out = []
+    for n, (a, b, wh) in enumerate(lines, 1):
+        f = "…" if n in hide_f else f"${ftex(a, b)}$"
+        out.append(f"{n}. {f} [{'…' if n in hide_why else why_text(wh)}]")
+    return "\n".join(out)
+
+
+def complete_card(num):
+    """Длинный вывод: пропущены три-четыре основания и две строки-формулы."""
+    lines = build_ok(rnd.choice([10, 11]), least=9)
+    schema_lines = [n for n, (*_, wh) in enumerate(lines, 1) if isinstance(wh, str)]
+    rule_lines = [n for n, (*_, wh) in enumerate(lines, 1) if isinstance(wh, tuple)]
+    hide_f = set(rnd.sample(schema_lines[1:] or schema_lines, min(2, len(schema_lines) - 1 or 1)))
+    hide_why = set(rnd.sample([n for n in schema_lines if n not in hide_f], min(2, len(schema_lines) - len(hide_f))))
+    hide_why |= set(rnd.sample(rule_lines[:-1], min(2, len(rule_lines) - 1)))
+    a, b = lines[-1][0], lines[-1][1]
+    cond = (f"{CONV} В выводе формулы ${ftex(a, b)}$ пропущены основания некоторых шагов и формулы некоторых строк "
+            f"(«…»). Восстановите их.\n\n{show_hidden(lines, hide_why, hide_f)}")
+    parts = []
+    for n in sorted(hide_why | hide_f):
+        la, lb, wh = lines[n - 1]
+        s = f"{n} — " + (f"${ftex(la, lb)}$" if n in hide_f else "")
+        if n in hide_why:
+            s += ("" if n not in hide_f else " ") + f"[{why_text(wh)}]"
+        parts.append(s)
+    ans = "; ".join(parts)
+    sol = ("Строку-формулу восстанавливаем по соседним строкам: в R1 заключение одной строки — посылка другой, "
+           "в R2 обе строки имеют общую посылку. Полный вывод:\n\n" + show(lines) + "\n\nСхемы — с. 15–18; правила — с. 17.")
+    return dict(level=5, type="D", step="complete", form="sym", answer="build", source="с. 15–20, гл. 1, § 1–2",
+                tags="S1, вывод, дополнение", cond=cond, ans=ans, sol=sol)
+
+
+NAMES = ["A1", "A2", "A3", "A4", "A7", "A8", "A9", "A10", "T1", "T2", "T3", "T4", "T5", "T6", "T7"]
+
+
+def all_schemes(a, b):
+    out = []
+    for n in NAMES:
+        if n[0] == "A" and n not in ("A3", "A4") and axiom(a, b) == n:
+            out.append(n)
+        elif n in ("A3", "A4"):
+            if a[0] == "conj" and len(a[1]) == 2 and b == (a[1][0] if n == "A3" else C(a[1][1], a[1][0])):
+                out.append(n)
+        elif n[0] == "T" and is_lemma(a, b, n):
+            out.append(n)
+    return out
+
+
+def recognize_card():
+    X, Y, Z = compound(), compound(), compound()
+    while len({X, Y, Z}) < 3:
+        Y, Z = compound(), compound()
+    pool = [(*inst("A9", X, Y), "A9", f"$x$ := ${tex(X)}$, $y$ := ${tex(Y)}$"),
+            (C(X, X), X, "A3", f"$x$ := ${tex(X)}$, $y$ := ${tex(X)}$"),
+            (D(Y, X), D(X, Y), "T6", f"$x$ := ${tex(Y)}$, $y$ := ${tex(X)}$"),
+            (N(N(C(Z, Z))), C(Z, Z), "A2", f"$x$ := ${tex(C(Z, Z))}$"),
+            (C(Y, Z), C(Z, Y), "A4", f"$x$ := ${tex(Y)}$, $y$ := ${tex(Z)}$")]
+    rnd.shuffle(pool)
+    for a, b, n, _ in pool:
+        assert n in all_schemes(a, b)
+    items = "\n".join(f"{L[k]}) ${ftex(a, b)}$" for k, (a, b, _, _) in enumerate(pool))
+    ans = "; ".join(f"{L[k]}) " + ", ".join(all_schemes(a, b)) + f" ({n}: {s})" for k, (a, b, n, s) in enumerate(pool))
+    cond = (f"{CONV} Для каждой формулы найдите все аксиомные (A1–A4, A7–A10) и теоремные (T1–T7) схемы, примером "
+            f"которых она является, и для одной из них укажите замену метапеременных.\n\n{items}")
+    sol = ("Формула — пример схемы, если получается из неё заменой метапеременных (одинаковые — одинаково). "
+           "Совпадение членов даёт сразу несколько схем: $XX \\vdash X$ — пример A3, T1 и T4; "
+           "$XY \\vdash YX$ — пример A4 и T5; $X : Y \\vdash Y : X$ — пример T6 и T7. Схемы — с. 15–18.\n\n"
+           + "  \n".join(f"{L[k]}) " + ", ".join(all_schemes(a, b)) + f"; замена для {n}: {s}." for k, (a, b, n, s) in enumerate(pool)))
+    return dict(level=4, type="R", step="iso", form="sym", answer="short", source="с. 15–18, гл. 1, § 1–2",
+                tags="S1, теоремные схемы", cond=cond, ans=ans, sol=sol)
+
+
+def series_card():
+    """Тавтологичность и доказуемость в S¹ для длинных формул: доказуемая, с новой буквой, не тавтология."""
+    from s1 import counterexample, new_atoms, tautology
+    items = []
+    tries = 0
+    want = ["strong", "new", "non", rnd.choice(["strong", "new", "non"])]
+    while len(items) < 4 and tries < 5000:
+        tries += 1
+        kind = want[len(items)]
+        if kind in ("strong", "new"):
+            lines = build_ok(6, least=4)
+            a, b = lines[-1][0], lines[-1][1]
+            if kind == "new":
+                b = D(b, C(z, N(z))) if rnd.random() < .5 else C(b, D(w, N(w)))
+                b = N(N(b)) if rnd.random() < .3 else b
+                if not tautology(a, b) or not new_atoms(a, b):
+                    continue
+        else:
+            lines = build_ok(6, least=4)
+            a, b = lines[-1][0], lines[-1][1]
+            b = C(b, N(lines[0][1])) if b[0] != "neg" else b[1]
+            if tautology(a, b):
+                continue
+        if a != b and 12 <= len(tex(a)) + len(tex(b)) <= 46 and (a, b) not in items:
+            items.append((a, b))
+    rnd.shuffle(items)
+    ans, sol = [], []
+    for k, (a, b) in enumerate(items):
+        if strong_tautology(a, b):
+            ans.append(f"{L[k]}) тавтология, в $S^1$ доказуема")
+            sol.append(f"{L[k]}) Тавтология, новых букв в заключении нет — сильная тавтология, по § 7, MT6 (с. 32) доказуема.")
+        elif tautology(a, b):
+            na = ", ".join(f"${t}$" for t in sorted(new_atoms(a, b)))
+            ans.append(f"{L[k]}) тавтология, в $S^1$ недоказуема")
+            sol.append(f"{L[k]}) Тавтология, но в заключение входит {na}, которого нет в посылке; по § 4, MT1 (с. 21) — недоказуема.")
+        else:
+            env = counterexample(a, b)
+            ev = ", ".join(f"${p} = {v}$" for p, v in sorted(env.items()))
+            ans.append(f"{L[k]}) не тавтология, в $S^1$ недоказуема")
+            sol.append(f"{L[k]}) При {ev} посылка — 1, заключение — 0: не тавтология; по § 5, MT1 (с. 22) — недоказуема.")
+    body = "\n".join(f"{L[k]}) ${ftex(a, b)}$" for k, (a, b) in enumerate(items))
+    cond = (f"{CONV} Для каждой формулы установите: (1) её тавтологичность — верна ли она как формула классической "
+            "логики высказываний ($:$ — «одно и только одно из»); (2) её доказуемость в $S^1$. Для нетавтологии укажите "
+            "значения, при которых посылка истинна, а заключение ложно. Пользуйтесь критерием: формула доказуема в $S^1$ "
+            "тогда и только тогда, когда она — сильная тавтология, то есть тавтология, в заключение которой не входят "
+            "элементарные высказывания, отсутствующие в посылке (§ 4, MT1, с. 21; § 5, MT1, с. 22; § 7, MT6, с. 32)."
+            f"\n\n{body}")
+    return dict(level=7, type="S", step="transfer", form="sym", answer="short", source="с. 15–32, гл. 1",
+                tags="S1, классическая логика", cond=cond, ans="; ".join(ans), sol="\n".join(sol))
 
 
 # ---------- вручную: существует ли формула — пример двух схем ----------
@@ -298,8 +422,8 @@ HAND = {
 }
 
 
-def render(cid, c):
-    return (f'---\nid: "{cid}"\nchapter: 1\nsection: 2\nlevel: {c["level"]}\ntype: {c["type"]}\nstep: {c["step"]}\n'
+def render(cid, c, sec=2):
+    return (f'---\nid: "{cid}"\nchapter: 1\nsection: {sec}\nlevel: {c["level"]}\ntype: {c["type"]}\nstep: {c["step"]}\n'
             f'condition: def\nform: {c["form"]}\nanswer: {c["answer"]}\nsource: "{c["source"]}"\nsystem: "S^1"\n'
             f'generated: true\ntags: [{c["tags"]}]\n---\n\n## Условие\n\n{c["cond"]}\n\n## Ответ\n\n{c["ans"]}\n\n'
             f'## Решение\n\n{c["sol"]}\n')
@@ -314,21 +438,29 @@ def main():
     for num in range(20, 24):
         cards[num] = deriv_card(num)[1]
     cards.update(HAND)
-    for c in cards.values():
+    for num in range(13, 18):
+        cards[num] = complete_card(num)
+    cards[1] = recognize_card()
+    extra = {f"01.01-{n}": series_card() for n in (110, 111, 112)}
+    for c in list(cards.values()) + list(extra.values()):
         assert not test_like(c["cond"]), c["cond"][:80]
     path = ROOT / "data" / "zadachi" / "01.md"
     text = path.read_text(encoding="utf-8")
     parts = re.split(r"(\n=====\n)", text)
     done = 0
     for i, chunk in enumerate(parts):
-        m = re.search(r'^id: "01\.02-(\d{3})"', chunk, re.M)
-        if m and int(m.group(1)) in cards:
+        m = re.search(r'^id: "(01\.0[12])-(\d{3})"', chunk, re.M)
+        if not m:
+            continue
+        cid = f"{m.group(1)}-{m.group(2)}"
+        c = cards.get(int(m.group(2))) if m.group(1) == "01.02" else extra.get(cid)
+        if c:
             lead = chunk[: len(chunk) - len(chunk.lstrip("\n"))]
-            parts[i] = lead + render(f"01.02-{int(m.group(1)):03d}", cards[int(m.group(1))]).rstrip("\n") + (
-                "\n" if chunk.endswith("\n") else "")
+            sec = int(m.group(1)[-1])
+            parts[i] = lead + render(cid, c, sec).rstrip("\n") + ("\n" if chunk.endswith("\n") else "")
             done += 1
     path.write_text("".join(parts), encoding="utf-8")
-    print(f"Заменено карточек: {done} из {len(cards)}")
+    print(f"Заменено карточек: {done} из {len(cards) + len(extra)}")
 
 
 if __name__ == "__main__":
