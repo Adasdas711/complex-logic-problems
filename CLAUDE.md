@@ -1,7 +1,7 @@
 # Правила работы с задачником
 
-- Структура: `src/` — задачник (data, scripts, docs, templates, books); `zanyatiya/` — документы занятий, контрольных и входных тестов (генерируются); `site_src/` — исходники сайта. Готовый сайт (`_site/`) собирает `python3 src/scripts/site.py`, в репозиторий его не класть.
-- После пуша в main GitHub Actions (`.github/workflows/sborka.yml`) проверяет карточки, пересобирает занятия (коммитит изменения сам) и данные сайта; публикует сайт на GitHub Pages, когда репозиторий публичный.
+- Структура: `src/` — задачник (data, scripts, docs, templates, books); `zanyatiya/` — документы занятий, контрольных и входных тестов (генерируются); `index.html` в корне + `site_src/` — сайт. Данные сайта `site_src/data/` собирает `python3 src/scripts/site.py` (генерируются); он же собирает `_site/` для публикации — в репозиторий его не класть.
+- После пуша в main GitHub Actions (`.github/workflows/sborka.yml`) проверяет карточки, пересобирает занятия и данные сайта (коммитит изменения сам); публикует сайт на GitHub Pages, когда репозиторий публичный.
 
 - Разделы 0–15 строятся только по книге А. А. Зиновьева «Комплексная логика» (1970). Раздел 16 (координаты высказываний) — только по источникам, указанным в нём: «Очерки комплексной логики» (2000), Раздел VIII, гл. 1, § 17 и § 28; «Logische Sprachregeln» (Зиновьев, Вессель), гл. 14, § 3.
 - Перед написанием задач к главе:
@@ -12,6 +12,6 @@
 - Квоты по параграфам, ступеням и доле диагностики — `src/docs/03-plan.md`; не превышать.
 - Задачи в параграфе идут лестницей: дополнение → изоморфные → вариации → открытый исход → перенос. Около 25 % — диагностика (тип E): ответ называет нарушенное правило с номером и страницей.
 - Каждое решение ссылается на определения, аксиомы, правила и страницу источника. Утверждения, которых нет в источнике и которые не выведены в решении, не допускаются.
-- Сгенерированные файлы (`src/docs/01-soderzhanie.md`, `src/docs/03-plan.md`, `src/docs/06-zanyatiya.md`, `src/docs/07-uchebnyj-plan.md`, `src/docs/progress.md`, `src/docs/indeks-*.md`, `zanyatiya/*`, таблица разделов в `README.md`) руками не править: `python3 src/scripts/build.py`.
-- Перед коммитом: `python3 src/scripts/validate.py` без ошибок и `python3 src/scripts/build.py --check`.
+- Сгенерированные файлы (`src/docs/01-soderzhanie.md`, `src/docs/03-plan.md`, `src/docs/06-zanyatiya.md`, `src/docs/07-uchebnyj-plan.md`, `src/docs/progress.md`, `src/docs/indeks-*.md`, `zanyatiya/*`, таблица разделов в `README.md`) руками не править: `python3 src/scripts/build.py`. Данные сайта `site_src/data/*` — тоже: `python3 src/scripts/site.py`.
+- Перед коммитом: `python3 src/scripts/validate.py` без ошибок, `python3 src/scripts/build.py --check` и `python3 src/scripts/site.py --check`.
 - PDF книг хранятся в `src/books/` (репозиторий приватный; при открытии доступа — убрать). Распознанный текст (OCR) и рабочие изображения страниц в репозиторий не добавлять.

@@ -1,9 +1,10 @@
 name: Сборка
 
-# Изменили задачи (src/) → проверки → пересборка занятий (zanyatiya/, src/docs/, README) → данные сайта → GitHub Pages.
-# Пересобранные занятия робот коммитит сам; такой коммит новую сборку не запускает.
-# Публикация на Pages включается сама, когда репозиторий станет публичным
-# (Settings → Pages → Source: GitHub Actions).
+# Изменили задачи (src/) → проверки → пересборка занятий (zanyatiya/, src/docs/, README)
+# и данных сайта (site_src/data/) → GitHub Pages.
+# Пересобранное робот коммитит сам; такой коммит новую сборку не запускает.
+# Сайт — index.html в корне репозитория + site_src/. Публикация включается сама,
+# когда репозиторий станет публичным (Settings → Pages → Source: GitHub Actions).
 
 on:
   push:
@@ -39,21 +40,20 @@ jobs:
 
       - name: Пересборка занятий
         run: python3 src/scripts/build.py
-      - name: Сохранить пересобранные занятия
-        if: github.event_name != 'pull_request'
-        run: |
-          if [ -n "$(git status --porcelain -- zanyatiya src/docs README.md)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add -A -- zanyatiya src/docs README.md
-            git commit -m "🤖 Пересборка занятий после изменения задач"
-            git push
-          else
-            echo "Занятия актуальны."
-          fi
-
       - name: Данные сайта
         run: python3 src/scripts/site.py
+      - name: Сохранить пересобранное
+        if: github.event_name != 'pull_request'
+        run: |
+          if [ -n "$(git status --porcelain -- zanyatiya src/docs README.md site_src/data)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A -- zanyatiya src/docs README.md site_src/data
+            git commit -m "🤖 Пересборка занятий и сайта после изменения задач"
+            git push
+          else
+            echo "Занятия и данные сайта актуальны."
+          fi
       - name: Передать сайт на публикацию
         if: github.event_name != 'pull_request' && github.event.repository.visibility == 'public'
         uses: actions/upload-pages-artifact@v3
