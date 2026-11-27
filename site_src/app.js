@@ -104,7 +104,7 @@ function renderSide() {
       <div class="field">${searchIcon()}<input id="side-q" type="search" autocomplete="off" placeholder="Номер или название"></div>
       <div class="drop" id="side-drop" hidden></div>
     </div>
-    <a class="nav${act === 'kurs' ? ' on' : ''}" href="#/"><b style="font-size:15px">Курс</b><span class="t2"><span>все занятия, поиск</span></span></a>
+    <a class="nav${act === 'kurs' ? ' on' : ''}" href="#/"><span class="t1">Курс</span><span class="t2"><span>все занятия, поиск</span></span></a>
     <p class="side-h">Модули</p>${mods}
     <p class="side-h">Проверка</p>
     <a class="nav${act === 'kontr' || act === 'k' ? ' on' : ''}" href="#/k"><span class="t1">Контрольные</span><span class="t2"><span>${IDX.kontrol.length} работ · <span class="${kd === IDX.kontrol.length ? 'ok' : ''}">выполнено ${kd}</span></span></span></a>
