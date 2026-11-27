@@ -132,12 +132,7 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .tile.gold { background: var(--gold-bg); border-color: var(--gold-line); }
 .tile.gold .n { color: var(--gold); }
 .tile.gold.done { border-color: #35503d; }
-.tile.sel { border-color: var(--green); box-shadow: 0 0 0 1px var(--green); }
 .tile.dim { opacity: .25; }
-.pick { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; border-radius: 12px; background: var(--inner); border: 1px solid var(--line); flex-wrap: wrap; }
-.pick p { margin: 0; }
-.pick .m { font-size: 12px; color: var(--muted); }
-.pick .tt { font-size: 16px; margin-top: 2px; }
 
 /* Списки строк: модуль, контрольные, тесты */
 .rows { display: flex; flex-direction: column; gap: 6px; }

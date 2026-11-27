@@ -10,7 +10,6 @@ const cache = {};
 let IDX = null;
 let route = { page: 'kurs' };
 const open = new Set(); // раскрытые ответы и решения: "a:id", "s:id", "e:id"
-let selTile = null;
 
 // ---------- хранение ----------
 const S = (() => {
@@ -136,14 +135,7 @@ function resultsHtml(found, limit) {
   return found.slice(0, limit).map((s) => `<a class="res" href="#/z/${s.num}"><b>${s.num}</b><span class="tt">${s.topicH}</span>
     ${doneZ(s.num) ? '<span class="ok">✓ выполнено</span>' : ''}<span class="meta">неделя ${s.week} · ${esc(s.label)}</span></a>`).join('');
 }
-function pickHtml(num) {
-  const s = IDX.sessions.find((x) => x.num === num) || IDX.sessions[0];
-  return `<div><p class="m">Занятие ${s.num} · неделя ${s.week} · ${esc(IDX.modules[s.module].name)} · <span style="color:${doneZ(s.num) ? 'var(--green)' : 'var(--dim)'};font-weight:600">${doneZ(s.num) ? '✓ выполнено' : 'не отмечено'}</span></p>
-    <p class="tt">${s.topicH}</p></div><a class="btn" href="#/z/${s.num}">Открыть занятие →</a>`;
-}
 function viewKurs() {
-  const first = IDX.sessions.find((s) => !doneZ(s.num)) || IDX.sessions[IDX.sessions.length - 1];
-  if (selTile === null) selTile = first.num;
   const blocks = IDX.modules.map((m, i) => {
     const ss = modSessions(i);
     const items = [];
@@ -151,7 +143,7 @@ function viewKurs() {
       for (const t of testBefore(s.num)) {
         items.push(`<a class="tile gold${doneT(t.chapter) ? ' done' : ''}" href="#/t/${t.chapter}" title="Входной тест к ${testShort(t)}">${doneT(t.chapter) ? '<span class="ck">✓</span>' : ''}<span class="n">Т</span><span class="s">${t.chapter === 16 ? 'тест р. 16' : 'тест гл. ' + t.chapter}</span></a>`);
       }
-      items.push(`<a class="tile${doneZ(s.num) ? ' done' : ''}${s.num === selTile ? ' sel' : ''}" data-n="${s.num}" href="#/z/${s.num}" title="${esc(s.topic)}">${doneZ(s.num) ? '<span class="ck" aria-label="выполнено">✓</span>' : ''}<span class="n">${s.num}</span><span class="s">${esc(s.label)}</span></a>`);
+      items.push(`<a class="tile${doneZ(s.num) ? ' done' : ''}" data-n="${s.num}" href="#/z/${s.num}" title="${esc(s.topic)}">${doneZ(s.num) ? '<span class="ck" aria-label="выполнено">✓</span>' : ''}<span class="n">${s.num}</span><span class="s">${esc(s.label)}</span></a>`);
       for (const k of kontrolAfter(s.num)) {
         items.push(`<a class="tile gold${doneK(k.k) ? ' done' : ''}" href="#/k/${k.k}" title="Контрольная работа ${k.k}">${doneK(k.k) ? '<span class="ck">✓</span>' : ''}<span class="n">К</span><span class="s">контр. ${k.k}</span></a>`);
       }
@@ -179,9 +171,8 @@ function viewKurs() {
       </ul></section>
     <section class="card">
       <div class="row-between"><h2 class="eyebrow">Занятия 1–${IDX.sessions.length}</h2>
-        <p class="legend"><span class="g">Т</span> входной тест · <span class="g">К</span> контрольная · <span class="ok">✓</span> выполнено · наведите на плитку — тема ниже</p></div>
+        <p class="legend"><span class="g">Т</span> входной тест · <span class="g">К</span> контрольная · <span class="ok">✓</span> выполнено</p></div>
       ${blocks}
-      <div class="pick" id="pick">${pickHtml(selTile)}</div>
     </section>`;
   const inp = $('#main-q'), res = $('#main-res'), clear = $('#main-clear');
   const upd = () => {
@@ -196,12 +187,6 @@ function viewKurs() {
   inp.addEventListener('input', upd);
   inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { const f = findSessions(inp.value); if (f.length) location.hash = '#/z/' + f[0].num; } });
   clear.addEventListener('click', () => { inp.value = ''; upd(); inp.focus(); });
-  document.querySelectorAll('.tile[data-n]').forEach((t) => t.addEventListener('mouseenter', () => {
-    selTile = +t.dataset.n;
-    document.querySelectorAll('.tile.sel').forEach((x) => x.classList.remove('sel'));
-    t.classList.add('sel');
-    $('#pick').innerHTML = pickHtml(selTile);
-  }));
   document.title = 'Комплексная логика — задачник';
 }
 
