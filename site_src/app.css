@@ -95,7 +95,7 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .done.on { background: var(--green-bg); border-color: var(--green-line); color: var(--green); }
 .solved { align-self: flex-start; flex: none; width: 34px; height: 34px; padding: 0; border-radius: 50%; font-size: 16px; line-height: 1;
   display: inline-flex; align-items: center; justify-content: center; background: transparent; border: 1px solid var(--line2); color: #4a4a4a; }
-.solved:hover { border-color: #5a5a5a; color: var(--muted); }
+.solved:hover { border-color: #6a6a6a; }
 .solved.on { background: var(--green-bg); border-color: var(--green-line); color: var(--green); font-weight: 700; }
 .seg { display: flex; gap: 2px; padding: 3px; border-radius: 12px; background: #151515; border: 1px solid #2c2c2c; }
 .seg button { padding: 7px 16px; border-radius: 9px; background: transparent; border: 1px solid transparent; color: var(--muted); font-size: 13px; }
