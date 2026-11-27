@@ -155,19 +155,15 @@ def main() -> int:
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(FILES[p], encoding="utf-8")
 
-    # index.html: версия у app.css и app.js (хэш содержимого) — браузер берёт новые файлы сразу после обновления
-
-    page = REPO / "index.html"
-    html_old = page.read_text(encoding="utf-8")
-    html_new = html_old
-    for name in ("app.css", "app.js"):
-        v = hashlib.sha1((REPO / "site_src" / name).read_bytes()).hexdigest()[:8]
-        html_new = re.sub(rf'site_src/{re.escape(name)}(\?v=\w+)?"', f'site_src/{name}?v={v}"', html_new)
-    if html_new != html_old:
+    # site_src/version.json: версии app.css и app.js (хэш содержимого) — index.html грузит их мимо кэша
+    ver = json.dumps({n.split(".")[1]: hashlib.sha1((REPO / "site_src" / n).read_bytes()).hexdigest()[:8]
+                      for n in ("app.css", "app.js")}) + "\n"
+    vfile = REPO / "site_src" / "version.json"
+    if not vfile.exists() or vfile.read_text(encoding="utf-8") != ver:
         if check:
-            print("устарел: index.html (версия app.css/app.js)")
+            print("устарел: site_src/version.json (версии app.css/app.js)")
             return 1
-        page.write_text(html_new, encoding="utf-8")
+        vfile.write_text(ver, encoding="utf-8")
 
     if check:
         print("Проверено: данные сайта актуальны.")
