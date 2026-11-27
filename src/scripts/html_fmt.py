@@ -21,10 +21,12 @@ SYM = {
     "alpha": "α", "beta": "β", "gamma": "γ", "delta": "δ", "varepsilon": "ε", "epsilon": "ε",
     "lambda": "λ", "mu": "μ", "pi": "π", "sigma": "σ", "tau": "τ", "varphi": "φ", "phi": "φ", "psi": "ψ",
     "quad": " ", "qquad": "  ",
+    "Leftarrow": "⇐", "langle": "⟨", "rangle": "⟩", "mid": "∣", "parallel": "∥", "pm": "±",
+    "geqslant": "⩾", "leqslant": "⩽", "square": "□",
 }
 UPRIGHT = {"min", "max", "lim", "log", "sin", "cos"}
 ARG = {"text", "mathrm", "textrm", "operatorname", "mathit", "tilde", "widetilde", "overline", "bar", "hat", "mathbf"}
-SPACED = "⊢⊣→←↔⇒⇀⇌↦∨⊃⊂⊆⊇∈∉≥≤≠≡∩∪"
+SPACED = "⊢⊣→←↔⇒⇀⇌↦∨⊃⊂⊆⊇∈∉≥≤≠≡∩∪⇐⩾⩽∣∥"
 TIGHT_AFTER = "↓⌝∼∀∃"
 
 
