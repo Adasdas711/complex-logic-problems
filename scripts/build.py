@@ -312,6 +312,8 @@ def card_parts(pr) -> dict:
     out, parts = {}, re.split(r"^## (.+)$", pr.body, flags=re.M)
     for title, text in zip(parts[1::2], parts[2::2]):
         text = re.sub(r"</?details>|<summary>.*?</summary>", "", text).strip()
+        # Подпункты «а) … б) …» на отдельных строках: в Markdown одиночный перевод строки — пробел, нужен жёсткий перенос.
+        text = re.sub(r"(?<=\S)\n(?=[а-з]\) )", "  \n", text)
         out[title] = text
     return out
 
