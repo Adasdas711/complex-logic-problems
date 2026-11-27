@@ -17,6 +17,12 @@ from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from open_form import process as _of_process  # noqa: E402  (условия без «тестовой» формы)
+
+
+def open_form_text(text: str) -> str:
+    return _of_process(text)[0]
 import kontrolnye as K  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -194,7 +200,7 @@ def write(tests):
             c = re.sub(r"^---\n", f"---\nid: V{ch:02d}-{i:02d}\ntest_for: {ch}\n", c, count=1)
             c = re.sub(r"^generated: true\n", "", c, flags=re.M)
             fixed.append(tidy(c))
-        (OUT / f"V{ch:02d}.md").write_text("\n\n=====\n\n".join(fixed) + "\n", encoding="utf-8")
+        (OUT / f"V{ch:02d}.md").write_text(open_form_text("\n\n=====\n\n".join(fixed) + "\n"), encoding="utf-8")
         m = [K.meta(c) for c in cards]
         print(f"V{ch:02d}: {len(cards)} задач; параграфы {dict(Counter(key(c) for c in cards))}; "
               f"ступени {dict(sorted(Counter(int(x['level']) for x in m).items()))}; "

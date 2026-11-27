@@ -179,6 +179,18 @@ def main() -> int:
         print("ПРЕДУПРЕЖДЕНИЕ:", w)
     for e in errors:
         print("ОШИБКА:", e)
+    # Задачи без «тестовой» формы: ни готовых вариантов, ни голых вопросов «да/нет» (src/scripts/open_form.py).
+    import re as _re
+    from common import DATA as _DATA
+    from open_form import FILES as _OF, cards as _cards, test_like
+    for folder in _OF:
+        for f in sorted((_DATA / folder).glob("*.md")):
+            for chunk in _re.split(r"\n=====\n", f.read_text(encoding="utf-8")):
+                mid = _re.search(r'^id: "?([^"\n]+)"?', chunk, _re.M)
+                for c_, _a in _cards(chunk):
+                    if test_like(c_):
+                        errors.append(f"{folder}/{f.name}: {mid.group(1) if mid else '?'}: условие в «тестовой» форме "
+                                      "(готовые варианты или вопрос «да/нет») — см. src/scripts/open_form.py")
     print(f"Задач: {len(problems)} из {tax['total']}; в контрольных: {kcount}; разобранных примеров: {len(examples)}; повторения: {sum(rseen.values())}; во входных тестах: {vcount}. Ошибок: {len(errors)}, предупреждений: {len(warnings)}.")
     return 1 if errors else 0
 

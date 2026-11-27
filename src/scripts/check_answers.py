@@ -264,6 +264,8 @@ def predicate(q):
     ql = q.lower()
     if re.search(r"таблиц|интерпретаци|значени[яй] 1, 2|трёхзнач|четырёхзнач|контрольн", ql):
         return None          # тавтологичность в особой таблице или иной процедуре — не главная интерпретация
+    if re.search(r"_\{?if\b|оператор условности", q):
+        return None          # системы условных высказываний — вне общей теории дедукции
     ks = systems_in(q)
     if "тавтолог" in ql and not re.search(r"доказу|теорем|следовани|услови", ql):
         return ("taut",)
@@ -288,8 +290,10 @@ def items(cond_):
 
 def yesno(ans):
     out = {}
-    for m in re.finditer(r"([а-ж])\) (да|нет)", ans):
-        out[m[1]] = m[2] == "да"
+    for m in re.finditer(r"([а-ж])\) (да|нет)\b|([а-ж])\) (доказуема|недоказуема|тавтология|не тавтология)"
+                         r"(?=\s*(?:;|$|\.|,\s*\$?[A-Z]))", ans):
+        letter, word = (m[1], m[2]) if m[1] else (m[3], m[4])
+        out[letter] = word in ("да", "доказуема", "тавтология")
     return out
 
 
@@ -422,7 +426,8 @@ def main():
                         bad.append(f"{cid}: {L}) ${fx}$ — в ответе «{'да' if yn[L] else 'нет'}», программа: "
                                    f"«{'да' if got else 'нет'}» ({' '.join(pred)})")
         # 3. «S^s — нет; S^w — да; …»
-        five = re.findall(r"\$S\^\{?(s|w|m|c|6)\}?\$ — (да|нет)", ans)
+        five = [(k, "да" if v in ("да", "доказуема") else "нет")
+            for k, v in re.findall(r"\$S\^\{?(s|w|m|c|6)\}?\$ — (да|нет|доказуема|недоказуема)", ans)]
         if len(five) >= 3 and typ != "E":
             fs = re.findall(r"\$([^$]*\\vdash[^$]*)\$", cond_)
             if len(set(fs)) == 1:

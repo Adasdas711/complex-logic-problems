@@ -19,6 +19,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from open_form import process as _of_process  # noqa: E402  (условия без «тестовой» формы)
+
+
+def open_form_text(text: str) -> str:
+    return _of_process(text)[0]
 sys.path.insert(0, str(ROOT / "scripts" / "gen"))
 sys.path.insert(0, str(ROOT / "scripts" / "logic"))
 import kontrolnye as K  # noqa: E402
@@ -126,7 +132,7 @@ def main():
         cards.append(c)
     d = ROOT / "data" / "povtorenie"
     d.mkdir(parents=True, exist_ok=True)
-    (d / "povtorenie.md").write_text("\n\n=====\n\n".join(cards) + "\n", encoding="utf-8")
+    (d / "povtorenie.md").write_text(open_form_text("\n\n=====\n\n".join(cards) + "\n"), encoding="utf-8")
     print(f"задач повторения: {len(cards)} из {len(plan)}; диагностика: {e_count}")
 
 

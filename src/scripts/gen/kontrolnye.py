@@ -20,6 +20,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from open_form import process as _of_process  # noqa: E402  (условия без «тестовой» формы)
+
+
+def open_form_text(text: str) -> str:
+    return _of_process(text)[0]
 from common import compute_quotas, compute_sessions, load_book, load_problems  # noqa: E402
 
 GENS = ["g00_04", "g00_05_08", "g01_01", "g01_02", "g01_04_09", "g02", "g02_05", "g05_16", "g06_07", "g07_08", "g08_10", "g10_12", "g12_15"]
@@ -210,7 +216,7 @@ def write(tests):
             c = re.sub(r"^---\n", f"---\nid: K{k:02d}-{i:02d}\n", c, count=1)
             c = re.sub(r"^generated: true\n", "", c, flags=re.M)
             fixed.append(c)
-        (out_dir / f"K{k:02d}.md").write_text("\n\n=====\n\n".join(fixed) + "\n", encoding="utf-8")
+        (out_dir / f"K{k:02d}.md").write_text(open_form_text("\n\n=====\n\n".join(fixed) + "\n"), encoding="utf-8")
         m = [meta(c) for c in cards]
         print(f"K{k:02d}: {len(cards)} задач; ступени {dict(sorted(Counter(int(x['level']) for x in m).items()))}; "
               f"диагностика {sum(x['type'] == 'E' for x in m)}")
