@@ -222,6 +222,8 @@ function repeatLink(r) {
 }
 
 // ---------- занятие ----------
+const CHK = '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.2l2.2 2.2 4.8-5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const donePill = (act, n, on, label) => `<button type="button" class="pill${on ? ' on' : ''}" data-act="${act}" data-n="${n}" aria-pressed="${on}"><span class="pill-c">${on ? CHK : ''}</span>${label}</button>`;
 async function viewZ(num) {
   const s = IDX.sessions.find((x) => x.num === num);
   if (!s) return notFound();
@@ -257,7 +259,7 @@ async function viewZ(num) {
     <section class="card hero">
       <div class="hero-top">
         <div class="tags"><span class="tag">Занятие ${num}</span><span class="tag">Неделя ${s.week}</span><a class="tag tag-link" href="#/m/${s.module + 1}">Модуль ${ROM(s.module)} · ${esc(modTitle(s.module))}</a></div>
-        <button type="button" class="done${d ? ' on' : ''}" data-act="doneZ" data-n="${num}">${d ? '✓ Занятие выполнено' : 'Отметить выполненным'}</button>
+        ${donePill('doneZ', num, d, d ? 'Выполнено' : 'Отметить выполненным')}
       </div>
       <h1 class="hero-h">${z.topicH}</h1>
       <div class="hero-stats"><span>${z.tasks.length} ${plural(z.tasks.length, 'задача', 'задачи', 'задач')}</span><span class="dot"></span><span>${z.examples.length ? z.examples.length + ' ' + plural(z.examples.length, 'пример', 'примера', 'примеров') : 'без примеров'}</span><span class="dot"></span><span class="${solvedN ? 'ok' : ''}">решено ${solvedN} из ${z.tasks.length}</span>
@@ -277,10 +279,10 @@ async function viewZ(num) {
       ${z.tasks.map((t) => taskHtml(t, under, key)).join('')}
     </section>
     ${under ? '' : `<section class="card"><h2 class="eyebrow">Ответы и решения</h2><p class="muted small">Свёрнуты: откройте после своего решения.</p>${answersBlock(z.tasks, false)}</section>`}
-    <section class="card"><div class="navrow">
-      ${prev ? `<a class="btn" href="#/z/${prev.num}">‹ Занятие ${prev.num}</a>` : '<span></span>'}
-      <button type="button" class="done${d ? ' on' : ''}" data-act="doneZ" data-n="${num}">${d ? '✓ Занятие выполнено' : 'Отметить занятие выполненным'}</button>
-      ${next ? `<a class="btn" href="#/z/${next.num}">Занятие ${next.num} ›</a>` : '<span></span>'}</div></section>`;
+    <nav class="foot-nav" aria-label="Соседние занятия">
+      ${prev ? `<a class="foot-a" href="#/z/${prev.num}">‹ Занятие ${prev.num}</a>` : '<span></span>'}
+      ${donePill('doneZ', num, d, d ? 'Занятие выполнено' : 'Отметить занятие выполненным')}
+      ${next ? `<a class="foot-a" href="#/z/${next.num}">Занятие ${next.num} ›</a>` : '<span></span>'}</nav>`;
   document.title = `Занятие ${num} — Комплексная логика`;
 }
 
@@ -344,11 +346,11 @@ async function viewCheck(kind, id) {
        <p class="muted">После занятия ${meta.after} · материал занятий ${meta.from}–${meta.after} · ${data.tasks.length} задач · время — <b style="color:var(--text)">${esc(data.time)}</b> · книгой и записями пользоваться можно</p>`
     : `<p class="eyebrow gold">Входной тест · перед занятием ${meta.before} · неделя ${meta.week}</p><h1>${testTo(meta)}</h1>
        <p class="muted">${data.tasks.length} ${plural(data.tasks.length, 'задача', 'задачи', 'задач')} на то, что глава берёт из прежних · время — <b style="color:var(--text)">${esc(data.time)}</b> · без книги и записей</p>`;
-  const back = kind === 'k' ? '<a class="btn" href="#/k">‹ Все контрольные</a>' : '<a class="btn" href="#/t">‹ Все входные тесты</a>';
+  const back = kind === 'k' ? '<a class="foot-a" href="#/k">‹ Все контрольные</a>' : '<a class="foot-a" href="#/t">‹ Все входные тесты</a>';
   const doneL = kind === 'k' ? (d ? '✓ Работа выполнена' : 'Отметить работу выполненной') : (d ? '✓ Тест выполнен' : 'Отметить тест выполненным');
-  const go = kind === 't' ? `<a class="btn" href="#/z/${meta.before}">К занятию ${meta.before} ›</a>` : '';
+  const go = kind === 't' ? `<a class="foot-a" href="#/z/${meta.before}">К занятию ${meta.before} ›</a>` : '';
   $('#view').innerHTML = `
-    <section class="card gold">${head}<div class="navrow">${back}<span class="mid">${go}</span><button type="button" class="done${d ? ' on' : ''}" data-act="done${kind.toUpperCase()}" data-n="${id}">${doneL}</button></div></section>
+    <section class="card gold">${head}<div class="navrow">${back}<span class="mid">${go}</span>${donePill('done' + kind.toUpperCase(), id, d, doneL.replace('✓ ', ''))}</div></section>
     <section class="card"><h2 class="eyebrow">Как оценивать</h2><p>${esc(data.pass)}</p></section>
     <section class="card"><h2 class="eyebrow">Что проверяется</h2><ul class="plain-list">${checkedList(data.tasks)}</ul></section>
     <section class="card"><h2 class="eyebrow">Задачи</h2>${tasks}</section>

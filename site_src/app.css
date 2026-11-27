@@ -147,6 +147,19 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .progress p { margin: 0 0 6px; }
 .progress .bar { height: 6px; margin: 0; }
 
+/* Отметка «выполнено»: лёгкая таблетка с кружком */
+.pill { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 13px 0 9px; border-radius: 999px; font-size: 13px; font-weight: 500;
+  background: transparent; border: 1px solid var(--line2); color: var(--muted); white-space: nowrap; transition: color .15s, border-color .15s, background .15s; }
+.pill:hover { color: var(--text); border-color: #555; }
+.pill-c { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #5a5a5a; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.pill.on { color: var(--green); border-color: #35503d; background: var(--green-bg); }
+.pill.on .pill-c { border-color: var(--green); background: var(--green); color: #10251a; }
+/* Низ занятия: тонкая строка вместо карточки */
+.foot-nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 4px 4px 0; }
+.foot-nav > :last-child { justify-self: end; }
+.foot-a { font-size: 13.5px; color: var(--muted); padding: 6px 10px; border-radius: 8px; }
+.foot-a:hover { color: var(--text); background: #222; }
+
 /* Шапка занятия */
 .hero { gap: 16px; padding: 22px 26px 20px; }
 .hero-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
@@ -154,7 +167,6 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .tag { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font-size: 12px; font-weight: 600;
   color: var(--muted); background: #1c1c1c; border: 1px solid var(--line); letter-spacing: .01em; }
 .tag-link:hover { color: var(--text); border-color: #4a4a4a; }
-.hero .done { min-height: 36px; padding: 0 14px; font-size: 13px; }
 .hero-h { font-size: 32px; line-height: 1.2; letter-spacing: -.01em; }
 .hero-stats { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
 .hero-stats .dot { width: 3px; height: 3px; border-radius: 50%; background: #555; }
@@ -162,6 +174,7 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .hero-bar { flex: 1 1 120px; max-width: 220px; height: 4px; border-radius: 2px; background: #2e2e2e; overflow: hidden; }
 .hero-bar > span { display: block; height: 100%; background: var(--green); border-radius: 2px; }
 .hero-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.hero-links .btn { min-height: 30px; padding: 0 12px; font-size: 12.5px; border-radius: 999px; }
 .pn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 14px; border-top: 1px solid #303030; }
 .pn-a { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 10px 14px; border-radius: 11px; border: 1px solid transparent; transition: background .15s, border-color .15s; }
 .pn-a:hover { background: #2b2b2b; border-color: #3a3a3a; }
