@@ -134,10 +134,13 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .home-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 40px; align-items: start; }
 .home-col { display: flex; flex-direction: column; gap: 26px; min-width: 0; }
 .mod-block { display: flex; flex-direction: column; gap: 10px; }
-.mod-h { display: flex; align-items: baseline; gap: 10px; font-size: 15px; font-weight: 600; color: #d6d6d6; width: fit-content; }
+.mod-h { display: flex; align-items: baseline; gap: 8px; font-size: 15px; font-weight: 600; color: #d6d6d6; width: fit-content; }
 .mod-h:hover { color: var(--text); }
-.mod-h .rn { min-width: 26px; font-size: 12px; font-weight: 500; color: var(--dim); }
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, 48px); gap: 6px; }
+.mod-h .rn { flex: none; width: 46px; font-family: 'STIX Two Text', Georgia, serif; font-size: 22px; font-weight: 600; line-height: 1;
+  color: var(--dim); letter-spacing: .02em; }
+.mod-h:hover .rn { color: var(--muted); }
+/* Плитки тянутся на всю ширину колонки: поля карточки слева и справа одинаковые */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 6px; }
 .tile { display: flex; align-items: center; justify-content: center; height: 42px; border-radius: 9px; border: 1px solid var(--line);
   background: var(--inner); color: #d6d6d6; font-variant-numeric: tabular-nums; transition: opacity .15s; }
 .tile:hover { background: #2d2d2d; border-color: #4a4a4a; color: var(--text); }
