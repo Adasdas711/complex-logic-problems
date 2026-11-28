@@ -167,7 +167,7 @@ function viewKurs() {
           <li>Ответ открывать после своего решения; задачи с ошибками решить снова через неделю.</li>
           <li>Решили занятие — «Готово». <b class="g">Т</b> — входной тест перед главой, <b class="g">К</b> — контрольная раз в месяц.</li>
         </ul></details></header>
-    <section class="card home-card"><div class="home-cols"><div class="home-col">${blocks.slice(0, 4).join('')}</div><div class="home-col">${blocks.slice(4, 8).join('')}</div></div>${blocks.slice(8).join('')}</section>`;
+    <section class="card home-card"><div class="home-cols" style="--rows:4">${blocks.slice(0, 8).join('')}</div>${blocks.slice(8).join('')}</section>`;
   const inp = $('#main-q'), res = $('#main-res'), clear = $('#main-clear');
   const upd = () => {
     const q = inp.value.trim(), found = findSessions(q), hit = new Set(found.map((s) => s.num));
