@@ -23,10 +23,11 @@ SYM = {
     "quad": " ", "qquad": "  ",
     "Leftarrow": "⇐", "langle": "⟨", "rangle": "⟩", "mid": "∣", "parallel": "∥", "pm": "±",
     "geqslant": "⩾", "leqslant": "⩽", "square": "□",
+    "Downarrow": "⇓", "Delta": "Δ", "Pi": "Π", "approx": "≈",
 }
 UPRIGHT = {"min", "max", "lim", "log", "sin", "cos"}
 ARG = {"text", "mathrm", "textrm", "operatorname", "mathit", "tilde", "widetilde", "overline", "bar", "hat", "mathbf"}
-SPACED = "⊢⊣→←↔⇒⇀⇌↦∨⊃⊂⊆⊇∈∉≥≤≠≡∩∪⇐⩾⩽∣∥"
+SPACED = "⊢⊣→←↔⇒⇀⇌↦∨⊃⊂⊆⊇∈∉≥≤≠≡∩∪⇐⩾⩽∣∥≈"
 TIGHT_AFTER = "↓⌝∼∀∃"
 
 
