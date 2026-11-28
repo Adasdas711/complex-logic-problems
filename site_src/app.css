@@ -239,9 +239,12 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .box { display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; border-radius: 12px; background: var(--inner); border: 1px solid var(--line); }
 .task-row { display: flex; gap: 12px; }
 .task-row > .rich { flex: 1; min-width: 0; }
-.num { min-width: 28px; font-size: 16px; }
+.num { flex: none; min-width: 28px; font-size: 16px; }
 .num.ok { color: var(--green); }
-.star { display: block; font-size: 12px; color: var(--gold); line-height: 1; margin-top: 4px; }
+/* Звезда трудной задачи (ступени 8–10) — по центру под цифрами номера, точка не в счёт */
+.num.hard { padding-bottom: 16px; }
+.nd { position: relative; display: inline-block; }
+.star { position: absolute; left: 50%; top: 100%; width: 11px; height: 11px; margin-top: 3px; transform: translateX(-50%); fill: var(--gold); }
 /* Ответ и решение под задачей: тихие переключатели и блоки с полосой слева */
 .reveal { display: flex; gap: 4px; margin-left: 32px; }
 .ex .reveal { margin-left: -8px; }

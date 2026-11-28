@@ -132,6 +132,8 @@ function renderSide() {
   inp.addEventListener('blur', () => setTimeout(() => { drop.hidden = true; }, 150));
 }
 
+// Значок трудной задачи (ступени 8–10): ровная пятиконечная звезда, а не символ шрифта
+const STAR = '<svg class="star" viewBox="0 0 24 24" role="img" aria-label="Трудная задача"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.5 1.2 6.4L12 17.1l-5.7 3.1 1.2-6.4-4.7-4.5 6.4-.8z"/></svg>';
 // ---------- курс ----------
 function resultsHtml(found, limit) {
   return found.slice(0, limit).map((s) => `<a class="res" href="#/z/${s.num}"><b>${s.num}</b><span class="tt">${s.topicH}</span>
@@ -196,7 +198,7 @@ function reveal(t, ka, ks) {
 function taskHtml(t, under, key) {
   const ok = !!(key && S.r[key] && S.r[key][t.id]);
   const btn = key ? `<button type="button" class="solved${ok ? ' on' : ''}" data-act="solve" data-key="${key}" data-id="${esc(t.id)}" aria-pressed="${ok}" aria-label="Задача ${t.n} решена" title="${ok ? 'Снять отметку' : 'Отметить задачу решённой'}">${ok ? '✓' : ''}</button>` : '';
-  let h = `<article class="box" id="t${t.n}"><div class="task-row"><b class="num${ok ? ' ok' : ''}">${t.n}.${t.level >= 8 ? '<span class="star" title="Трудная задача">★</span>' : ''}</b><div class="rich">${t.cond}</div>${btn}</div>`;
+  let h = `<article class="box" id="t${t.n}"><div class="task-row"><b class="num${ok ? ' ok' : ''}${t.level >= 8 ? ' hard' : ''}"><span class="nd">${t.n}${t.level >= 8 ? STAR : ''}</span>.</b><div class="rich">${t.cond}</div>${btn}</div>`;
   if (under) {
     h += reveal(t, 'a:' + key + t.id, 's:' + key + t.id);
   }
