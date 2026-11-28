@@ -1,14 +1,35 @@
-# Введение (с. 3–14): элементарные навыки. Подробные формулировки — в книге и docs/04-oboznacheniya.md.
+# Введение (с. 3–14): элементарные навыки. Перечень проверяющего V00, уточнён исправителем F00.
+# Подробные формулировки — в книге и docs/04-oboznacheniya.md.
 skills:
-  - {id: 00-ops, kind: definition, label: "§ 3", section: 3, page: 4, statement: "три группы операторов; ⌉ и ? только при ←, ∃, ∀, →"}
+  - {id: 00-goal, kind: definition, label: "§ 1", section: 1, page: 3, statement: "систематическое изложение теории логического следования (вывода, дедукции), названной комплексной логикой; первоначальный вариант, не окончательный; использованы работы других советских логиков"}
+  - {id: 00-subject, kind: definition, label: "§ 2", section: 2, page: 3, statement: "логика изучает термины и высказывания: правила образования новых из данных и правила суждения о значениях одних по значениям других"}
+  - {id: 00-subject-ops, kind: definition, label: "§ 2", section: 2, page: 4, statement: "операторы — изобретённые предметы, с которыми соединяются термины и высказывания; показатели типов структур; «логика есть наука о логических операторах» лишь в этом смысле"}
+  - {id: 00-ops-lang, kind: definition, label: "§ 3", section: 3, page: 4, statement: "роль операторов в языке играют слова и запятые, точки; символы нужны прежде всего потому, что одни средства выполняют разные функции, а один оператор выражается разными средствами"}
+  - {id: 00-ops-groups, kind: definition, label: "§ 3", section: 3, page: 4, statement: "две группы: терминообразующие и высказываниеобразующие; операторы только первой, только второй и обеих групп; роль третьих зависит от положения"}
+  - {id: 00-ops, kind: definition, label: "§ 3, перечень", section: 3, page: 5, statement: "1) ←, ∃, ∀, →, ⌉, ? — высказываниеобразующие (⌉ и ? только при ←, ∃, ∀, →); 2) ↓, [ ] — терминообразующие; 3) ·, :, ∨, ∼ — обе роли; чтения символов"}
+  - {id: 00-aux, kind: definition, label: "§ 3", section: 3, page: 5, statement: "круглые скобки, запятые, точки — не операторы, а подсобные средства однозначности чтения"}
   - {id: 00-D1-4, kind: definition, label: "D1 § 4", section: 4, page: 5, statement: "предикат: пп. 1–7"}
   - {id: 00-D2-4, kind: definition, label: "D2 § 4", section: 4, page: 6, statement: "субъект: пп. 1–9"}
-  - {id: 00-read-4, kind: definition, label: "чтение терминов", section: 4, page: 6}
-  - {id: 00-D1-5, kind: definition, label: "D1 § 5", section: 5, page: 7, statement: "основные высказывания, совпадение местности"}
-  - {id: 00-D2-5, kind: definition, label: "D2 § 5", section: 5, page: 7, statement: "высказывание: пп. 1–6"}
-  - {id: 00-D3-5, kind: definition, label: "D3 § 5", section: 5, page: 8, statement: "главный оператор"}
-  - {id: 00-read-5, kind: definition, label: "чтение высказываний", section: 5, page: 8}
-  - {id: 00-D1-7, kind: definition, label: "D1 § 7", section: 7, page: 9, statement: "вхождение"}
-  - {id: 00-D1-6-8, kind: definition, label: "D1–D6 § 8", section: 8, page: 10, statement: "формула следования, посылка, вхождение, вырожденное следование"}
-  - {id: 00-case, kind: definition, label: "§ 9", section: 9, page: 11, statement: "классический и неклассический случаи"}
-  - {id: 00-meta, kind: method, label: "§ 10", section: 10, page: 12, statement: "буквы — метасимволы; аксиомные и теоремные схемы; нумерация Dikl"}
+  - {id: 00-D3-4, kind: definition, label: "D3 § 4", section: 4, page: 6, statement: "субъекты и предикаты (и только они) суть термины"}
+  - {id: 00-read-4, kind: definition, label: "чтение терминов, пп. 1–10", section: 4, page: 6}
+  - {id: 00-arity-5, kind: definition, label: "§ 5", section: 5, page: 7, statement: "энместный субъект — по D2, п. 5 § 4; деление предикатов по местности предполагается данным"}
+  - {id: 00-D1-5, kind: definition, label: "D1 § 5", section: 5, page: 7, statement: "основные высказывания (a ← b), (a ⌉← b), (a? ← b); совпадение местности субъекта и предиката (в т. ч. распознавание нарушения)"}
+  - {id: 00-read-5b, kind: definition, label: "чтение D1 § 5, пп. 1–3", section: 5, page: 7}
+  - {id: 00-D2-5, kind: definition, label: "D2 § 5", section: 5, page: 7, statement: "высказывание: пп. 1–6 (в п. 4 — любой термин; кванторы с ⌉ и ?; условные с ⌉→ и ?→)"}
+  - {id: 00-D3-5, kind: definition, label: "D3 § 5", section: 5, page: 8, statement: "главный оператор, пп. 1–5"}
+  - {id: 00-read-5, kind: definition, label: "чтение D2 § 5, пп. 1–6", section: 5, page: 8}
+  - {id: 00-ext-6, kind: definition, label: "§ 6", section: 6, page: 9, statement: "операторы помимо кванторов («один», «большинство», …) и упорядоченные конъюнкции; ядро, основа и образец; расширения с пояснением места"}
+  - {id: 00-D1-7, kind: definition, label: "D1 § 7", section: 7, page: 9, statement: "вхождение = графическая часть; для термина и оператора аналогично; само в себя"}
+  - {id: 00-occ-ex-7, kind: method, label: "§ 7, пример", section: 7, page: 9, statement: "не всякая графическая часть — вхождение: x : y в (x : y : z), (x · y) в (x · y · z)"}
+  - {id: 00-vdash-8, kind: definition, label: "§ 8", section: 8, page: 10, statement: "знак ⊢, чтение «из x логически следует y»"}
+  - {id: 00-D1-2-8, kind: definition, label: "D1–D2 § 8", section: 8, page: 10, statement: "формула следования; посылка и заключение"}
+  - {id: 00-simple-8, kind: definition, label: "§ 8", section: 8, page: 10, statement: "x ⊢ y — простое высказывание ([x], [y] ← (⊢)); ⊢ x — элементарное ([x] ← (⊢)); ⊢ — не оператор, а предикат"}
+  - {id: 00-D3-4-8, kind: definition, label: "D3–D4 § 8", section: 8, page: 10, statement: "вхождение высказывания и термина в формулу следования"}
+  - {id: 00-D5-6-8, kind: definition, label: "D5–D6 § 8", section: 8, page: 11, statement: "вырожденное следование ⊢ x и вхождение в него"}
+  - {id: 00-one-vdash-8, kind: definition, label: "§ 8", section: 8, page: 11, statement: "рассматриваются формулы с одним ⊢; выражения с двумя и более ⊢ — сокращения высказываний"}
+  - {id: 00-case, kind: definition, label: "§ 9", section: 9, page: 11, statement: "признак: два отрицания и ? — неклассический случай; одно отрицание без ? — классический"}
+  - {id: 00-case-usage, kind: definition, label: "§ 9", section: 9, page: 12, statement: "отличие от принятого деления по классу доказуемых формул; две позиции отрицания; отказ от принятого деления"}
+  - {id: 00-meta, kind: method, label: "§ 10", section: 10, page: 12, statement: "буквы — переменные метасимволы: любое высказывание/термин или заданного контекстом типа; различие букв — лишь возможное различие"}
+  - {id: 00-induct-10, kind: method, label: "§ 10", section: 10, page: 13, statement: "в индуктивных доказательствах букве приписывают свойства базисного шага"}
+  - {id: 00-schema-10, kind: method, label: "§ 10", section: 10, page: 13, statement: "смысл аксиомной схемы x ⊢ y (⊢ x) и правил; доказать теоремную схему — для любых высказываний такой структуры; связь с обычными исчислениями"}
+  - {id: 00-num-10, kind: method, label: "§ 10", section: 10, page: 14, statement: "нумерация Di, Dikl, Ai, Aikl, Ti, Tikl, MTi, MTikl; шаги под формулировкой, основания справа в скобках"}
