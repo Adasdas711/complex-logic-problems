@@ -1,0 +1,39 @@
+# Приложение «Правила приписывания значений высказываниям с кванторами и формулам следования» (с. 192–197).
+skills:
+  - {id: 15-star, kind: rule, label: "x → x*", section: 0, page: 192, statement: "∼(a¹…aⁿ) → ∼a¹∨…∨∼aⁿ; ∼(a¹∨…∨aⁿ) → ∼a¹…∼aⁿ; ∼∼a → a; (∃a)b → ∼(∀a)∼b; вырожденные группы исключаются; x ⊢ y равнозначна x* ⊢ y*",
+     errors: ["(∃a)b → ∼(∃a)∼b", "(∃a)b → (∀a)∼b (потерян внешний ∼)", "∼(ab) → ∼a∼b", "∼(a∨b) → ∼a∨∼b", "оставлено ∼∼a"]}
+  - {id: 15-R1, kind: interpretation, label: "правило 1", section: 0, page: 192, statement: "всем вхождениям одного (∀a)b в высказывание — одно значение",
+     errors: ["применяют к разным (∀a)b, например к (∀a)(x∨y) и (∀a)x"]}
+  - {id: 15-R2, kind: interpretation, label: "правило 2", section: 0, page: 192, statement: "(∀a)b = 1 ⇒ b = 1; (∀a)b = 0 — значение b не определяется",
+     errors: ["из (∀a)b = 0 выводят b = 0", "из (∀a)(x∨y) = 1 выводят x = 1 и y = 1"]}
+  - {id: 15-R3, kind: interpretation, label: "правило 3", section: 0, page: 192, statement: "b = 0 ⇒ (∀a)b = 0; b = 1 — значение (∀a)b не определяется",
+     errors: ["из b = 1 выводят (∀a)b = 1", "правило 3 применяют в обратную сторону вместо правила 2"]}
+  - {id: 15-taut-rule, kind: interpretation, label: "правило для формул следования", section: 0, page: 193, statement: "x — противоречие или y — тавтология по правилам ⇒ x ⊢ y тавтология; иначе x = 1 (или y = 0) и последствия"}
+  - {id: 15-R4, kind: interpretation, label: "правило 4", section: 0, page: 193, statement: "приписав x = 1 (y = 0), вынуждены приписать b из y (из x) значение 1 ⇒ (∀a)b из y (из x) получает 1",
+     errors: ["«вынуждены» понимают по одному варианту, а не по всем вариантам при x = 1", "к вхождению в заключение применяют правило 3 вместо 4/5"]}
+  - {id: 15-R5, kind: interpretation, label: "правило 5", section: 0, page: 193, statement: "не вынуждены приписывать b значение 1 ⇒ (∀a)b получает 0",
+     errors: ["считают, что буква заключения, отсутствующая в посылке, делает b невынужденным, даже если b = 1 при любом её значении"]}
+  - {id: 15-D1, kind: definition, label: D1, section: 0, page: 193, statement: "x ⊢ y тавтология ⇔ значение 1 при всех вариантах приписывания значений частям x и y",
+     errors: ["«хотя бы при одном варианте»", "требуют, чтобы высказывания заключения входили в посылку"]}
+  - {id: 15-D2, kind: definition, label: D2, section: 0, page: 194, statement: "⊢ x тавтология ⇔ x тавтология"}
+  - {id: 15-D3, kind: definition, label: D3, section: 0, page: 194, statement: "представительство в классе формул следования: приставка (K¹a¹)…(Kⁿaⁿ)y; ∼a → c∨d или cd; разложение до c∨d, элементарное a → a∨a; c∨d → ∼c ⊢ d",
+     errors: ["c∨d → c ⊢ d (без отрицания)", "элементарный член конъюнкции пропущен вместо замены на a∨a"]}
+  - {id: 15-p5, kind: interpretation, label: "п. 5", section: 0, page: 195, statement: "высказывание имеет значение 1 ⇔ все формулы его представительства имеют значение 1"}
+  - {id: 15-MT1, kind: metatheorem, label: MT1, section: 0, page: 195, statement: "высказывание тавтология ⇔ тавтологии все формулы представительства"}
+  - {id: 15-MT2, kind: metatheorem, label: MT2, section: 0, page: 195, statement: "(∀a)x, (∃a)x тавтология ⇔ x тавтология",
+     errors: ["применяют к высказыванию, не имеющему вида (∀a)x, например к (∀a)x ∨ ∼(∀a)x"]}
+  - {id: 15-MT3, kind: metatheorem, label: MT3, section: 0, page: 195, statement: "(K¹a¹)…(Kⁿaⁿ)x тавтология ⇔ x тавтология (следует из MT2)"}
+  - {id: 15-nonempty, kind: interpretation, label: "с. 195", section: 0, page: 195, statement: "способ делает излишней гипотезу о непустоте области значений субъектов"}
+  - {id: 15-MT5-8, kind: metatheorem, label: "MT5–MT8", section: 0, page: 195, statement: "в S⁶_cq доказуемы x ⊢ y и ⊢ x, если и только если они тавтологии; доказательство MT6 через x ∨ ∼zz, полноту S^s_cq, S⁶ и транзитивность",
+     errors: ["z берут из высказываний посылки", "ссылаются на полноту S⁶_cq вместо S^s_cq"]}
+  - {id: 15-decide, kind: method, label: "процедура разрешимости S⁶_cq", section: 0, page: 196, statement: "x ⊢ y — проверить тавтологичность; ⊢ x — свести к формулам представительства"}
+  - {id: 15-classical, kind: interpretation, label: "с. 196", section: 0, page: 196, statement: "S⁶_cq не эквивалентна классическому исчислению предикатов: (∀a)P(a) ⊃ P(b) общезначима, но не тавтология; (∀a)P(a) ⊢ P(b) недоказуема",
+     errors: ["считают S⁶_cq эквивалентной классическому исчислению предикатов"]}
+  - {id: 15-Ak, kind: axiom, label: "A^k", section: 0, page: 196, statement: "(∀a)x ⊢ y, y ⊢ (∃a)x; y — из x заменой всех свободных a на b; в x нет (∀b)z, (∃b)z со свободным a в z",
+     errors: ["заменяют не все свободные вхождения a", "нарушают условие о группах по b (свободное a становится связанным)"]}
+  - {id: 15-MT9-10, kind: metatheorem, label: "MT9, MT10", section: 0, page: 196, statement: "S^k эквивалентна классическому исчислению предикатов (x ⊢ y ⇔ x ⊃ y; ⊢ x ⇔ x)"}
+  - {id: 15-Di, kind: definition, label: "D^i", section: 0, page: 197, statement: "x ⊢ y в S^i: y — из x заменой нуля или более (∀a)z, (∃a)z на (∀b)v, (∃b)v, v — из z заменой всех a на b, b не входит в z",
+     errors: ["новый термин уже входит в z", "заменены не все вхождения a в z", "меняют вид квантора"]}
+  - {id: 15-subclasses, kind: interpretation, label: "с. 197", section: 0, page: 197, statement: "формулы S^k: доказуемые в S⁶_cq; формулы переименования; смешанные"}
+  - {id: 15-Dr, kind: definition, label: "D^r", section: 0, page: 197, statement: "x ⊢ y в S^r: пара x ⊢ v, v ⊢ y, каждая в S⁶_cq или S^i; или аксиома A^k; простая процедура разрешимости",
+     errors: ["допускают в паре формулы S^k", "считают, что у S^r нет процедуры разрешимости"]}

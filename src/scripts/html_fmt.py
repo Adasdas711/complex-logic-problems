@@ -11,7 +11,7 @@ UNKNOWN: set = set()
 
 SYM = {
     "urcorner": "⌝", "sim": "∼", "vdash": "⊢", "dashv": "⊣", "downarrow": "↓", "uparrow": "↑",
-    "rightarrow": "→", "to": "→", "leftarrow": "←", "leftrightarrow": "↔", "Rightarrow": "⇒",
+    "rightarrow": "→", "to": "→", "leftarrow": "←", "leftrightarrow": "↔", "Rightarrow": "⇒", "Leftrightarrow": "⇔",
     "rightharpoonup": "⇀", "rightleftharpoons": "⇌", "mapsto": "↦",
     "forall": "∀", "exists": "∃", "vee": "∨", "wedge": "∧", "bigvee": "⋁", "bigwedge": "⋀", "cdot": "·",
     "supset": "⊃", "subset": "⊂", "subseteq": "⊆", "supseteq": "⊇", "in": "∈", "notin": "∉",
