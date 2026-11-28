@@ -131,13 +131,14 @@ h1 { margin: 0; font-size: 28px; line-height: 1.25; }
 .how .plain-list { margin: 10px 0 0; font-size: 14px; color: var(--muted); }
 .how .g { color: var(--gold); }
 .home-card { gap: 26px; }
-/* Модули I–IV слева, V–VIII справа; ряды общие, поэтому I и V, II и VI… начинаются на одной высоте и ряд одной высоты */
+/* Цифры модулей выровнены вправо: зазор до названия одинаковый, названия стоят ровно.
+   Модули I–IV слева, V–VIII справа; ряды общие, поэтому I и V, II и VI… начинаются на одной высоте и ряд одной высоты */
 .home-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: repeat(var(--rows, 4), auto);
   grid-auto-flow: column; gap: 26px 40px; align-items: start; }
 .mod-block { display: flex; flex-direction: column; gap: 10px; }
-.mod-h { display: flex; align-items: baseline; gap: 8px; font-size: 15px; font-weight: 600; color: #d6d6d6; width: fit-content; }
+.mod-h { display: flex; align-items: baseline; gap: 10px; font-size: 15px; font-weight: 600; color: #d6d6d6; width: fit-content; }
 .mod-h:hover { color: var(--text); }
-.mod-h .rn { flex: none; width: 40px; font-size: 18px; font-weight: 500; line-height: 1;
+.mod-h .rn { flex: none; width: 31px; text-align: right; font-size: 18px; font-weight: 500; line-height: 1;
   color: #6f6f6f; letter-spacing: .04em; }
 .mod-h:hover .rn { color: var(--muted); }
 /* Плитки тянутся на всю ширину колонки: поля карточки слева и справа одинаковые */
