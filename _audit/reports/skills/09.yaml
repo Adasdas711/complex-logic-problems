@@ -1,0 +1,141 @@
+# Глава 9 «Теория терминов» (с. 137–148). Составлено проверяющим V08 по изображениям страниц.
+skills:
+- id: 09-alph
+  kind: definition
+  label: алфавит § 1
+  section: 1
+  page: 137
+  statement: простые термины, sc, pc, ⇀
+- id: 09-D1
+  kind: definition
+  label: D1 § 1 предикат
+  section: 1
+  page: 137
+  statement: пп. 1–6
+- id: 09-D2
+  kind: definition
+  label: D2 § 1 субъект
+  section: 1
+  page: 138
+  statement: пп. 1–7, в т. ч. (a¹,…,aⁿ), [a]
+- id: 09-D3
+  kind: definition
+  label: D3 § 1 термины
+  section: 1
+  page: 138
+  statement: субъекты и предикаты (и только они) — термины
+- id: 09-read
+  kind: definition
+  label: чтение терминов
+  section: 1
+  page: 138
+  statement: ∼a — «не-a»; ã — противоположный; (ab) и (·(a,b))
+  errors:
+  - смешивают ∼a и ã
+  - смешивают (ab) и (·(a,b))
+- id: 09-inc
+  kind: definition
+  label: a ⇀ b, D4
+  section: 1
+  page: 139
+  statement: a⇀b — «b есть a»; a⇌b
+  errors:
+  - читают «a есть b»
+- id: 09-AI-t
+  kind: axiom
+  label: AI.1–12 S¹_t
+  section: 2
+  page: 139
+  statement: аксиомные схемы AI
+- id: 09-T1-9-t
+  kind: theorem
+  label: T1–T9 S¹_t
+  section: 2
+  page: 140
+  statement: теоремные схемы
+- id: 09-MT1-3-t
+  kind: metatheorem
+  label: MT1–MT3 § 2
+  section: 2
+  page: 140
+  statement: общий термин; ⇀ как ⊃; доказуемость тавтологий с общим термином
+  errors:
+  - тавтология без общего термина
+- id: 09-AII-III-t
+  kind: axiom
+  label: AII, AIII S¹_t
+  section: 2
+  page: 141
+  statement: (a¹,…,aⁿ); замена ⇌
+- id: 09-AI-2t
+  kind: axiom
+  label: AI.1–5 S²_t
+  section: 3
+  page: 142
+  statement: '(a⇀b) и ← '
+  errors:
+  - обращают AI.3
+- id: 09-T-2t
+  kind: theorem
+  label: T1–T11 S²_t
+  section: 3
+  page: 142
+  statement: следствия
+- id: 09-AIII-2t
+  kind: axiom
+  label: AIII.1–15 S²_t
+  section: 3
+  page: 142
+  statement: ·(b,c), ∨(b,c), b̃; кванторы
+- id: 09-AIV
+  kind: axiom
+  label: AIV.1–9
+  section: 3
+  page: 144
+  statement: ↓-термины
+  errors:
+  - опускают условие AIV.3
+- id: 09-D1-3
+  kind: definition
+  label: D1 § 3 aα↓b
+  section: 3
+  page: 144
+  statement: сокращение
+- id: 09-AV-VIII
+  kind: axiom
+  label: AV–AVIII
+  section: 3
+  page: 144
+  statement: pc, sc; кванторы
+- id: 09-rej
+  kind: method
+  label: почему не принимается (a←b)(a←c)→(a←(bc))
+  section: 3
+  page: 143
+  statement: неприемлемость для ∼b
+- id: 09-syl
+  kind: axiom
+  label: A1, A2, A*2 § 4
+  section: 4
+  page: 145
+  statement: силлогистика предикатов
+- id: 09-def
+  kind: definition
+  label: § 5 определения
+  section: 5
+  page: 146
+  statement: соглашения; случаи 1, 2; правило для определений с переменными
+- id: 09-D1-6
+  kind: definition
+  label: D1 § 6
+  section: 6
+  page: 147
+  statement: логически взаимозаменимые; списки неклассический/классический
+  errors:
+  - αa — только a или ∼a
+- id: 09-7
+  kind: definition
+  label: § 7 логические термины
+  section: 7
+  page: 148
+  statement: логические термины — термины существования, модальностей, классов, отношений; их свойства устанавливает логика (с. 148)

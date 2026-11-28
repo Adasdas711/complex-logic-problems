@@ -1,0 +1,33 @@
+# Глава 4 «Другие формы следования» (с. 59–71). Составлено проверяющим V04 по изображениям страниц.
+skills:
+  # § 1. Максимальное следование (с. 59–62)
+  - {id: 04-S3, kind: definition, label: "S³", section: 1, page: 59, statement: "S³ получается из S¹ ограничением A3: в y входят только элементарные высказывания, входящие в x", errors: ["ограничение относят к посылке и заключению всей формулы, а не к x и y схемы", "A3 без ограничения в выводе S³"]}
+  - {id: 04-Smirnov, kind: definition, label: "ограничение Г. А. Смирнова", section: 1, page: 59, statement: "ослабленная формулировка: в x и y (A3) входят одинаковые элементарные высказывания", errors: ["путают с ограничением S³"]}
+  - {id: 04-MT1-1, kind: metatheorem, label: "MT1 § 1", section: 1, page: 59, statement: "в теореме S³ множества элементарных высказываний посылки и заключения совпадают; доказательство — аксиомы обладают свойством, правила его сохраняют", errors: ["обращение MT1 без тавтологичности"]}
+  - {id: 04-T1-2-1, kind: theorem, label: "T1, T2 § 1", section: 1, page: 59, statement: "T1 (x:y)z ⊢ xz:yz; T2 xz:y ⊢ (xz:y)(x:∼x) — выводы в S³"}
+  - {id: 04-D1-1, kind: definition, label: "D1 § 1", section: 1, page: 60, statement: "каноническая форма x* ⊢ y** для S³ (y** — каноническая форма для y*z, z — конъюнкция ∼aⁱaⁱ из x*, не входящих в y*)"}
+  - {id: 04-MT2-5-1, kind: metatheorem, label: "MT2–MT5 § 1", section: 1, page: 60, statement: "полнота S³: тавтология с совпадающими множествами доказуема (через канонические формы, T13 I2, T14 I2 вместо T3 I7)"}
+  - {id: 04-S_3, kind: definition, label: "S₃", section: 1, page: 61, statement: "S₃ из S₁ тем же ограничением A3; эквивалентна S³; доказательство MT4 II2 с соблюдением ограничения (строки 1–7, A7, A8)", errors: ["A1/A2 в S₁ и S¹ переставлены"]}
+  - {id: 04-S3star, kind: definition, label: "S₃*, R*1, R*3, A*12", section: 1, page: 61, statement: "S₃* из S₃ заменой R1, R3 на R*1, R*3 и добавлением A*12 x∨x ⊢ x; R*3: из x ⊢ y и z ⊢ v — x∨z ⊢ y∨v"}
+  - {id: 04-indep-1, kind: method, label: "независимость S₃*", section: 1, page: 62, statement: "трёхзначные таблицы для A3, A*12, R*3 (∼pp ⊢ p при p = 3; p∨q ⊢ ∼∼p∨q при p = 2, q = 3)", errors: ["таблицы для разных схем путают", "неотмеченное значение ⊢ считают по двузначной интерпретации"]}
+  - {id: 04-Sm, kind: definition, label: "Sᵐ", section: 1, page: 62, statement: "системы, эквивалентные S³ и S₃"}
+  # § 2. Конверсное следование (с. 62–67)
+  - {id: 04-A15, kind: axiom, label: "A15", section: 2, page: 62, statement: "S⁴ = S³ + A15 ∼x ⊢ ∼(xy)", errors: ["∼x ⊢ ∼x y (отрицание только первого члена)", "x на втором месте"]}
+  - {id: 04-MT1-2, kind: metatheorem, label: "MT1 § 2", section: 2, page: 63, statement: "в посылку теоремы S⁴ входят только элементарные высказывания заключения; доказательство по 4 случаям (аксиома, R1, R2, R3)"}
+  - {id: 04-T1-2, kind: theorem, label: "T1 § 2", section: 2, page: 63, statement: "x ⊢ x(y:∼y) (через A15, A7)"}
+  - {id: 04-D1-2, kind: definition, label: "D1 § 2", section: 2, page: 64, statement: "каноническая форма x** ⊢ y** для S⁴"}
+  - {id: 04-MT2-5-2, kind: metatheorem, label: "MT2–MT5 § 2", section: 2, page: 64, statement: "полнота S⁴: тавтология, в посылку которой не входят новые высказывания, доказуема"}
+  - {id: 04-A12, kind: axiom, label: "A12 (S₄)", section: 2, page: 65, statement: "S₄ = S₃ + A12 x ⊢ x∨y; независимость A12 очевидна; полнота по А. М. Фединой (подстановка qⁱ(pᵏ∨∼pᵏ))", errors: ["посылка — второй член дизъюнкции", "трёхчленная дизъюнкция как пример A12"]}
+  - {id: 04-S4star, kind: definition, label: "S₄*, A**12, R*5; S₄**", section: 2, page: 66, statement: "S₄* из S₄ заменой A3, A8, A11 на A**12 x ⊢ x(y∨∼y) и R*5 (из x ⊢ z, если в y нет высказываний, отсутствующих в z, — xy ⊢ z); S₄** = S₃* + A*12", errors: ["R*5 без условия на y", "A3 в выводе S₄*"]}
+  - {id: 04-Sc, kind: definition, label: "Sᶜ", section: 2, page: 67, statement: "системы, эквивалентные S⁴ и S₄"}
+  # § 3. Вырожденное следование (с. 67–70)
+  - {id: 04-S5, kind: definition, label: "S⁵: D1, A^d1, R^d1, D2", section: 3, page: 67, statement: "⊢x — формула вырожденного следования; A^d1 ⊢ ∼(∼xx); R^d1: из x ⊢ y и ⊢x — ⊢y", errors: ["R1 к формуле ⊢x", "A^d1 с обратным порядком ∼(x∼x)"]}
+  - {id: 04-MT1-3, kind: metatheorem, label: "MT1 § 3", section: 3, page: 67, statement: "доказуемая ⊢x — тавтология"}
+  - {id: 04-MT2-3, kind: metatheorem, label: "MT2 § 3", section: 3, page: 67, statement: "x ⊣⊢ его каноническая форма (индукция по построению)"}
+  - {id: 04-MT3-4-3, kind: metatheorem, label: "MT3, MT4 § 3", section: 3, page: 68, statement: "полнота S⁵ (Л. А. Боброва): тавтология x ⇒ ⊢x"}
+  - {id: 04-Rd23, kind: rule, label: "MT5, MT6, R^d2, R^d3", section: 3, page: 69, statement: "из x ⊢ y и ⊢∼y — ⊢∼x; из ⊢x и ⊢y — ⊢xy", errors: ["R^d1 вместо R^d2"]}
+  - {id: 04-MT7-3, kind: metatheorem, label: "MT7 § 3", section: 3, page: 70, statement: "подстановка z вместо v везде, где v входит в x", errors: ["подстановка не во все вхождения"]}
+  # § 4. Квазиследование (с. 70–71)
+  - {id: 04-Rk1, kind: rule, label: "R^k1", section: 4, page: 70, statement: "S⁶ = S⁵ + R^k1: из xz ⊢ y и ⊢z — x ⊢ y", errors: ["R^d1 вместо R^k1", "z не тавтология"]}
+  - {id: 04-MT1-2-4, kind: metatheorem, label: "MT1, MT2 § 4", section: 4, page: 70, statement: "теоремы S⁶ — в точности тавтологии; доказательство полноты по трём случаям (случай 3 — z = (p¹…pⁿ)∨∼(p¹…pⁿ))"}
+  - {id: 04-S6star, kind: definition, label: "S*⁶, MT3 § 4", section: 4, page: 71, statement: "S*⁶ из S₂ снятием ограничения на R2; MT3: если x ⊃ y тавтология, то x ⊢ y доказуема (вывод 1–8, x ⊣⊢ x(y∨∼y))"}

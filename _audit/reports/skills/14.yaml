@@ -1,0 +1,21 @@
+# Гл. 14 «Нормативные предикаты» (с. 189–191). Схемы переписаны с изображений страниц.
+skills:
+  - {"id": "14-def", "kind": "definition", "label": "с. 189", "section": 0, "page": 189, "statement": "нормативные высказывания: субъекты — названия действий, предикаты O, P, З, Б, Н; на них распространяются общие правила логики"}
+  - {"id": "14-AI.1", "kind": "axiom", "label": "AI.1", "section": 0, "page": 189, "statement": "O(a) ⊢ P(a)"}
+  - {"id": "14-AI.2", "kind": "axiom", "label": "AI.2", "section": 0, "page": 189, "statement": "¬ P(a) ⊢ ¬ O(a)"}
+  - {"id": "14-AI.3", "kind": "axiom", "label": "AI.3", "section": 0, "page": 189, "statement": "?P(a) ⊢ ∼O(a)"}
+  - {"id": "14-AII.1", "kind": "axiom", "label": "AII.1", "section": 0, "page": 190, "statement": "O(a) ⊣⊢ ¬ P(ã)"}
+  - {"id": "14-AII.2", "kind": "axiom", "label": "AII.2", "section": 0, "page": 190, "statement": "¬ O(a) ⊣⊢ P(ã)"}
+  - {"id": "14-AII.3", "kind": "axiom", "label": "AII.3", "section": 0, "page": 190, "statement": "?O(a) ⊣⊢ ?P(ã)"}
+  - {"id": "14-AIII.1", "kind": "axiom", "label": "AIII.1", "section": 0, "page": 190, "statement": "З(a) ⊣⊢ ¬ P(a)"}
+  - {"id": "14-AIII.2", "kind": "axiom", "label": "AIII.2", "section": 0, "page": 190, "statement": "¬ З(a) ⊣⊢ P(a)"}
+  - {"id": "14-AIII.3", "kind": "axiom", "label": "AIII.3", "section": 0, "page": 190, "statement": "?З(a) ⊣⊢ ?P(a)"}
+  - {"id": "14-AIV.1", "kind": "axiom", "label": "AIV.1", "section": 0, "page": 190, "statement": "Б(a) ⊣⊢ P(a)P(ã)"}
+  - {"id": "14-AIV.2", "kind": "axiom", "label": "AIV.2", "section": 0, "page": 190, "statement": "¬ Б(a) ⊣⊢ ¬ P(a) ∨ ¬ P(ã)"}
+  - {"id": "14-AIV.3", "kind": "axiom", "label": "AIV.3", "section": 0, "page": 190, "statement": "?Б(a) ⊣⊢ (?P(a) ∨ ?P(ã))∼¬ P(a)∼¬ P(ã)"}
+  - {"id": "14-AV.1", "kind": "axiom", "label": "AV.1", "section": 0, "page": 190, "statement": "Н(a) ⊣⊢ ¬ O(a)"}
+  - {"id": "14-AV.2", "kind": "axiom", "label": "AV.2", "section": 0, "page": 190, "statement": "¬ Н(a) ⊣⊢ O(a)"}
+  - {"id": "14-AV.3", "kind": "axiom", "label": "AV.3", "section": 0, "page": 190, "statement": "?Н(a) ⊣⊢ ?O(a)"}
+  - {"id": "14-types", "kind": "definition", "label": "с. 190", "section": 0, "page": 190, "statement": "по AI O и P дедуктивно связаны (O категорически сильнее); по AII, AIII, AV — логически взаимозаменимы O и P, З и P, Н и O; Б определяется через P (AIV)"}
+  - {"id": "14-cl", "kind": "method", "label": "S^n_c", "section": 0, "page": 190, "statement": "исключить всё, что связано с ?, заменить ¬ на ∼; схемы S^n_c 1–6"}
+  - {"id": "14-quant", "kind": "definition", "label": "с. 191", "section": 0, "page": 191, "statement": "нормативные предикаты неявно предполагают кванторы: «действие a разрешено» = «всякое действие, называемое a, разрешено»"}

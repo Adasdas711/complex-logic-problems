@@ -1,0 +1,106 @@
+# Глава 11 «Логика существования» (с. 161–167). Составлено проверяющим V08 по изображениям страниц.
+skills:
+- id: 11-1
+  kind: definition
+  label: § 1 E, U, сокращения b(a)
+  section: 1
+  page: 161
+  statement: E, U — экзистенциальные предикаты; логически взаимозаменимы, E категорически сильнее U; b(a), ¬b(a), ?b(a) — сокращения для a←b и т. д.
+- id: 11-AI
+  kind: axiom
+  label: AI.1–8
+  section: 2
+  page: 162
+  statement: E(a¹,…,aⁿ) ⊣⊢ E(a¹)…E(aⁿ); ¬E и ∨; U(a¹,…,aⁿ) и т. п.
+- id: 11-AII
+  kind: axiom
+  label: AII.1–3
+  section: 2
+  page: 162
+  statement: E(a)¬E(a↓b)⊢E(a¬↓b); с ?; с ∼
+- id: 11-AIII
+  kind: axiom
+  label: AIII.1–2
+  section: 2
+  page: 162
+  statement: (∃a)E(a)⊢E(a); ∼E(a)⊢(∀a)∼E(a)
+- id: 11-AIV
+  kind: axiom
+  label: AIV.1–5 (с. 162)
+  section: 2
+  page: 162
+  statement: U(a)⊢¬E(∼a); ¬E(∼a)⊢U(a); ¬U(a)⊢E(∼a); E(∼a)⊢¬U(a); U(a)⊢E(a) (и для ↓x)
+  errors:
+  - пишут ∼ вместо ¬ в S^e_n
+- id: 11-AV
+  kind: axiom
+  label: AV.1–2
+  section: 2
+  page: 162
+  statement: ⊢¬E(∼aa); ⊢¬E(aã)
+- id: 11-AVI
+  kind: axiom
+  label: AVI.1–4 (с. 163, первая группа)
+  section: 2
+  page: 163
+  statement: (∃a)x⊢E(a↓x); E(a↓x)⊢(∃a)x; (¬∃a)x⊢¬E(a↓x); обратная; E не входит в x
+  errors:
+  - опускают условие «E не входит в x»
+- id: 11-AVII
+  kind: axiom
+  label: AVII.1–6
+  section: 2
+  page: 163
+  statement: E(ab)⊢E(a)E(b); E(a∨b)⊣⊢E(a)∨E(b); ¬E(a)∨¬E(b)⊢¬E(ab); ¬E(a∨b)⊣⊢¬E(a)¬E(b); U(a)E(b)⊢E(ab); U(a∨b)⊢U(a)∨E(b)
+  errors:
+  - обращают AVII.1, AVII.3
+- id: 11-AVIII
+  kind: axiom
+  label: AVIII.1–7
+  section: 2
+  page: 163
+  statement: x⊢E(↓x); U(↓x)⊢x; E(↓x)⊣⊢E(a↓x) (a свободно в x); E(a↓x)⊢E(a); ¬E(a)⊢¬E(a↓x); ?E(a)⊢∼E(a↓x)
+- id: 11-R1
+  kind: rule
+  label: R1
+  section: 2
+  page: 163
+  statement: если ⊢x, то ⊢U(↓x)
+- id: 11-T
+  kind: theorem
+  label: T1–T25 § 3
+  section: 3
+  page: 164
+  statement: T1–T25 § 3 (E(abc)⊢E(a), ⊢U(a∨∼a), U(a)⊢E(a)¬E(∼a), …, ⊢∼(?∃a)E(a))
+- id: 11-MT1-4
+  kind: metatheorem
+  label: MT1 § 4 универсальность
+  section: 4
+  page: 164
+  statement: ⊢U(a) доказуема е. т. е. a=↓x и ⊢x, либо a* — тавтология
+  errors:
+  - считают U(a∨b) доказуемой
+- id: 11-5
+  kind: method
+  label: § 5 элиминация E
+  section: 5
+  page: 165
+  statement: кванторы заменимы бескванторными формулами с E; обратное — лишь при a⇌(b↓x)
+- id: 11-int
+  kind: interpretation
+  label: интерпретация § 6 пп. 1–13
+  section: 6
+  page: 165
+  statement: пп. 1–13 интерпретации § 6
+- id: 11-MT1-2-6
+  kind: metatheorem
+  label: MT1, MT2 § 6
+  section: 6
+  page: 166
+  statement: 'MT1: доказуемые — тавтологии; MT2: E(a)E(b)⊢E(ab) и др. недоказуемы'
+- id: 11-Sec
+  kind: axiom
+  label: S^e_c § 7
+  section: 7
+  page: 167
+  statement: 'S^e_c: AI.1–4; вместо AII — E(a)∼E(a↓x)⊢E(a↓∼x); AIII.1; вместо AIV — три схемы с ∼; AV ⊢∼E(∼aa); AVI.1–2; замена шестой схемы; R1'

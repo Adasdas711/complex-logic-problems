@@ -1,0 +1,64 @@
+# Глава 6 «Условные высказывания» («Комплексная логика», 1970, с. 82–97). Составил проверяющий V06 по изображениям страниц.
+skills:
+  # § 1 (с. 82)
+  - {id: 06-alph, kind: definition, label: "§ 1, алфавит", section: 1, page: 82, statement: "→ — оператор условности «если, то»; ⌝ — внутреннее отрицание; ? — оператор неопределённости"}
+  - {id: 06-D1-1, kind: definition, label: "D1 § 1", section: 1, page: 82, statement: "(x → y), (x ⌝→ y), (x? → y) суть высказывания е. т. е. x и y суть высказывания", errors: ["⌝ или ? без оператора условности", "термин на месте антецедента или консеквента"]}
+  - {id: 06-D2-1, kind: definition, label: "D2 § 1", section: 1, page: 82, statement: "x и y — антецедент и консеквент (x → y), (x ⌝→ y), (x? → y)", errors: ["антецедент и консеквент меняют местами"]}
+  - {id: 06-D2b-1, kind: definition, label: "D2 (второе) § 1", section: 1, page: 82, statement: "элементарное высказывание теории условных высказываний: пп. 1–3", errors: ["условное высказывание считают элементарным"]}
+  # § 2 (с. 83)
+  - {id: 06-if-ent, kind: definition, label: "§ 2, состав", section: 2, page: 83, statement: "«Если x, то y» — из высказываний x, y и высказываниеобразующего оператора; «Из x следует y» — из субъектов «высказывание x», «высказывание y» и предиката «из первого следует второе»", errors: ["смешение условного высказывания с высказыванием о следовании"]}
+  - {id: 06-princ, kind: theorem, label: "§ 2, принцип", section: 2, page: 83, statement: "если верно, что из x следует y, то верно «Если x, то y»; в остальных случаях логика не компетентна; не всегда при истинном «Если x, то y» истинно «Из x следует y»; истинные условные без общих терминов и высказываний", errors: ["обращение принципа"]}
+  # § 3 (с. 83–86)
+  - {id: 06-err84, kind: interpretation, label: "§ 3, ошибочные утверждения", section: 3, page: 84, statement: "xy ⊢ (x→y), ∼x∼y ⊢ (x→y), ∼xy ⊢ (x→y), ∼(x∼y) ⊢ (x→y), ∼(x→y) ⊢ x∼y, ∼x∨y ⊢ (x→y) — ошибочны (аналоги с ⊃ доказуемы в Sˢ)", errors: ["→ как ⊃"]}
+  - {id: 06-err84b, kind: interpretation, label: "§ 3, распределение", section: 3, page: 84, statement: "(xy → z∨v) ⊢ (x→z)∨(y→v) и (xy→z) ⊢ (x→z)∨(y→z) ошибочны; пример xy → y∨x"}
+  - {id: 06-math, kind: interpretation, label: "§ 3, математика", section: 3, page: 85, statement: "причина отождествления → и ⊃: в математике антецеденты и консеквенты универсальны, условные принимаются только из следования"}
+  - {id: 06-sim, kind: theorem, label: "§ 3, сходство", section: 3, page: 85, statement: "сходные утверждения для ⊃ и → ((x→y)x ⊢ y и др.); ⊢ (x→y)→(x⊃y), ⊢ ∼(x⊃y)→∼(x→y)"}
+  - {id: 06-apriori, kind: theorem, label: "§ 3, априорная предпосылка", section: 3, page: 86, statement: "не всякому приемлемому x ⊢ y с ⊃ соответствует приемлемое z ⊢ v с заменой ⊃ на → хотя бы в одном месте"}
+  # § 4 (с. 86–88)
+  - {id: 06-int1-4, kind: interpretation, label: "пп. 1–4 § 4", section: 4, page: 86, statement: "значения антецедента/консеквента при x → y = 1 (пп. 1–2) и = 0 (пп. 3–4)", errors: ["п. 3: значение y считают определённым, как у ⊃"]}
+  - {id: 06-int5-9, kind: interpretation, label: "пп. 5–9 § 4", section: 4, page: 86, statement: "вынужденное значение 1 (пп. 5–6), возможное 0 (пп. 7–8), независимость при x = 0 или y = 1 (п. 9)", errors: ["x → y = 1 при x = 0 по таблице ⊃"]}
+  - {id: 06-int10-12, kind: interpretation, label: "пп. 10–12 § 4", section: 4, page: 87, statement: "x → y и x ⌝→ y не истинны вместе; при 0 одного другое не зависит; x? → y ≡ ∼(x→y)∼(x⌝→y)"}
+  - {id: 06-int-taut, kind: method, label: "§ 4, примеры", section: 4, page: 87, statement: "проверка тавтологичности формул с → приписыванием значений (z ⊢ (x→z); xy → x; (x→y)(y→z) ⊢ (x→z); (xy→z) ⊢ (x→z)∨(y→z); (x→y∨z) ⊢ (x→y)∨(x→z))"}
+  - {id: 06-int-vs-imp, kind: interpretation, label: "§ 4, с. 88", section: 4, page: 88, statement: "x → y = 0 возможно при x = y = 1 и при x = 0, y = 1; совпадение с ⊃ лишь при x = 1, y = 0; истинно x → y ⇒ истинно x ⊃ y, не наоборот"}
+  # § 5 (с. 89–90)
+  - {id: 06-An1-6, kind: axiom, label: "Aⁿ1–Aⁿ6", section: 5, page: 89, statement: "каждое из x→y, x⌝→y, x?→y равнозначно конъюнкции отрицаний двух других"}
+  - {id: 06-class, kind: definition, label: "§ 5, классический случай", section: 5, page: 89, statement: "исключение Aⁿ1–Aⁿ6, ⌝, ? и символов с ними из D1–D3 либо добавление Aⁿ7 ∼(x→y) ⊢ (x⌝→y)"}
+  - {id: 06-MT1-5, kind: metatheorem, label: "MT1 § 5", section: 5, page: 89, statement: "с Aⁿ1–Aⁿ7 в S⁵ доказуемы ⊢ ∼(x?→y) и ∼(x⌝→y) ⊢ (x→y)"}
+  - {id: 06-MT2-3-5, kind: metatheorem, label: "MT2, MT3 § 5", section: 5, page: 89, statement: "Aⁿ1–Aⁿ6 — тавтологии и непарадоксальны; ∼(x⌝→y) ⊢ (x→y) и ∼(x→y) ⊢ (x⌝→y) не тавтологии и недоказуемы без Aⁿ7"}
+  - {id: 06-Dstar, kind: axiom, label: "D*1, A*1–A*4", section: 5, page: 90, statement: "вариант: x?→y — сокращение для ∼(x→y)∼(x⌝→y); A*1–A*4; ? исключается из алфавита"}
+  # § 6 (с. 90–91)
+  - {id: 06-A1, kind: axiom, label: "A1 § 6", section: 6, page: 90, statement: "(x → y)x ⊢ y"}
+  - {id: 06-A2, kind: axiom, label: "A2 § 6", section: 6, page: 90, statement: "(x → y) ⊢ (∼y → ∼x)"}
+  - {id: 06-A3, kind: axiom, label: "A3 § 6", section: 6, page: 90, statement: "(x → y)(y → z) ⊢ (x → z)", errors: ["консеквент первого не совпадает с антецедентом второго"]}
+  - {id: 06-A4, kind: axiom, label: "A4 § 6", section: 6, page: 90, statement: "(x → yz) ⊢ (x → y)(x → z)", errors: ["применяют к дизъюнкции в консеквенте или обращают"]}
+  - {id: 06-A5, kind: axiom, label: "A5 § 6", section: 6, page: 90, statement: "(xy → z) ⊢ (x → (y → z))", errors: ["меняют порядок членов"]}
+  - {id: 06-A6, kind: axiom, label: "A6 § 6", section: 6, page: 90, statement: "(x → (y → z)) ⊢ (xy → z)"}
+  - {id: 06-A7, kind: axiom, label: "A7 § 6", section: 6, page: 90, statement: "(x → y)(z → v) ⊢ (xz → yv)"}
+  - {id: 06-A8, kind: axiom, label: "A8 § 6", section: 6, page: 90, statement: "(x → y) ∨ (z → v) ⊢ (xz → y ∨ v)", errors: ["антецедент заключения — дизъюнкция"]}
+  - {id: 06-Ssif-der, kind: method, label: "вывод в Sˢ_if", section: 6, page: 90, statement: "вывод с A1–A8, шагами общей теории дедукции и R1–R3 (с. 17)", errors: ["R1/R2 с несовпадающими формулами", "шаг Sˢ, не являющийся сильной тавтологией"]}
+  - {id: 06-MT1-6, kind: metatheorem, label: "MT1 § 6", section: 6, page: 90, statement: "доказуемые в Sˢ_if формулы — тавтологии (интерпретация § 4)"}
+  - {id: 06-MT2-6, kind: metatheorem, label: "MT2 § 6", section: 6, page: 90, statement: "в заключение теоремы не входят элементарные высказывания, отсутствующие в посылке"}
+  - {id: 06-MT3-6, kind: metatheorem, label: "MT3 § 6", section: 6, page: 90, statement: "оператор условности заключения входит в посылку; x ⊢ (y → z) при x без → недоказуема"}
+  - {id: 06-T-6, kind: theorem, label: "T1–T11 § 6", section: 6, page: 91, statement: "теоремные схемы Sˢ_if с указанными в книге основаниями (T4 [A2, A1], T8 [A2, A7, A2] …)"}
+  # § 7 (с. 91)
+  - {id: 06-A9, kind: axiom, label: "A9 § 7", section: 7, page: 91, statement: "(x → y) ⊢ (xz → y)", errors: ["усиливают консеквент"]}
+  - {id: 06-MT-7, kind: metatheorem, label: "MT1, MT2 § 7", section: 7, page: 91, statement: "в теореме Sʷ_if посылка и заключение имеют общее элементарное высказывание; теоремы — тавтологии"}
+  - {id: 06-T1-7, kind: theorem, label: "T1 § 7", section: 7, page: 91, statement: "(x → y) ⊢ (x → y ∨ z) [A2, A9, A2]"}
+  # § 8 (с. 91–93)
+  - {id: 06-R1-8, kind: rule, label: "R1 § 8", section: 8, page: 91, statement: "если x ⊢ y, то ⊢ (x → y)", errors: ["обращение R1"]}
+  - {id: 06-S5if-der, kind: method, label: "вывод в S⁵_if", section: 8, page: 91, statement: "выводы ⊢ x с R1 § 8, Rᵈ1, MT6 (Rᵈ3) гл. 4 и вспомогательными тавтологиями"}
+  - {id: 06-MT1-4-8, kind: metatheorem, label: "MT1–MT4 § 8", section: 8, page: 92, statement: "⊢ (x→y) — тавтология; x ⊃ y — тавтология; из ⊢ (x→y) и ⊢ x — ⊢ y; из ⊢ (x→y) и ⊢ ∼y — ⊢ ∼x"}
+  - {id: 06-T-8, kind: theorem, label: "T1–T15 § 8", section: 8, page: 92, statement: "теоремные схемы S⁵_if (в т. ч. парадоксы T5–T8, T13, T15)"}
+  - {id: 06-MT5-7-8, kind: metatheorem, label: "MT5–MT7 § 8", section: 8, page: 92, statement: "⊢ (x ⊃ y) в S⁵ ⇒ ⊢ (x → y) в S⁵_if (через T13, T15); MT6 для высказываний S⁵; MT7 — замена → на ⊃; контрпримеры с. 93", errors: ["MT6 без условия «x, y — высказывания S⁵»", "обращение MT7"]}
+  # § 9 (с. 93–94)
+  - {id: 06-S5s-ax, kind: axiom, label: "A1–A3, R1 § 9", section: 9, page: 93, statement: "S⁵*_if: S⁵ + A1 (x→y)x ⊢ y, A2 (x→y)∼y ⊢ ∼x, A3 ⊢ ((xy→z)→(x→(y→z))), R1"}
+  - {id: 06-T-9, kind: theorem, label: "T1–T8 § 9", section: 9, page: 94, statement: "теоремные схемы S⁵*_if — аналоги A1–A8 Sˢ_if"}
+  - {id: 06-MT1-9, kind: metatheorem, label: "MT1 § 9", section: 9, page: 94, statement: "⊢ (x → y) доказуема в S⁵_if е. т. е. в S⁵*_if"}
+  # § 10 (с. 94–95)
+  - {id: 06-par, kind: theorem, label: "§ 10, парадоксы", section: 10, page: 94, statement: "⊢ (x→(y→x)), ⊢ (x→(∼x→y)), ⊢ (x→y∨∼y), ⊢ (∼yy→x); источник — (xy→z) ⊢ (x→(y→z))"}
+  - {id: 06-Astar5, kind: axiom, label: "A*5, A*3 § 10", section: 10, page: 95, statement: "A*5 вместо A5 Sˢ_if и A*3 вместо A3 S⁵*_if — с условием недоказуемости ⊢ (x→z), ⊢ (y→z); вторая форма с ∼(x→z)∼(y→z) в посылке"}
+  - {id: 06-par-thesis, kind: theorem, label: "§ 10, тезис", section: 10, page: 94, statement: "исключение парадоксов из системы не исключает их из ситуаций применения; для систем с ограничением неверен аналог MT5 § 8; доказуемые ⊢ (x→y) непарадоксальны"}
+  # § 11 (с. 95–97)
+  - {id: 06-compl-crit, kind: interpretation, label: "§ 11, критерии", section: 11, page: 95, statement: "критерии полноты общей теории дедукции недостаточны: (xy→z) ⊢ (xy→y), (xy → ∼x∼y) ⊢ (y→x), (z → x∼z) ⊢ (x→z) — тавтологии, непарадоксальны, но неприемлемы"}
+  - {id: 06-D1-11, kind: definition, label: "D1 § 11", section: 11, page: 96, statement: "базисная формула: виды 1–18"}
+  - {id: 06-D2-11, kind: definition, label: "D2 § 11", section: 11, page: 97, statement: "достаточная полнота: доказуемы базисные тавтологии-непарадоксальные и их подстановочные примеры; распространение на любое число членов, отрицания доводятся до элементарных"}

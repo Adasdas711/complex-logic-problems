@@ -1,0 +1,143 @@
+# Гл. 12 «Модальная логика» (с. 168–177), «Комплексная логика» (1970). Схемы переписаны с изображений страниц.
+skills:
+  - {"id": "12-modpred", "kind": "definition", "label": "§ 1", "section": 1, "page": 168, "statement": "модальные предикаты: «возможно», «необходимо», «случайно», «вероятно (возможно) со степенью»; к ним относится всё сказанное о предикатах вообще", "errors": ["считать модальными только «возможно» и «необходимо»"]}
+  - {"id": "12-D1", "kind": "definition", "label": "D1 § 2", "section": 2, "page": 168, "statement": "M, N, C — модальные предикаты и только они"}
+  - {"id": "12-D2", "kind": "definition", "label": "D2 § 2", "section": 2, "page": 168, "statement": "модальные высказывания — содержащие модальные предикаты"}
+  - {"id": "12-m1-AI.1", "kind": "axiom", "label": "AI.1", "section": 2, "page": 168, "statement": "N(↓x) ⊢ x"}
+  - {"id": "12-m1-AI.2", "kind": "axiom", "label": "AI.2", "section": 2, "page": 168, "statement": "x ⊢ M(↓x)"}
+  - {"id": "12-m1-AII.1", "kind": "axiom", "label": "AII.1", "section": 2, "page": 168, "statement": "N(↓x) ⊢ ¬ M(↓∼x)"}
+  - {"id": "12-m1-AII.2", "kind": "axiom", "label": "AII.2", "section": 2, "page": 168, "statement": "¬ M(↓x) ⊢ N(↓∼x)"}
+  - {"id": "12-m1-AII.3", "kind": "axiom", "label": "AII.3", "section": 2, "page": 168, "statement": "¬ N(↓x) ⊢ M(↓∼x)"}
+  - {"id": "12-m1-AII.4", "kind": "axiom", "label": "AII.4", "section": 2, "page": 168, "statement": "M(↓x) ⊢ ¬ N(↓∼x)"}
+  - {"id": "12-m1-AIII.1", "kind": "axiom", "label": "AIII.1", "section": 2, "page": 169, "statement": "C(↓x) ⊢ M(↓x)M(↓∼x)"}
+  - {"id": "12-m1-AIII.2", "kind": "axiom", "label": "AIII.2", "section": 2, "page": 169, "statement": "M(↓x)M(↓∼x) ⊢ C(↓x)"}
+  - {"id": "12-m1-AIII.3", "kind": "axiom", "label": "AIII.3", "section": 2, "page": 169, "statement": "¬ C(↓x) ⊢ M(↓x)¬ M(↓∼x)"}
+  - {"id": "12-m1-AIII.4", "kind": "axiom", "label": "AIII.4", "section": 2, "page": 169, "statement": "M(↓x)¬ M(↓x) ⊢ ¬ C(↓x)"}
+  - {"id": "12-m1-AIII.5", "kind": "axiom", "label": "AIII.5", "section": 2, "page": 169, "statement": "?C(↓x) ⊢ M(↓x)?M(↓∼x)"}
+  - {"id": "12-m1-AIII.6", "kind": "axiom", "label": "AIII.6", "section": 2, "page": 169, "statement": "M(↓x)?M(↓∼x) ⊢ ?C(↓x)"}
+  - {"id": "12-m1-AIV.1", "kind": "axiom", "label": "AIV.1", "section": 2, "page": 169, "statement": "M(↓(x ∨ y)) ⊢ M(↓x) ∨ M(↓y)"}
+  - {"id": "12-m1-AIV.2", "kind": "axiom", "label": "AIV.2", "section": 2, "page": 169, "statement": "M(↓x) ∨ M(↓y) ⊢ M(↓(x ∨ y))"}
+  - {"id": "12-m1-AIV.3", "kind": "axiom", "label": "AIV.3", "section": 2, "page": 169, "statement": "N(↓x)N(↓y) ⊢ N(↓(xy))"}
+  - {"id": "12-m1-AIV.4", "kind": "axiom", "label": "AIV.4", "section": 2, "page": 169, "statement": "N(↓x)M(↓y) ⊢ M(↓(xy))"}
+  - {"id": "12-m1-AIV.5", "kind": "axiom", "label": "AIV.5", "section": 2, "page": 169, "statement": "N(↓(x ∨ y)) ⊢ N(↓x) ∨ M(↓y)"}
+  - {"id": "12-m1-AIV.6", "kind": "axiom", "label": "AIV.6", "section": 2, "page": 169, "statement": "M(↓x)?M(↓y) ⊢ ?M(↓(xy))"}
+  - {"id": "12-m1-AIV.7", "kind": "axiom", "label": "AIV.7", "section": 2, "page": 169, "statement": "N(↓x)?N(↓y) ⊢ ?N(↓(xy))"}
+  - {"id": "12-m1-AIV.8", "kind": "axiom", "label": "AIV.8", "section": 2, "page": 169, "statement": "?M(↓x)?M(↓y) ⊢ ?M(↓(xy))"}
+  - {"id": "12-m1-AIV.9", "kind": "axiom", "label": "AIV.9", "section": 2, "page": 169, "statement": "?N(↓x)?N(↓y) ⊢ ?N(↓(xy))"}
+  - {"id": "12-m1-AV.1", "kind": "axiom", "label": "AV.1", "section": 2, "page": 169, "statement": "αQ(a) ⊢ αQ(↓(E(a)))"}
+  - {"id": "12-m1-AV.2", "kind": "axiom", "label": "AV.2", "section": 2, "page": 169, "statement": "αQ(↓(E(a))) ⊢ αQ(a)"}
+  - {"id": "12-m1-AV.3", "kind": "axiom", "label": "AV.3", "section": 2, "page": 169, "statement": "M(a, b) ⊢ M(a)M(b)"}
+  - {"id": "12-m1-AV.4", "kind": "axiom", "label": "AV.4", "section": 2, "page": 169, "statement": "M(a)M(b) ⊢ M(a, b)"}
+  - {"id": "12-m1-AV.5", "kind": "axiom", "label": "AV.5", "section": 2, "page": 169, "statement": "N(a, b) ⊢ N(a)N(b)"}
+  - {"id": "12-m1-AV.6", "kind": "axiom", "label": "AV.6", "section": 2, "page": 169, "statement": "N(a)N(b) ⊢ N(a, b)"}
+  - {"id": "12-m1-AV.7", "kind": "axiom", "label": "AV.7", "section": 2, "page": 169, "statement": "¬ M(a, b) ⊢ ¬ M(a) ∨ ¬ M(b)"}
+  - {"id": "12-m1-AV.8", "kind": "axiom", "label": "AV.8", "section": 2, "page": 169, "statement": "¬ M(a) ∨ ¬ M(b) ⊢ ¬ M(a, b)"}
+  - {"id": "12-m1-AV.9", "kind": "axiom", "label": "AV.9", "section": 2, "page": 169, "statement": "¬ N(a, b) ⊢ ¬ N(a) ∨ ¬ N(b)"}
+  - {"id": "12-m1-AV.10", "kind": "axiom", "label": "AV.10", "section": 2, "page": 169, "statement": "¬ N(a) ∨ ¬ N(b) ⊢ ¬ N(a, b)"}
+  - {"id": "12-m1-AVI.1", "kind": "axiom", "label": "AVI.1", "section": 2, "page": 170, "statement": "Q(↓((αK a)x)) ⊢ (αK a)Q(↓x)"}
+  - {"id": "12-m1-AVI.2", "kind": "axiom", "label": "AVI.2", "section": 2, "page": 170, "statement": "(αK a)Q(↓x) ⊢ Q(↓((αK a)x))"}
+  - {"id": "12-m1-AVII.1", "kind": "axiom", "label": "AVII.1", "section": 2, "page": 170, "statement": "(x → y) ⊢ ¬ M(↓(x∼y))"}
+  - {"id": "12-m1-AVII.2", "kind": "axiom", "label": "AVII.2", "section": 2, "page": 170, "statement": "M(↓(x∼y)) ⊢ (x ¬→ y)"}
+  - {"id": "12-m1-AVII.3", "kind": "axiom", "label": "AVII.3", "section": 2, "page": 170, "statement": "(x → y)N(↓x) ⊢ N(↓y)"}
+  - {"id": "12-m1-AVII.4", "kind": "axiom", "label": "AVII.4", "section": 2, "page": 170, "statement": "(x → y)M(↓x) ⊢ M(↓y)"}
+  - {"id": "12-m1-AVII.5", "kind": "axiom", "label": "AVII.5", "section": 2, "page": 170, "statement": "(x → y)¬ M(↓y) ⊢ ¬ M(↓x)"}
+  - {"id": "12-m1-AVII.6", "kind": "axiom", "label": "AVII.6", "section": 2, "page": 170, "statement": "(x → y)¬ N(↓y) ⊢ ¬ N(↓x)"}
+  - {"id": "12-m1-AVII.7", "kind": "axiom", "label": "AVII.7", "section": 2, "page": 170, "statement": "(x → y)?M(↓y) ⊢ ∼M(↓x)"}
+  - {"id": "12-m1-AVII.8", "kind": "axiom", "label": "AVII.8", "section": 2, "page": 170, "statement": "(x → y)?N(↓y) ⊢ ∼N(↓x)"}
+  - {"id": "12-m1-AVII.9", "kind": "axiom", "label": "AVII.9", "section": 2, "page": 170, "statement": "M(↓x)M(↓y)(x ¬→ ∼y)(y ¬→ ∼x) ⊢ M(↓(xy))"}
+  - {"id": "12-m1-AVIII.1", "kind": "axiom", "label": "AVIII.1", "section": 2, "page": 170, "statement": "(α∃ a)M(a) ⊢ αM(a)"}
+  - {"id": "12-m1-AVIII.2", "kind": "axiom", "label": "AVIII.2", "section": 2, "page": 170, "statement": "αM(a) ⊢ (α∃ a)M(a)"}
+  - {"id": "12-m1-AIX.1", "kind": "axiom", "label": "AIX.1", "section": 2, "page": 170, "statement": "αQ(↓x) ⊢ N(↓(αQ(↓x)))"}
+  - {"id": "12-m1-AIX.2", "kind": "axiom", "label": "AIX.2", "section": 2, "page": 170, "statement": "M(↓(αQ(↓x))) ⊢ αQ(↓x)"}
+  - {"id": "12-m1-R1", "kind": "rule", "label": "R1", "section": 2, "page": 170, "statement": "если x ⊢ y, то N(↓x) ⊢ N(↓y)"}
+  - {"id": "12-m1-R2", "kind": "rule", "label": "R2", "section": 2, "page": 170, "statement": "если x ⊢ y, то M(↓x) ⊢ M(↓y)"}
+  - {"id": "12-T1-3", "kind": "theorem", "label": "T1 § 3", "section": 3, "page": 171, "statement": "N(↓(xy)) ⊢ N(↓x)N(↓y)"}
+  - {"id": "12-T2-3", "kind": "theorem", "label": "T2 § 3", "section": 3, "page": 171, "statement": "M(↓xy) ⊢ M(↓x)M(↓y)"}
+  - {"id": "12-T3-3", "kind": "theorem", "label": "T3 § 3", "section": 3, "page": 171, "statement": "C(↓(xy)) ⊢ M(↓x)M(↓y)"}
+  - {"id": "12-T4-3", "kind": "theorem", "label": "T4 § 3", "section": 3, "page": 171, "statement": "¬ N(↓(xy)) ⊢ ¬ N(↓x) ∨ ¬ N(↓y)"}
+  - {"id": "12-T5-3", "kind": "theorem", "label": "T5 § 3", "section": 3, "page": 171, "statement": "¬ N(↓x) ∨ ¬ N(↓y) ⊢ ¬ N(↓(xy))"}
+  - {"id": "12-T6-3", "kind": "theorem", "label": "T6 § 3", "section": 3, "page": 171, "statement": "N(↓x) ⊢ ¬ C(↓x)"}
+  - {"id": "12-T7-3", "kind": "theorem", "label": "T7 § 3", "section": 3, "page": 171, "statement": "¬ C(↓x) ⊢ N(↓x)"}
+  - {"id": "12-T8-3", "kind": "theorem", "label": "T8 § 3", "section": 3, "page": 171, "statement": "αC(↓x) ⊢ M(↓x)"}
+  - {"id": "12-T9-3", "kind": "theorem", "label": "T9 § 3", "section": 3, "page": 171, "statement": "N(↓x) ⊢ NN(↓x)"}
+  - {"id": "12-T10-3", "kind": "theorem", "label": "T10 § 3", "section": 3, "page": 171, "statement": "M(↓x) ⊢ NM(↓x)"}
+  - {"id": "12-T11-3", "kind": "theorem", "label": "T11 § 3", "section": 3, "page": 171, "statement": "MM(↓x) ⊢ M(↓x)"}
+  - {"id": "12-T12-3", "kind": "theorem", "label": "T12 § 3", "section": 3, "page": 171, "statement": "MN(↓x) ⊢ M(↓x)"}
+  - {"id": "12-T13-3", "kind": "theorem", "label": "T13 § 3", "section": 3, "page": 171, "statement": "∼N(↓x) ⊢ N(↓(∼N(↓x)))"}
+  - {"id": "12-T14-3", "kind": "theorem", "label": "T14 § 3", "section": 3, "page": 171, "statement": "?N(↓(xy)) ⊢ (?N(↓x) ∨ ?N(↓y))∼N(↓x)∼¬ N(↓y)"}
+  - {"id": "12-T15-3", "kind": "theorem", "label": "T15 § 3", "section": 3, "page": 171, "statement": "?M(↓(xy)) ⊢ (?M(↓x) ∨ ?M(↓y))∼¬ M(↓x)∼¬ M(↓y)"}
+  - {"id": "12-ops", "kind": "definition", "label": "§ 4", "section": 4, "page": 171, "statement": "«возможно», «необходимо», «случайно» как логические операторы M, N, C; система S^m2_n = S^m1_n + схемы § 4", "errors": ["смешение оператора M и предиката M"]}
+  - {"id": "12-m2-AI.1", "kind": "axiom", "label": "AI.1 S^m2_n", "section": 4, "page": 171, "statement": "(αQa)x ⊢ αQ(a↓x)"}
+  - {"id": "12-m2-AI.2", "kind": "axiom", "label": "AI.2 S^m2_n", "section": 4, "page": 171, "statement": "αQ(a↓x) ⊢ (αQa)x"}
+  - {"id": "12-m2-AI.3", "kind": "axiom", "label": "AI.3 S^m2_n", "section": 4, "page": 172, "statement": "(αQ(a,b))x ⊢ (αQa)x(αQb)x"}
+  - {"id": "12-m2-AI.4", "kind": "axiom", "label": "AI.4 S^m2_n", "section": 4, "page": 172, "statement": "(αQa)x(αQb)x ⊢ (αQ(a,b))x"}
+  - {"id": "12-m2-AI.5", "kind": "axiom", "label": "AI.5 S^m2_n", "section": 4, "page": 172, "statement": "(α¹Q¹a¹)…(αⁿQⁿaⁿ)x ⊢ (α¹Q¹a¹)x·…·(αⁿQⁿaⁿ)x"}
+  - {"id": "12-m2-AI.6", "kind": "axiom", "label": "AI.6 S^m2_n", "section": 4, "page": 172, "statement": "обращение AI.5"}
+  - {"id": "12-m2-AII.1", "kind": "axiom", "label": "AII.1 S^m2_n", "section": 4, "page": 172, "statement": "(αQa)x ⊢ (αQb)x, a и b свободно входят в x"}
+  - {"id": "12-m2-AII.2", "kind": "axiom", "label": "AII.2 S^m2_n", "section": 4, "page": 172, "statement": "(Ma)x(N(a↓x))y ⊢ (Ma)y"}
+  - {"id": "12-m2-AII.3", "kind": "axiom", "label": "AII.3 S^m2_n", "section": 4, "page": 172, "statement": "(Na)x(N(a↓x))y ⊢ (Na)y"}
+  - {"id": "12-m2-AIII.1", "kind": "axiom", "label": "AIII.1 S^m2_n", "section": 4, "page": 172, "statement": "(αKa)(βQb)x ⊢ (αKa)((βQb)x)"}
+  - {"id": "12-m2-AIII.2", "kind": "axiom", "label": "AIII.2 S^m2_n", "section": 4, "page": 172, "statement": "обращение AIII.1"}
+  - {"id": "12-m2-AIII.3", "kind": "axiom", "label": "AIII.3 S^m2_n", "section": 4, "page": 172, "statement": "(Qa)x(∀(a↓x))y ⊢ (Qa)y"}
+  - {"id": "12-int-1", "kind": "interpretation", "label": "п. 1 § 5", "section": 5, "page": 172, "statement": "x=1 ⇒ M(↓x)=1; M(↓x)=1 ⇒ x может принять 1; может принять 1 ⇒ M(↓x)=1; M(↓x)=0 ⇒ x=0", "errors": ["из M(↓x)=1 выводят x=1"]}
+  - {"id": "12-int-2", "kind": "interpretation", "label": "п. 2 § 5", "section": 5, "page": 173, "statement": "N(↓x) ≡ ¬M(↓∼x); ¬N(↓x) ≡ M(↓∼x)"}
+  - {"id": "12-int-3", "kind": "interpretation", "label": "п. 3 § 5", "section": 5, "page": 173, "statement": "C(↓x) ≡ M(↓x)M(↓∼x); ¬C ≡ M(↓x)¬M(↓∼x); ?C ≡ M(↓x)?M(↓∼x)"}
+  - {"id": "12-int-4", "kind": "interpretation", "label": "п. 4 § 5", "section": 5, "page": 173, "statement": "a, b равнозначны ⇒ αQ(a), αQ(b) равнозначны"}
+  - {"id": "12-int-5", "kind": "interpretation", "label": "п. 5 § 5", "section": 5, "page": 173, "statement": "(αQa)x ≡ αQ(a↓x)"}
+  - {"id": "12-int-6", "kind": "interpretation", "label": "п. 6 § 5", "section": 5, "page": 173, "statement": "(αQ(a,b))x ≡ (αQa)x(αQb)x"}
+  - {"id": "12-int-7", "kind": "interpretation", "label": "п. 7 § 5", "section": 5, "page": 173, "statement": "(α¹Q¹a¹)…x ≡ (α¹Q¹a¹)x·…"}
+  - {"id": "12-int-8", "kind": "interpretation", "label": "п. 8 § 5", "section": 5, "page": 173, "statement": "(Qa)x, (N(a↓x))y = 1 ⇒ (Qa)y = 1; так же с ∀"}
+  - {"id": "12-int-9", "kind": "interpretation", "label": "п. 9 § 5", "section": 5, "page": 173, "statement": "(αKa)Q(↓x) ≡ Q(↓((αKa)x))"}
+  - {"id": "12-int-10", "kind": "interpretation", "label": "п. 10 § 5", "section": 5, "page": 173, "statement": "(αKa)(βQb)x ≡ (αKa)((βQb)x)"}
+  - {"id": "12-MT1-5", "kind": "metatheorem", "label": "MT1 § 5", "section": 5, "page": 173, "statement": "все доказуемые в S^m1_n и S^m2_n формулы — тавтологии"}
+  - {"id": "12-cl", "kind": "method", "label": "§ 6", "section": 6, "page": 173, "statement": "S^m1_c: исключить формулы с ?, заменить ¬ на ∼, исключить повторения и зависимые схемы", "errors": ["заменять ? на ∼", "заменять ∼ на ¬"]}
+  - {"id": "12-m0-A1", "kind": "axiom", "label": "A1 S^m0_n", "section": 7, "page": 174, "statement": "N(↓x) ⊢ x"}
+  - {"id": "12-m0-A2", "kind": "axiom", "label": "A2 S^m0_n", "section": 7, "page": 174, "statement": "x ⊢ M(↓x)"}
+  - {"id": "12-m0-A3", "kind": "axiom", "label": "A3 S^m0_n", "section": 7, "page": 174, "statement": "N(↓x) ⊢ ¬ M(↓∼x)"}
+  - {"id": "12-m0-A4", "kind": "axiom", "label": "A4 S^m0_n", "section": 7, "page": 174, "statement": "¬ M(↓∼x) ⊢ N(↓∼x)"}
+  - {"id": "12-m0-A5", "kind": "axiom", "label": "A5 S^m0_n", "section": 7, "page": 174, "statement": "¬ N(↓x) ⊢ M(↓∼x)"}
+  - {"id": "12-m0-A6", "kind": "axiom", "label": "A6 S^m0_n", "section": 7, "page": 174, "statement": "M(↓∼x) ⊢ ¬ N(↓x)"}
+  - {"id": "12-m0-A7", "kind": "axiom", "label": "A7 S^m0_n", "section": 7, "page": 174, "statement": "M(↓(x ∨ y)) ⊢ M(↓x) ∨ M(↓y)"}
+  - {"id": "12-m0-A8", "kind": "axiom", "label": "A8 S^m0_n", "section": 7, "page": 174, "statement": "M(↓x) ∨ M(↓y) ⊢ M(↓(x ∨ y))"}
+  - {"id": "12-m0-A9", "kind": "axiom", "label": "A9 S^m0_n", "section": 7, "page": 174, "statement": "N(↓x)M(↓y) ⊢ M(↓(xy))"}
+  - {"id": "12-m0-A10", "kind": "axiom", "label": "A10 S^m0_n", "section": 7, "page": 174, "statement": "N(↓x) ∨ N(↓y) ⊢ N(↓(x ∨ y))"}
+  - {"id": "12-m0-A11", "kind": "axiom", "label": "A11 S^m0_n", "section": 7, "page": 174, "statement": "N(↓(x ∨ y)) ⊢ N(↓x) ∨ M(↓y)"}
+  - {"id": "12-m0-A12", "kind": "axiom", "label": "A12 S^m0_n", "section": 7, "page": 174, "statement": "M(↓x)?M(↓y) ⊢ ?M(↓(xy))"}
+  - {"id": "12-m0-A13", "kind": "axiom", "label": "A13 S^m0_n", "section": 7, "page": 174, "statement": "?M(↓x)?M(↓y) ⊢ ?M(↓(xy))"}
+  - {"id": "12-m0-A14", "kind": "axiom", "label": "A14 S^m0_n", "section": 7, "page": 174, "statement": "N(↓x) ⊢ N(↓(N(↓x)))"}
+  - {"id": "12-m0-A15", "kind": "axiom", "label": "A15 S^m0_n", "section": 7, "page": 174, "statement": "M(↓(M(↓x))) ⊢ M(↓x)"}
+  - {"id": "12-m0-R", "kind": "rule", "label": "R1, R2 S^m0_n", "section": 7, "page": 174, "statement": "если x ⊢ y, то N(↓x) ⊢ N(↓y); M(↓x) ⊢ M(↓y)"}
+  - {"id": "12-m0c", "kind": "method", "label": "S^m0_c", "section": 7, "page": 174, "statement": "исключаются A12, A13; A3–A6 заменяются на N(↓x) ⊢ ∼M(↓∼x), ∼M(↓∼x) ⊢ N(↓x)"}
+  - {"id": "12-l8-A*1", "kind": "axiom", "label": "A*1 § 8", "section": 8, "page": 175, "statement": "LN(↓x) ⊢ ∼LM(↓∼x)"}
+  - {"id": "12-l8-A*2", "kind": "axiom", "label": "A*2 § 8", "section": 8, "page": 175, "statement": "∼LM(↓∼x) ⊢ LN(↓x)"}
+  - {"id": "12-l8-A*3", "kind": "axiom", "label": "A*3 § 8", "section": 8, "page": 175, "statement": "LN(↓x) ⊢ N(↓x)"}
+  - {"id": "12-l8-A*4", "kind": "axiom", "label": "A*4 § 8", "section": 8, "page": 175, "statement": "M(↓x) ⊢ LM(↓x)"}
+  - {"id": "12-l8-A*5", "kind": "axiom", "label": "A*5 § 8", "section": 8, "page": 175, "statement": "LC(↓x) ⊢ LM(↓x)LM(↓∼x)"}
+  - {"id": "12-l8-A*6", "kind": "axiom", "label": "A*6 § 8", "section": 8, "page": 175, "statement": "LM(↓x)LM(↓∼x) ⊢ LC(↓x)"}
+  - {"id": "12-l8-T1", "kind": "theorem", "label": "T1 § 8", "section": 8, "page": 175, "statement": "⊢ M(↓x) ∨ M(↓∼x)"}
+  - {"id": "12-R*1", "kind": "rule", "label": "R*1", "section": 8, "page": 175, "statement": "если ⊢ x, то ⊢ LN(↓x)", "errors": ["применять к x ⊢ y"]}
+  - {"id": "12-T1-9", "kind": "theorem", "label": "T1 § 9", "section": 9, "page": 175, "statement": "E(↓x) ⊢ M(↓x)"}
+  - {"id": "12-T2-9", "kind": "theorem", "label": "T2 § 9", "section": 9, "page": 175, "statement": "N(↓x) ⊢ E(↓x)"}
+  - {"id": "12-T3-9", "kind": "theorem", "label": "T3 § 9", "section": 9, "page": 175, "statement": "U(↓x) ⊢ N(↓x)"}
+  - {"id": "12-T4-9", "kind": "theorem", "label": "T4 § 9", "section": 9, "page": 175, "statement": "¬ U(↓x) ⊢ M(↓∼x)"}
+  - {"id": "12-T5-9", "kind": "theorem", "label": "T5 § 9", "section": 9, "page": 175, "statement": "C(↓x) ⊢ ¬ U(↓x)"}
+  - {"id": "12-T6-9", "kind": "theorem", "label": "T6 § 9", "section": 9, "page": 175, "statement": "¬ M(↓x) ⊢ ¬ E(↓x)"}
+  - {"id": "12-10", "kind": "theorem", "label": "§ 10", "section": 10, "page": 175, "statement": "¬M(↓(x∼y)) ⊢ (x→y) недоказуема в S^mi_n (не тавтология); ∼M(↓(x∼y)) ⊢ (x→y) недоказуема в S^mi_c; ни то, ни другое не сокращение для (x→y)"}
+  - {"id": "12-MT1-11", "kind": "metatheorem", "label": "MT1 § 11", "section": 11, "page": 176, "statement": "(αVa)z ↔ (αNa)z, (α∃a)z ↔ (αMa)z: (x⊢y)^q доказуема е. т. е. (x⊢y)^m"}
+  - {"id": "12-MT2-11", "kind": "metatheorem", "label": "MT2 § 11", "section": 11, "page": 176, "statement": "(αVa)z ↔ αN(↓z), (α∃a)z ↔ αM(↓z)", "errors": ["MT2 даёт операторы, а не предикаты"]}
+  - {"id": "12-p-alph", "kind": "definition", "label": "§ 12", "section": 12, "page": 176, "statement": "предикаты вероятности p=α, p>α, p<α, p≥α, p≤α (0≤α≤1); запись p(↓x)=α"}
+  - {"id": "12-mp-A1", "kind": "axiom", "label": "A1 S^mp_n", "section": 12, "page": 177, "statement": "⊢ 0 ≤ p(↓x) ≤ 1"}
+  - {"id": "12-mp-A2", "kind": "axiom", "label": "A2 S^mp_n", "section": 12, "page": 177, "statement": "⊢ (p(↓x)=0) → ¬M(↓x)"}
+  - {"id": "12-mp-A3", "kind": "axiom", "label": "A3 S^mp_n", "section": 12, "page": 177, "statement": "⊢ ¬M(↓x) → (p(↓x)=0)"}
+  - {"id": "12-mp-A4", "kind": "axiom", "label": "A4 S^mp_n", "section": 12, "page": 177, "statement": "⊢ (p(↓x)=1) → N(↓x)"}
+  - {"id": "12-mp-A5", "kind": "axiom", "label": "A5 S^mp_n", "section": 12, "page": 177, "statement": "⊢ N(↓x) → (p(↓x)=1)"}
+  - {"id": "12-mp-A6", "kind": "axiom", "label": "A6 S^mp_n", "section": 12, "page": 177, "statement": "⊢ M(↓x) → (0<p(↓x))"}
+  - {"id": "12-mp-A7", "kind": "axiom", "label": "A7 S^mp_n", "section": 12, "page": 177, "statement": "⊢ (0<p(↓x)) → M(↓x)"}
+  - {"id": "12-mp-A8", "kind": "axiom", "label": "A8 S^mp_n", "section": 12, "page": 177, "statement": "⊢ M(↓∼x) → (p(↓x)<1)"}
+  - {"id": "12-mp-A9", "kind": "axiom", "label": "A9 S^mp_n", "section": 12, "page": 177, "statement": "⊢ (p(↓x)<1) → M(↓∼x)"}
+  - {"id": "12-mp-A10", "kind": "axiom", "label": "A10 S^mp_n", "section": 12, "page": 177, "statement": "⊢ p↓(x¹·…·xⁿ) ≤ min(…)"}
+  - {"id": "12-mp-A11", "kind": "axiom", "label": "A11 S^mp_n", "section": 12, "page": 177, "statement": "⊢ p↓(x¹∨…∨xⁿ) ≥ max(…)"}
+  - {"id": "12-mp-A12", "kind": "axiom", "label": "A12 S^mp_n", "section": 12, "page": 177, "statement": "⊢ (x→(p(↓y)=α))(p(↓x)=β) → (p(↓y) ≤ min(α,β))"}
+  - {"id": "12-mp-A13", "kind": "axiom", "label": "A13 S^mp_n", "section": 12, "page": 177, "statement": "⊢ (p↓(x→y)=α) → (x→(p(↓y)=α))"}
+  - {"id": "12-mp-A14", "kind": "axiom", "label": "A14 S^mp_n", "section": 12, "page": 177, "statement": "⊢ (x→(p(↓y)=α)) → (p↓(x→y)=α)"}
+  - {"id": "12-mp-A*12", "kind": "axiom", "label": "A*12", "section": 12, "page": 177, "statement": "⊢ (x→(p(↓y)=α))(p(↓x)=β) → (p(↓y)=α·β); возможны различные соглашения"}

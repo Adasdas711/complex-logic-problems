@@ -1,0 +1,73 @@
+# Глава 7 «Теория кванторов» (с. 98–131). Составлено по изображениям страниц PDF 99–132 (проверяющий V07).
+skills:
+  # § 1 (с. 98–99)
+  - {id: 07-alph, kind: definition, label: "алфавит, D1", section: 1, page: 98, statement: "∀, ∃, ←; D1 — элементарное высказывание (a ← b): a — субъект, b — соответственно местный предикат"}
+  - {id: 07-D2-3, kind: definition, label: "D2, D3", section: 1, page: 98, statement: "высказывание: элементарное; ∼x, (x¹·…·xⁿ), (x¹∨…∨xⁿ); (∀a)x, (∃a)x; кванторная группа (∀a), (∃a)"}
+  - {id: 07-D4-5, kind: definition, label: "D4, D5", section: 1, page: 99, statement: "свободный/связанный термин; свободное и связанное вхождение термина", errors: ["вхождение a в (a ← b) внутри (∀a)… считают свободным", "внешнюю группу распространяют на вхождения, уже связанные внутренней группой"]}
+  - {id: 07-D6, kind: definition, label: "D6", section: 1, page: 99, statement: "вырожденная группа (Ka) в (Ka)x — в x нет свободных вхождений a"}
+  - {id: 07-D7, kind: definition, label: "D7", section: 1, page: 99, statement: "бескванторная форма: исключить все кванторные группы", errors: ["вместе с группой стирают ∼ перед ней", "теряют члены"]}
+  # § 2 (с. 99–100)
+  - {id: 07-A1, kind: axiom, label: A1, section: 2, page: 99, statement: "(∀a)x ⊢ x"}
+  - {id: 07-A2, kind: axiom, label: A2, section: 2, page: 99, statement: "x ⊢ (∃a)x"}
+  - {id: 07-A3, kind: axiom, label: A3, section: 2, page: 99, statement: "(∀a)x(∃a)y ⊢ (∃a)(xy)"}
+  - {id: 07-A4, kind: axiom, label: A4, section: 2, page: 99, statement: "(∀a)(x∨y) ⊢ (∀a)x ∨ (∃a)y"}
+  - {id: 07-A5, kind: axiom, label: A5, section: 2, page: 99, statement: "(∃a)x ⊢ (∀a)x, где a не входит свободно в x", errors: ["условие на свободное вхождение не проверено"]}
+  - {id: 07-A6-7, kind: axiom, label: "A6, A7", section: 2, page: 99, statement: "(∀a)x ⊢ ∼(∃a)∼x; ∼(∃a)∼x ⊢ (∀a)x"}
+  - {id: 07-R1-2, kind: rule, label: "R1, R2", section: 2, page: 100, statement: "x ⊢ y ⇒ (∀a)x ⊢ (∀a)y; x ⊢ y ⇒ (∃a)x ⊢ (∃a)y", errors: ["навешивают разные группы на посылку и заключение"]}
+  - {id: 07-Ss-ref, kind: method, label: "ссылки на S^s", section: 2, page: 100, statement: "S^s_cq = S^s + § 1 + A1–A7, R1, R2; формулы S^s и правила S^s (транзитивность, соединение заключений) применяются к высказываниям с кванторами как к буквам (§ 6, с. 102)", errors: ["R1 S^s и R2 S^s перепутаны"]}
+  # § 3 (с. 100)
+  - {id: 07-MT1-3, kind: metatheorem, label: "MT1 § 3", section: 3, page: 100, statement: "непарадоксальность: в заключение не входят элементарные высказывания, отсутствующие в посылке"}
+  - {id: 07-MT2-3, kind: metatheorem, label: "MT2 § 3", section: 3, page: 100, statement: "недоказуемы формулы, в заключение которых входят термины, отсутствующие в посылке"}
+  - {id: 07-MT3-3, kind: metatheorem, label: "MT3 § 3", section: 3, page: 100, statement: "бескванторная форма доказуемой формулы доказуема в S^s", errors: ["обращение MT3 (необходимое условие как достаточное)"]}
+  # § 4 (с. 100–101)
+  - {id: 07-cons, kind: method, label: "§ 4", section: 4, page: 100, statement: "непротиворечивость: бескванторные формы аксиом — x⊢x, xy⊢xy, x∨y⊢x∨y, x⊢∼∼x, ∼∼x⊢x; правила сохраняют"}
+  # § 5 (с. 101–102)
+  - {id: 07-indep, kind: method, label: "§ 5", section: 5, page: 101, statement: "независимость: исключающие семантические правила для A1–A7, R1, R2 + общее правило (прочие формулы равнозначны бескванторным формам)", errors: ["исключающее правило применено «наоборот»", "общее правило применено без исключающего"]}
+  # § 6 (с. 102–105)
+  - {id: 07-MT1-2-6, kind: metatheorem, label: "MT1, MT2 § 6", section: 6, page: 102, statement: "MT1 — свойства S^s; MT2 — контрапозиция при совпадении множеств элементарных высказываний"}
+  - {id: 07-T1-9, kind: theorem, label: "T1–T9 § 6", section: 6, page: 102, statement: "законы отрицания кванторов (T1 ∼(∀a)x ⊢ (∃a)∼x … T9)"}
+  - {id: 07-MTstar, kind: metatheorem, label: "MT*1, MT*2; MT3–MT5 § 6", section: 6, page: 103, statement: "производные правила ∼(Ka)y ⊢ ∼(Ka)x; MT3–MT5"}
+  - {id: 07-T10-16, kind: theorem, label: "T10–T16, T33, T38–T41", section: 6, page: 104, statement: "перестановка кванторов", errors: ["(∀b)(∃a)x ⊢ (∃a)(∀b)x считают теоремой"]}
+  - {id: 07-T17-18, kind: theorem, label: "T17, T18", section: 6, page: 104, statement: "x ⊢ (∀a)x и (∃a)x ⊢ x при a, не входящем свободно в x", errors: ["условие не проверено"]}
+  - {id: 07-T19-26, kind: theorem, label: "T19–T26, T29–T32, T34–T36, T42", section: 6, page: 104, statement: "вынос и внесение кванторов в конъюнкции и дизъюнкции", errors: ["(∃a)x(∃a)y ⊢ (∃a)(xy)", "(∀a)(x∨y) ⊢ (∀a)x ∨ (∀a)y"]}
+  - {id: 07-T27-28-37, kind: theorem, label: "T27, T28, T37", section: 6, page: 104, statement: "(∀a)x ⊢ (∃a)x; ∼(∃a)x ⊢ ∼(∀a)x; ∼(∀a)∼x ⊢ (∃a)x", errors: ["обращение T27"]}
+  # § 7 (с. 105–106)
+  - {id: 07-D1-7, kind: definition, label: "D1 § 7", section: 7, page: 105, statement: "отмеченные термины ia; x(ia) — замена a на ia там, где a свободно"}
+  - {id: 07-D2-7, kind: interpretation, label: "D2 § 7", section: 7, page: 105, statement: "интерпретационная форма: 1) замыкание свободных терминов (∀ или ∃ на обе части); 2) отбрасывание вырожденных групп; 3) (∀b)z → конъюнкция z(ib), (∃b)z → дизъюнкция; n = 0 → z", errors: ["замена ia и внутри области одноимённой группы", "∃ раскрыт конъюнкцией", "п. 1 пропущен"]}
+  - {id: 07-D3-7, kind: definition, label: "D3 § 7", section: 7, page: 105, statement: "тавтология — каждая интерпретационная форма тавтология при любом числе отмеченных терминов"}
+  - {id: 07-direct, kind: interpretation, label: "прямая интерпретация, D*3", section: 7, page: 106, statement: "пп. 1–5 прямой интерпретации; D*3; равноценность прямой и косвенной"}
+  # § 8 (с. 107–116)
+  - {id: 07-D1-8, kind: definition, label: "D1 § 8", section: 8, page: 107, statement: "базисные формулы видов 1–8 (α…δ — наличие/отсутствие отрицания)", errors: ["перестановка членов принимается за базисный вид"]}
+  - {id: 07-MT1-8, kind: metatheorem, label: "MT1 § 8", section: 8, page: 108, statement: "базисная тавтология доказуема; перебор подслучаев 1–8 (с. 108–110)"}
+  - {id: 07-MT2-5-8, kind: metatheorem, label: "MT2–MT5 § 8", section: 8, page: 110, statement: "n-членные конъюнкции и дизъюнкции под квантором и вне его"}
+  - {id: 07-MT6-8, kind: metatheorem, label: "MT6 § 8", section: 8, page: 113, statement: "перестановка любого числа кванторов: цепочка базисных тавтологий + R1, R2"}
+  - {id: 07-MT7-8, kind: metatheorem, label: "MT7 § 8", section: 8, page: 114, statement: "полнота в узком смысле: тавтология с совпадающими (с точностью до ∼∼) бескванторными частями доказуема; разбор случаев i ⊢ k", errors: ["MT7 применяют при различных бескванторных формах"]}
+  # § 9 (с. 116–120)
+  - {id: 07-D1-9, kind: definition, label: "D1 § 9", section: 9, page: 116, statement: "контрольная форма: п. 1 (без изменений) / п. 2 (ДНФ, ∼∼a → a, ∼a → новое элементарное)", errors: ["замена ∼a при недоказуемых ⊢y*, ⊢∼x*"]}
+  - {id: 07-MT1-5-9, kind: metatheorem, label: "MT1–MT5 § 9", section: 9, page: 117, statement: "свойства контрольной формы"}
+  - {id: 07-MT6-9, kind: metatheorem, label: "MT6 § 9, процедура", section: 9, page: 119, statement: "разрешимость: шаг 1 — бескванторная форма в S^s; шаг 2 — контрольная форма — тавтология", errors: ["шаг 2 без шага 1", "вывод о доказуемости из одного шага 1"]}
+  # § 10 (с. 120–121)
+  - {id: 07-S5cq, kind: definition, label: "R1, D1, D2 § 10", section: 10, page: 120, statement: "S^5_cq: ⊢x ⇒ ⊢(∀a)x; интерпретационная форма ⊢x — только ∀-замыкание; тавтология при любом числе отмеченных"}
+  - {id: 07-MT-10, kind: metatheorem, label: "MT1, MT2 § 10", section: 10, page: 121, statement: "доказуемая ⊢x — тавтология; ⊢(∀a)(a←b)⊃(c←b) и ⊢(c←b)⊃(∃a)(a←b) недоказуемы"}
+  # § 11 (с. 121–122)
+  - {id: 07-Sstar, kind: axiom, label: "A*5, T1–T6, A8, MT1 § 11", section: 11, page: 121, statement: "A*5 — при свободном a, если ⊢x доказуема в S^5; T1–T4 (x — тавтология), T5, T6 недоказуемы в S^s_cq; A8; MT1 — полнота в смысле § 9", errors: ["T1–T4 § 11 при нетавтологичном x"]}
+  # § 12 (с. 122–123)
+  - {id: 07-nq-lang, kind: definition, label: "§ 12, алфавит", section: 12, page: 122, statement: "⌝, ?; (⌝∀a)x, (?∀a)x, (⌝∃a)x, (?∃a)x"}
+  - {id: 07-nq-ax, kind: axiom, label: "A^i6–A^i9, A10–A12", section: 12, page: 123, statement: "схемы S^s_nq вместо A6, A7", errors: ["A6/A7 используются в S^s_nq"]}
+  # § 13 (с. 123–124)
+  - {id: 07-D1-13, kind: definition, label: "D1 § 13", section: 13, page: 123, statement: "бескванторная форма S^s_nq: (?Kb)z → ∼(Kb)z∼(⌝Kb)z; (⌝Kb)z → ∼(Kb)z; группы исключить; непротиворечивость (с. 124)"}
+  # § 14 (с. 124)
+  - {id: 07-nq-T, kind: theorem, label: "MT1, T1–T8 § 14", section: 14, page: 124, statement: "непарадоксальность S^s_nq; T1–T8", errors: ["обращение T8"]}
+  # § 15 (с. 125–126)
+  - {id: 07-nq-int, kind: interpretation, label: "§ 15", section: 15, page: 125, statement: "косвенная ({x}, {∼x} не оба 1; замены пп. a–c) и прямая (?(Ka)x ≡ ∼(Ka)x∼(⌝Ka)x; (Ka)x и (⌝Ka)x не оба 1) интерпретации; MT1–MT3", errors: ["из {x} = 0 выводят {∼x} = 1"]}
+  # § 16–17 (с. 126–127)
+  - {id: 07-S5nq, kind: theorem, label: "T1–T8, MT1–MT3 § 16", section: 16, page: 126, statement: "S^5_nq: T1–T8; неклассическое отношение (αKa)x, (βKa)x; ⊢(Ka)x ∨ (⌝Ka)x недоказуема"}
+  - {id: 07-A13, kind: axiom, label: "A*13, T1–T3 § 17", section: 17, page: 127, statement: "классический вариант: ∼(∀a)x ⊢ (⌝∀a)x; ⊢∼(?Ka)x; (∀a)x ⊣⊢ ∼(∃a)∼x; ⊢(Ka)x ∨ (⌝Ka)x"}
+  # § 18 (с. 127–128)
+  - {id: 07-r18, kind: method, label: "§ 18", section: 18, page: 127, statement: "замена (⌝∀b)z → (∃b)∼z и т. д.; семантические правила; схемы 1–15; 1–4, 5, 6, 9, 12 отпадают как зависимые"}
+  # § 19 (с. 129–130)
+  - {id: 07-subst, kind: metatheorem, label: "MT1–MT5 § 19", section: 19, page: 129, statement: "подстановка в S^s; теоремы 1–14 (простые термины); MT2–MT5 — производные правила подстановки, условие для a¹ в T13, T14", errors: ["MT2 к T13, T14", "подстановка не «везде»"]}
+  # § 20 (с. 130–131)
+  - {id: 07-ext, kind: axiom, label: "A*I, A*II § 20", section: 20, page: 130, statement: "(Ka)(Kb)x ⊣⊢ (K(a,b))x при одинаковом K; группы ((K¹a)·(K²b)), ((K¹a)∨(K²b))", errors: ["A*I при разных K"]}
+  # § 21 (с. 131)
+  - {id: 07-cond, kind: axiom, label: "схемы 1–5 § 21", section: 21, page: 131, statement: "кванторы и условные высказывания; классический случай — (∃a)∼(x→y) ⊢ ∼(x→y)"}

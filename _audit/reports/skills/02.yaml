@@ -1,0 +1,37 @@
+# Глава 2 «Сильное следование (другой вариант)» (с. 36–48). Дополненный проверяющим V02 перечень:
+# записи из src/data/skills/02.yaml сохранены (id те же), добавленные помечены «new: true».
+skills:
+  # § 1 Система S₁ (с. 36–37)
+  - {id: 02-wdis, kind: interpretation, label: "∨", section: 1, page: 36, statement: "x¹∨…∨xⁿ = 0 ⇔ все xⁱ = 0", errors: ["∨ как сильная дизъюнкция"]}
+  - {id: 02-A1-2, kind: axiom, label: "A1, A2", section: 1, page: 36, statement: "∼∼x ⊢ x; x ⊢ ∼∼x", errors: ["нумерация как в S¹ (обратная)"]}
+  - {id: 02-A3-6, kind: axiom, label: "A3–A6", section: 1, page: 36, statement: "xy⊢x; xy⊢yx; расстановка скобок в конъюнкции"}
+  - {id: 02-A7-8, kind: axiom, label: "A7, A8", section: 1, page: 36, statement: "(x∨y)z ⊢ xz∨y; xz∨yz ⊢ (x∨y)z"}
+  - {id: 02-A9-10, kind: axiom, label: "A9, A10", section: 1, page: 36, statement: "∼(x¹…xⁿ) ⊣⊢ ∼x¹∨…∨∼xⁿ"}
+  - {id: 02-A11, kind: axiom, label: A11, section: 1, page: 36, statement: "xy∨z ⊢ (xy∨z)(y∨∼y)"}
+  - {id: 02-R1-3, kind: rule, label: "R1–R3 (как в S¹)", section: 1, page: 36, statement: "R1 транзитивность, R2 соединение заключений при общей посылке, R3 замена равнозначного (с. 17)", new: true, errors: ["R2 вместо R1 и наоборот"]}
+  - {id: 02-MT-cons, kind: metatheorem, label: "с. 37", section: 1, page: 37, statement: "для S₁ — аналоги MT1–MT3 § 4 и MT1, MT2 § 6 гл. 1: непарадоксальность и непротиворечивость", new: true}
+  - {id: 02-A11s, kind: axiom, label: "A*11 (с. 37)", section: 1, page: 37, statement: "x ∨ ∼yyz ⊢ x — «более простая» схема вместо A11 в S₁", errors: ["смешение с A*11 системы S₁* (с. 45)"]}
+  - {id: 02-D1-1, kind: definition, label: "D1 § 1", section: 1, page: 37, statement: "x : y — сокращение x∼y ∨ ∼xy; n-членная"}
+  - {id: 02-A12-13, kind: axiom, label: "A12, A13 (с. 37)", section: 1, page: 37, statement: "сильная дизъюнкция как первичный оператор: x¹:…:xⁿ ⊣⊢ y¹∨…∨yⁿ", new: true}
+  # § 2 Полнота (с. 37–43)
+  - {id: 02-T1, kind: theorem, label: "T1 § 2, пп. 1–7", section: 2, page: 37, statement: "перестановки и скобки, xx⊣⊢x, x∨x⊣⊢x, (x∨y)z⊣⊢xz∨yz; п. 7 x ⊣⊢ x(p∨∼p) — индукцией по числу операторов", new: true}
+  - {id: 02-T2, kind: theorem, label: "T2 § 2, пп. 1–11", section: 2, page: 39, statement: "x ∨ ∼ppy ⊣⊢ x; п. 10 x ⊢ x ∨ y (высказывания y из x); п. 9 xy∨z ⊣⊢ (x∨z)(y∨z)", new: true}
+  - {id: 02-D1-2, kind: definition, label: "D1, D2 § 2", section: 2, page: 39, statement: "каноническая форма: n ≥ 2, все элементарные в каждом члене, обе полярности, попарно различны"}
+  - {id: 02-MT1-2, kind: metatheorem, label: "MT1 § 2", section: 2, page: 40, statement: "приведение x ⊢ y к канонической форме: индукция по числу операторов + сомножители (pⁱ ∨ ∼pⁱ)", new: true}
+  - {id: 02-MT4-2, kind: metatheorem, label: "MT2–MT4 § 2", section: 2, page: 42, statement: "MT2, MT3 очевидные; MT4 разбор случаев: y — противоречие / выполнимо и не тавтология / тавтология", new: true}
+  - {id: 02-MT-2, kind: metatheorem, label: "MT5 § 2", section: 2, page: 43, statement: "полнота: сильная тавтология — теорема S₁"}
+  - {id: 02-MT6-7, kind: metatheorem, label: "MT6, MT7 § 2", section: 2, page: 43, statement: "производные правила: x⊢y∨z, z⊢v ⇒ x⊢y∨v; x⊢y, z⊢v ⇒ x∨z⊢y∨v", new: true}
+  # § 3 Независимость (с. 43–45)
+  - {id: 02-indep, kind: method, label: "§ 3", section: 3, page: 43, statement: "метод: таблица, где все схемы, кроме данной, тавтологичны и правила сохраняют тавтологичность"}
+  - {id: 02-ind2, kind: interpretation, label: "§ 3, пп. 1–6, 9; R2", section: 3, page: 43, statement: "двузначные таблицы для A1–A6, A9, R2", new: true}
+  - {id: 02-ind-syn, kind: interpretation, label: "§ 3, пп. 7, 8", section: 3, page: 44, statement: "синтаксические соглашения для A7 (∨ сильнее ·) и A8 (особые условия а), в), с))", new: true}
+  - {id: 02-ind3, kind: interpretation, label: "§ 3, пп. 10, 11; R1, R3", section: 3, page: 44, statement: "трёхзначные таблицы для A10, A11, R1, R3", new: true}
+  # § 4 (с. 45)
+  - {id: 02-MT1-4, kind: metatheorem, label: "MT1 § 4", section: 4, page: 45, statement: "множества теорем S¹ и S₁ совпадают (при D2 § 3 гл. 1 / A17, A18 и D1 § 1 / A12, A13)"}
+  # § 5 (с. 45–48)
+  - {id: 02-Ss, kind: definition, label: "Sˢ § 5", section: 5, page: 45, statement: "Sˢ — S¹, S₁ и любая эквивалентная им система сильного следования", new: true}
+  - {id: 02-A11ss, kind: axiom, label: "A*11 (с. 45), R*4", section: 5, page: 45, statement: "S₁*: A*11 x ∨ ∼xx ⊢ x и R*4 (x ⊢ y ⇒ x ⊢ y ∨ z, z без новых высказываний) вместо A8 и A11"}
+  - {id: 02-S1s-T, kind: theorem, label: "T1–T3 S₁* (с. 46)", section: 5, page: 46, statement: "выводы T1 x ⊢ x(y∨∼y), T2 (= A11), T3 (= A8) в S₁*; эквивалентность S₁ и S₁*", new: true}
+  - {id: 02-S1s-ind, kind: method, label: "с. 47", section: 5, page: 47, statement: "независимость S₁*: A*11 — как A11; R1 — трёхзначная таблица; R*4 — как A8", new: true}
+  - {id: 02-S1ss, kind: axiom, label: "S₁** (с. 47)", section: 5, page: 47, statement: "A**9 ∼(x∨y) ⊢ ∼x∼y, A**10 обратная, A**11 x ∨ ∼yy ⊢ x, R**3 контрапозиция при одинаковых элементарных высказываниях; R3 производное; независимость A**10 (трёхзначная), A3 (соглашение)", new: true}
+  - {id: 02-S1var, kind: definition, label: "S*¹, S₁⁰ (с. 48)", section: 5, page: 48, statement: "S*¹ — из S¹ заменой R3 на R*3 (с «:»); S₁⁰ — то же с «∨»", new: true}

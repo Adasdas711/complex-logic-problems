@@ -1,0 +1,84 @@
+# Глава 1 «Сильное следование» (с. 15–35) — полный перечень навыков (V01).
+# Дополняет src/data/skills/01.yaml: § 1 разбит по схемам (A9–A14 — частные и общие строки), § 2 — по группам
+# теоремных схем, § 3 — по схемам A15–A18, § 4–9 — по метатеоремам и приёмам доказательств.
+# Поле tasks — число задач 01.md, где навык явно задействован (метка книги или узнаваемая формула; оценка по
+# скрипту audit/coverage.py с ручной проверкой, ± несколько задач).
+skills:
+  # § 1. Система S¹ (с. 15–17)
+  - {id: 01-ops, kind: definition, label: "операторы S¹", section: 1, page: 15, statement: "· — конъюнкция, : — сильная дизъюнкция («одно и только одно из»), ∼ — отрицание", tasks: 39}
+  - {id: 01-conv, kind: definition, label: "соглашение о скобках", section: 1, page: 15, statement: "конъюнкция связывает сильнее дизъюнкции, обе — сильнее ⊢; знак · опускается", errors: ["x(yz) и xyz считают одним высказыванием", "x : yz читают как (x : y)z", "∼xy читают как ∼(xy)"], tasks: 39}
+  - {id: 01-D1, kind: definition, label: D1, section: 1, page: 15, statement: "элементарные относительно S¹ высказывания — нерасчленимые на высказывания и ·, :, ∼", tasks: 3}
+  - {id: 01-D2, kind: definition, label: D2, section: 1, page: 15, statement: "высказывание S¹: пп. 1–4; (x¹·…·xⁿ) и (x¹:…:xⁿ) при n ≥ 2 — одно высказывание, не вложенные двучленные", errors: ["(x·y·z) отождествляют с ((x·y)·z)", "(x·y) считают вхождением в (x·y·z) (Введение § 7, с. 9)"], tasks: 8}
+  - {id: 01-A1, kind: axiom, label: A1, section: 1, page: 15, statement: "x ⊢ ∼∼x", errors: ["путают с A2"], tasks: 100}
+  - {id: 01-A2, kind: axiom, label: A2, section: 1, page: 15, statement: "∼∼x ⊢ x", errors: ["путают с A1"], tasks: 80}
+  - {id: 01-A3, kind: axiom, label: A3, section: 1, page: 15, statement: "xy ⊢ x (двучленная конъюнкция)", errors: ["xy ⊢ y считают аксиомой", "применяют к xyz"], tasks: 125}
+  - {id: 01-A4, kind: axiom, label: A4, section: 1, page: 16, statement: "xy ⊢ yx", tasks: 115}
+  - {id: 01-A5, kind: axiom, label: A5, section: 1, page: 16, statement: "x¹x²…xⁿ ⊢ y, y отличается от (x¹…xⁿ) лишь расстановкой скобок по D2", errors: ["путают направление с A6"], tasks: 50}
+  - {id: 01-A6, kind: axiom, label: A6, section: 1, page: 16, statement: "y ⊢ x¹x²…xⁿ, y — как в A5", errors: ["путают направление с A5"], tasks: 45}
+  - {id: 01-A7, kind: axiom, label: A7, section: 1, page: 16, statement: "∼(xy) ⊢ ∼xy : x∼y : ∼x∼y", tasks: 55}
+  - {id: 01-A8, kind: axiom, label: A8, section: 1, page: 16, statement: "∼xy : x∼y : ∼x∼y ⊢ ∼(xy)", tasks: 43}
+  - {id: 01-A9, kind: axiom, label: A9, section: 1, page: 16, statement: "∼(x:y) ⊢ xy : ∼x∼y; общий вид ∼(x¹:…:xⁿ) ⊢ y¹:…:yᵐ, yʲ — (x¹…xⁿ), отрицания перед всеми и перед i из них, 1 ≤ i ≤ n−2", errors: ["берут члены с i > n−2", "забывают член с отрицаниями перед всеми"], tasks: 60}
+  - {id: 01-A10, kind: axiom, label: A10, section: 1, page: 16, statement: "xy : ∼x∼y ⊢ ∼(x:y); общий вид — обращение A9", tasks: 50}
+  - {id: 01-A11, kind: axiom, label: A11, section: 1, page: 16, statement: "x¹:x²:…:xⁿ ⊢ y, y отличается лишь расстановкой скобок по D2", errors: ["применяют в обратную сторону: (x:y):z ⊢ x:y:z"], tasks: 11}
+  - {id: 01-A12, kind: axiom, label: A12, section: 1, page: 16, statement: "y ⊢ x¹:…:xⁿ, каждый xⁱ — (αⁱ¹z¹·…·αⁱᵐzᵐ) (попарно различны) либо ∼zⁱ₁zⁱ₁zⁱ; y — расстановка скобок", errors: ["считают, что A12 разрешает любое снятие скобок в дизъюнкции"], tasks: 9}
+  - {id: 01-A13, kind: axiom, label: A13, section: 1, page: 17, statement: "xy : yz ⊢ (x:y)z; общий вид x¹y : … : xⁿy ⊢ (x¹:…:xⁿ)y", tasks: 8}
+  - {id: 01-A14, kind: axiom, label: A14, section: 1, page: 17, statement: "(x:y)z ⊢ xz : y; (x¹:…:xⁿ)y ⊢ x¹y : x² : … : xⁿ; (x¹:…:xⁿ)(y¹:…:yᵐ) ⊢ x¹y¹:…:x¹yᵐ:x²:…:xⁿ", errors: ["конъюнкцию присоединяют ко всем членам (как в T9)"], tasks: 18}
+  - {id: 01-sch, kind: method, label: "частные и общие строки A6, A9, A10, A13, A14", section: 1, page: 17, statement: "схемы можно понимать как множества схем или последнюю строку как общий случай", tasks: 2}
+  - {id: 01-R1, kind: rule, label: R1, section: 1, page: 17, statement: "x ⊢ y, y ⊢ z ⇒ x ⊢ z", errors: ["заключение первой формулы не совпадает с посылкой второй"], tasks: 125}
+  - {id: 01-R2, kind: rule, label: R2, section: 1, page: 17, statement: "x ⊢ y, x ⊢ z ⇒ x ⊢ yz", errors: ["разные посылки", "путают с R1"], tasks: 110}
+  - {id: 01-R3, kind: rule, label: R3, section: 1, page: 17, statement: "x ⊢ y, y ⊢ x ⇒ z ⊢ v, v — замена вхождения (не обязательно всех) x в z на y", errors: ["заменяют не вхождение (xy в xyz)", "применяют при одной формуле x ⊢ y", "путают с R1"], tasks: 70}
+  - {id: 01-D6, kind: definition, label: D6, section: 1, page: 17, statement: "доказуемость в S¹ (теорема — аксиома или результат правил из теорем); индукция по выводу", tasks: 14}
+  # § 2. Теоремные схемы (с. 17–20)
+  - {id: 01-dashv, kind: definition, label: "⊣⊢", section: 2, page: 17, statement: "x ⊣⊢ y — сокращение для x ⊢ y и y ⊢ x", tasks: 3}
+  - {id: 01-T1-5, kind: theorem, label: "T1–T5", section: 2, page: 18, statement: "xy ⊢ y; x ⊢ x; x ⊢ xx; xx ⊢ x; yx ⊢ xy (с основаниями книги)", tasks: 48}
+  - {id: 01-T6-7, kind: theorem, label: "T6, T7", section: 2, page: 18, statement: "x:y ⊢ y:x — пятишаговый вывод через ∼∼ и R3; T7", tasks: 18}
+  - {id: 01-T8, kind: theorem, label: T8, section: 2, page: 18, statement: "коммутация x¹:…:xⁿ (A5, A6, A9–A12, T6, T7); ссылки на A1, A5, A6, T2–T8 опускаются", errors: ["применяют T6 к трёхчленной дизъюнкции"], tasks: 3}
+  - {id: 01-T9-10, kind: theorem, label: "T9, T10", section: 2, page: 18, statement: "(x:y)z ⊢ xz : yz; общий случай n членов", tasks: 0}
+  - {id: 01-T11-14, kind: theorem, label: "T11–T14", section: 2, page: 18, statement: "x ⊣⊢ x : x∼x : x∼x; x ⊣⊢ x : x∼x (девятишаговый вывод T13)", tasks: 2}
+  - {id: 01-T15-17, kind: theorem, label: "T15–T17", section: 2, page: 19, statement: "x:y ⊣⊢ x∼y : ∼xy; общий случай T17", tasks: 2}
+  - {id: 01-T18-21, kind: theorem, label: "T18–T21", section: 2, page: 19, statement: "x ⊣⊢ x(x:∼x); xz:y ⊣⊢ (xz:y)(x:∼x)", tasks: 5}
+  - {id: 01-T22-23, kind: theorem, label: "T22, T23", section: 2, page: 20, statement: "(x:y)x ⊢ ∼y; (x:y)∼x ⊢ y", tasks: 4}
+  # § 3. Сокращающие определения (с. 20)
+  - {id: 01-D1-3, kind: definition, label: "D1 § 3", section: 3, page: 20, statement: "(x ⊃ y) — сокращение для xy : ∼xy : ∼x∼y; иного смысла нет", errors: ["⊃ отождествляют с ⊢"], tasks: 24}
+  - {id: 01-D2-3, kind: definition, label: "D2 § 3", section: 3, page: 20, statement: "(x ∨ y) — сокращение для ∼(∼x∼y); x¹∨…∨xⁿ — для ∼(∼x¹…∼xⁿ); «по крайней мере одно из»", errors: ["∨ отождествляют с :"], tasks: 16}
+  - {id: 01-A15-16, kind: axiom, label: "A15, A16", section: 3, page: 20, statement: "x ⊃ y ⊣⊢ xy : ∼xy : ∼x∼y при первичном ⊃", tasks: 1}
+  - {id: 01-A17-18, kind: axiom, label: "A17, A18", section: 3, page: 20, statement: "x¹∨…∨xⁿ ⊣⊢ ∼(∼x¹…∼xⁿ) при первичном ∨", tasks: 1}
+  # § 4. Непарадоксальность (с. 21–22)
+  - {id: 01-MT1-4, kind: metatheorem, label: "MT1 § 4", section: 4, page: 21, statement: "в заключение теоремы не входят элементарные высказывания, отсутствующие в посылке", errors: ["обращение MT1", "смешение посылки и заключения", "ложность посылки как причина недоказуемости"], tasks: 84}
+  - {id: 01-MT1-4-proof, kind: method, label: "доказательство MT1 § 4", section: 4, page: 21, statement: "индукция по выводу: аксиомы, R1, R2, R3 (случаи 1–4)", tasks: 8}
+  - {id: 01-MT2-4, kind: metatheorem, label: "MT2 § 4", section: 4, page: 21, statement: "x ⊣⊢ y ⇒ множества элементарных высказываний совпадают", tasks: 5}
+  - {id: 01-MT3-4, kind: metatheorem, label: "MT3 § 4", section: 4, page: 21, statement: "недоказуемы x ⊢ y:∼y, ∼xx ⊢ y, x ⊢ ∼(∼yy), x ⊢ y ⊃ x, x ⊢ ∼x ⊃ y, x ⊢ y ∨ ∼y; x ⊢ (y ⊢ x), x ⊢ (∼x ⊢ y) — не доказуемые формулы", tasks: 12}
+  # § 5. Главная семантическая интерпретация (с. 22–24)
+  - {id: 01-int, kind: interpretation, label: "главная интерпретация, пп. 1–5", section: 5, page: 22, statement: "1/0; ∼; конъюнкция; x¹:…:xⁿ = 1 ⇔ ровно одно xⁱ = 1; x ⊢ y = 0 ⇔ x = 1, y = 0", errors: ["«:» как соединительная дизъюнкция", "x:y:z как (x:y):z («нечётное число»)"], tasks: 100}
+  - {id: 01-D1-5, kind: definition, label: "D1 § 5", section: 5, page: 22, statement: "тавтология (формула следования)", tasks: 60}
+  - {id: 01-D2-5, kind: definition, label: "D2 § 5", section: 5, page: 22, statement: "тавтология (высказывание)", tasks: 10}
+  - {id: 01-D3-5, kind: definition, label: "D3 § 5", section: 5, page: 22, statement: "противоречие — отрицание есть тавтология", tasks: 25}
+  - {id: 01-MT1-5, kind: metatheorem, label: "MT1 § 5", section: 5, page: 22, statement: "теорема S¹ — тавтология; доказательство: аксиомы A9–A12 (с. 23), R1–R3 (с. 24)", tasks: 60}
+  - {id: 01-MT2-3-5, kind: metatheorem, label: "MT2, MT3 § 5", section: 5, page: 24, statement: "теорема и x = 1 ⇒ y = 1; теорема и y = 0 ⇒ x = 0", errors: ["обращение MT2"], tasks: 6}
+  - {id: 01-MT4-5, kind: metatheorem, label: "MT4 § 5", section: 5, page: 24, statement: "x ⊣⊢ y ⇒ x и y равнозначны", errors: ["обращение MT4"], tasks: 5}
+  - {id: 01-MT5-5, kind: metatheorem, label: "MT5 § 5", section: 5, page: 24, statement: "теорема x ⊢ y ⇒ x ⊃ y — тавтология", errors: ["обращение без условия на элементарные высказывания"], tasks: 4}
+  # § 6. Непротиворечивость (с. 25)
+  - {id: 01-MT1-6, kind: metatheorem, label: "MT1 § 6", section: 6, page: 25, statement: "x ⊢ y — теорема, x не противоречие ⇒ x ⊢ ∼y не теорема", errors: ["забывают условие «x не противоречие»"], tasks: 8}
+  - {id: 01-MT2-6, kind: metatheorem, label: "MT2 § 6", section: 6, page: 25, statement: "x ⊢ ∼yy — теорема ⇒ x противоречие (через MT3 § 5)", tasks: 5}
+  # § 7. Полнота (с. 25–32)
+  - {id: 01-D1-7, kind: definition, label: "D1 § 7", section: 7, page: 25, statement: "сильная тавтология", tasks: 74}
+  - {id: 01-D2-7, kind: definition, label: "D2 § 7", section: 7, page: 25, statement: "каноническая форма высказывания: п. 1 x:∼x; п. 2a–2c (литеры по алфавиту, a раньше ∼a; члены различны; m ≥ 1)", errors: ["считают каноническую форму единственной с точностью до порядка членов", "нарушают порядок литер"], tasks: 20}
+  - {id: 01-D3-7, kind: definition, label: "D3 § 7", section: 7, page: 26, statement: "каноническая форма для x: y в канонической форме и x ⊣⊢ y", tasks: 11}
+  - {id: 01-D4-7, kind: definition, label: "D4 § 7", section: 7, page: 26, statement: "формула следования в канонической форме (общие элементарные высказывания, все ∼zz посылки — в заключении)", tasks: 2}
+  - {id: 01-D5-7, kind: definition, label: "D5 § 7", section: 7, page: 26, statement: "x* ⊢ y**: y** — каноническая форма для y*z(v:∼v)", errors: ["забывают v (элементарные x*, не входящие в y*)"], tasks: 4}
+  - {id: 01-T1-3-7, kind: theorem, label: "T1–T3 § 7", section: 7, page: 26, statement: "x∼x:xy ⊣⊢ xy; x∼xz:y ⊢ y", tasks: 2}
+  - {id: 01-MT1-7, kind: metatheorem, label: "MT1 § 7", section: 7, page: 27, statement: "существование канонической формы (случаи 1–6)", tasks: 3}
+  - {id: 01-MT2-3-7, kind: metatheorem, label: "MT2, MT3 § 7", section: 7, page: 27, statement: "каноническая форма сильной тавтологии — сильная тавтология; теорема ⇔ её каноническая форма — теорема", tasks: 2}
+  - {id: 01-MT4-5-7, kind: metatheorem, label: "MT4, MT5 § 7", section: 7, page: 29, statement: "члены посылки входят в заключение (k ≥ i); каноническая сильная тавтология — теорема (случаи 1–4 и случай ∼aa)", tasks: 6}
+  - {id: 01-MT6-7, kind: metatheorem, label: "MT6 § 7", section: 7, page: 32, statement: "сильная тавтология — теорема (полнота)", tasks: 70}
+  - {id: 01-MT7-7, kind: metatheorem, label: "MT7 § 7", section: 7, page: 32, statement: "x ⊃ y — тавтология и нет новых элементарных ⇒ x ⊢ y теорема", tasks: 5}
+  - {id: 01-MT8-7, kind: metatheorem, label: "MT8 § 7", section: 7, page: 32, statement: "контрапозиция при одинаковых элементарных высказываниях", errors: ["применяют к xy ⊢ x"], tasks: 7}
+  # § 8. Независимость (с. 33–35)
+  - {id: 01-indep, kind: method, label: "§ 8, метод", section: 8, page: 33, statement: "все прочие схемы тавтологичны, правила сохраняют тавтологичность, проверяемая схема — нет", errors: ["проверяют только опровергаемую схему", "из нетавтологичности в таблице делают вывод о недоказуемости в S¹"], tasks: 10}
+  - {id: 01-indep2, kind: interpretation, label: "§ 8, пп. 1–8", section: 8, page: 33, statement: "двузначные таблицы для A1, A2, A3, A4, A7, A9, A10, A11", tasks: 24}
+  - {id: 01-indep3a, kind: interpretation, label: "§ 8, пп. 9–10", section: 8, page: 33, statement: "трёхзначные таблицы (отмеченное 0) для A5, A6", tasks: 7}
+  - {id: 01-indep3b, kind: interpretation, label: "§ 8, пп. 11–12", section: 8, page: 34, statement: "трёхзначные таблицы (отмеченные 0, 1) для A8, A13", tasks: 6}
+  - {id: 01-indep4, kind: interpretation, label: "§ 8, пп. 13–14", section: 8, page: 34, statement: "четырёхзначные таблицы для A12, A14; ограниченный вид A11", tasks: 7}
+  - {id: 01-indepR, kind: interpretation, label: "§ 8, R1–R3", section: 8, page: 34, statement: "двузначные таблицы для R1, R2 (a ⊢ a, a ⊢ aa); трёхзначная для R3 (a ⊢ a : ∼aa)", tasks: 14}
+  # § 9. Правило подстановки (с. 35)
+  - {id: 01-MT1-9, kind: metatheorem, label: "MT1 § 9", section: 9, page: 35, statement: "подстановка высказывания вместо элементарного везде, где оно входит; производное правило", errors: ["подстановка только в заключение", "подстановка элементарного вместо составного"], tasks: 12}

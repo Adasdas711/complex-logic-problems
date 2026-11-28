@@ -1,0 +1,116 @@
+# Глава 10 «Логика классов» (с. 149–160). Составлено проверяющим V08 по изображениям страниц.
+skills:
+- id: 10-alph
+  kind: definition
+  label: § 1 алфавит, D1
+  section: 1
+  page: 149
+  statement: ∈, ⊂, K; Ka — субъект
+- id: 10-A1-7
+  kind: axiom
+  label: A1–A7 S¹_k
+  section: 2
+  page: 150
+  statement: A1 (∃a)(a∈Kb)⊢(∃b)(b∈Ka); A2 ∼(a∈Kb)⊢(a∈K∼b); A3 обратная; A4 (a∈Kb)(∀b)(b∈Kc)⊢(a∈Kc); A5 ⊢a∈K(a∨b); A6 (∀a)(a∈Kb)⊢Ka⊂Kb; A7 обратная
+- id: 10-R1-5
+  kind: rule
+  label: R1–R5 замены
+  section: 2
+  page: 150
+  statement: замены ∼∼a↔a, ab→ba, a↔aa, перегруппировка, ∼(ab)↔∼a∨∼b (если S¹_k строится независимо от теории терминов)
+- id: 10-T1-7
+  kind: theorem
+  label: T1–T7 S¹_k
+  section: 2
+  page: 150
+  statement: T1, T2 (транзитивность с ∀/∃), T3, T4 (контрапозиция), T5 ⊢ab∈Ka, T6 ⊢Ka⊂K(a∨b), T7 ⊢K(ab)⊂Ka
+- id: 10-int
+  kind: interpretation
+  label: интерпретация Фединой пп. 1–6
+  section: 2
+  page: 150
+  statement: 'пп. 1–6 (Федина): a∈Kb=1 ⇒ a∈K∼b=0, ∼b∈K∼a=1; a∈Kb=0 ⇒ a∈K∼b=1, b∈Ka=0; транзитивность; a∈K(a∨b), ab∈Ka =1; (∀a)(a∈Kb) ≡ Ka⊂Kb; замены сохраняют значение'
+  errors:
+  - при a∈Kb=0 считают a∈Kc определённым
+- id: 10-MT1-2
+  kind: metatheorem
+  label: MT1 § 2 и замечание
+  section: 2
+  page: 151
+  statement: 'MT1: доказуемые в S¹_k — тавтологии; при (a⇀b)⊢(∀b)(b∈Ka) и обратной часть схем зависима'
+- id: 10-A14-24
+  kind: axiom
+  label: A¹4, A²4 S²_k
+  section: 3
+  page: 151
+  statement: A¹4 (∀a)x(b∈Ka)⊢y (a→b везде); A²4 x(b∈Ka)⊢(∃a)y (b→a везде); A4 — следствие A¹4
+  errors:
+  - не заменяют все вхождения
+- id: 10-Ssk
+  kind: axiom
+  label: A1–A13, R1–R4 S^s_k
+  section: 4
+  page: 152
+  statement: A1–A13 частичной системы S^s_k; R1–R4
+- id: 10-D1-syl
+  kind: definition
+  label: D1 § 4, коды 1a–5d
+  section: 4
+  page: 152
+  statement: простой категорический силлогизм; коды посылок 1a–4d и заключений 5a–5d (5b — ∀∼, 5c — ∃)
+  errors:
+  - путают буквы заключений 5b/5c с буквами посылок
+- id: 10-MT1-4
+  kind: metatheorem
+  label: MT1 § 4, R*1, R*2
+  section: 4
+  page: 153
+  statement: 'MT1: тавтологичный простой силлогизм доказуем; 512/256 случаев; R*1, R*2 сокращают перебор; 19 модусов'
+- id: 10-R3-L
+  kind: theorem
+  label: R*3, L1–L5
+  section: 4
+  page: 154
+  statement: 'R*3: x⊣⊢y ⇒ ∼y⊣⊢∼x; L1–L5'
+- id: 10-T1-19
+  kind: theorem
+  label: модусы T1–T19
+  section: 4
+  page: 155
+  statement: модусы T1–T19 с основаниями (Barbara, Celarent, Darii, Ferio, Cesare, Camestres …)
+- id: 10-MT2-4
+  kind: metatheorem
+  label: D2, MT2 § 4
+  section: 4
+  page: 156
+  statement: индукция
+- id: 10-5
+  kind: axiom
+  label: § 5 связь с силлогистикой предикатов
+  section: 5
+  page: 157
+  statement: (a←(x↓)) ⊣⊢ (a∈K(sc↓x))
+- id: 10-6
+  kind: axiom
+  label: § 6 A1 ⊢ a∈Kb, квазиследование
+  section: 6
+  page: 157
+  statement: A1 ⊢a∈Kb (совпадение областей значения субъектов); T1 ⊢(∀a)(a∈Kb); квазиследование
+- id: 10-7
+  kind: definition
+  label: § 7 классы классов, D1, D*1, MT1
+  section: 7
+  page: 158
+  statement: kl — термин «класс», K — не термин; D1, D*1 — определения с переменной; MT1; kl⇀Kkl, Kkl∈Kkl не выводятся
+- id: 10-8
+  kind: definition
+  label: § 8 нормальные классы
+  section: 8
+  page: 159
+  statement: 'nk: D1, D*1; утверждения A, B; подстановка nk на место переменной незаконна; nk⇀Knk безразлично к D1'
+- id: 10-9
+  kind: axiom
+  label: § 9 D1, A1–A3
+  section: 9
+  page: 160
+  statement: 'D1 производные термины классов: дополнение, сумма, произведение; A1–A3 (K∼a, K(a∨b), K(ab))'

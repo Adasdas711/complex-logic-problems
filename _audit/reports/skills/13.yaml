@@ -1,0 +1,131 @@
+# Гл. 13 «Логика отношений» (с. 178–188). Схемы переписаны с изображений страниц.
+skills:
+  - {"id": "13-relpred", "kind": "definition", "label": "§ 1", "section": 1, "page": 178, "statement": "предикаты отношений («ближе», «раньше», «правее», «между»…); две группы: сравнения и порядка"}
+  - {"id": "13-std", "kind": "definition", "label": "§ 1", "section": 1, "page": 178, "statement": "способы сравнения и упорядочивания не определяются; правила имеют силу при известных стандартных способах; в одном утверждении способ один"}
+  - {"id": "13-r1-D1", "kind": "definition", "label": "D1 § 2", "section": 2, "page": 179, "statement": "(>a), (<a), (=a) — предикаты сравнения; алфавит >, <, ="}
+  - {"id": "13-r1-read", "kind": "definition", "label": "чтение § 2", "section": 2, "page": 179, "statement": "(α>c)(a,b) — «a превосходит (не превосходит, неопределённо превосходит) b по признаку c»; сокращение aα(>c)b; c опускается"}
+  - {"id": "13-r1-AI.1", "kind": "axiom", "label": "AI.1", "section": 2, "page": 179, "statement": "⊢ (a ¬> a)"}
+  - {"id": "13-r1-AI.2", "kind": "axiom", "label": "AI.2", "section": 2, "page": 179, "statement": "(a > b) ⊢ (b ¬> a)"}
+  - {"id": "13-r1-AI.3", "kind": "axiom", "label": "AI.3", "section": 2, "page": 179, "statement": "(a ¬> b) ⊢ ((b > a) : (a = b))"}
+  - {"id": "13-r1-AI.4", "kind": "axiom", "label": "AI.4", "section": 2, "page": 179, "statement": "(a ?> b) ⊢ (b ?> a)"}
+  - {"id": "13-r1-AI.5", "kind": "axiom", "label": "AI.5", "section": 2, "page": 179, "statement": "(a > b)(b > c) ⊢ (a > c)"}
+  - {"id": "13-r1-AI.6", "kind": "axiom", "label": "AI.6", "section": 2, "page": 179, "statement": "(a > b)(b = c) ⊢ (a > c)"}
+  - {"id": "13-r1-AI.7", "kind": "axiom", "label": "AI.7", "section": 2, "page": 179, "statement": "(a ¬> b)(b ¬> c) ⊢ (a ¬> c)"}
+  - {"id": "13-r1-AI.8", "kind": "axiom", "label": "AI.8", "section": 2, "page": 179, "statement": "(a ?> b)(b = c) ⊢ (a ?> c)"}
+  - {"id": "13-r1-AI.9", "kind": "axiom", "label": "AI.9", "section": 2, "page": 179, "statement": "(a < b) ⊢ (b > a)"}
+  - {"id": "13-r1-AI.10", "kind": "axiom", "label": "AI.10", "section": 2, "page": 179, "statement": "(a > b) ⊢ (b < a)"}
+  - {"id": "13-r1-AI.11", "kind": "axiom", "label": "AI.11", "section": 2, "page": 179, "statement": "(a ¬< b) ⊢ (a > b) : (a = b)"}
+  - {"id": "13-r1-AI.12", "kind": "axiom", "label": "AI.12", "section": 2, "page": 180, "statement": "(a > b) : (a = b) ⊢ (a ¬< b)"}
+  - {"id": "13-r1-AI.13", "kind": "axiom", "label": "AI.13", "section": 2, "page": 180, "statement": "(a ?< b) ⊢ (b ?> a)"}
+  - {"id": "13-r1-AI.14", "kind": "axiom", "label": "AI.14", "section": 2, "page": 180, "statement": "(b ?> a) ⊢ (a ?< b)"}
+  - {"id": "13-r1-AI.15", "kind": "axiom", "label": "AI.15", "section": 2, "page": 180, "statement": "(a = b) ⊢ (a ¬> b)(b ¬> a)"}
+  - {"id": "13-r1-AI.16", "kind": "axiom", "label": "AI.16", "section": 2, "page": 180, "statement": "(a ¬> b)(b ¬> a) ⊢ (a = b)"}
+  - {"id": "13-r1-AI.17", "kind": "axiom", "label": "AI.17", "section": 2, "page": 180, "statement": "(a ¬= b) ⊢ (a > b) : (b > a)"}
+  - {"id": "13-r1-AI.18", "kind": "axiom", "label": "AI.18", "section": 2, "page": 180, "statement": "(a > b) : (b > a) ⊢ (a ¬= b)"}
+  - {"id": "13-r1-AI.19", "kind": "axiom", "label": "AI.19", "section": 2, "page": 180, "statement": "(a ?= b) ⊢ ((a ?> b) ∨ (b ?> a))∼(a > b)∼(b > a)"}
+  - {"id": "13-r1-AI.20", "kind": "axiom", "label": "AI.20", "section": 2, "page": 180, "statement": "((a ?> b) ∨ (b ?> a))∼(a > b)∼(b > a) ⊢ (a ?= b)"}
+  - {"id": "13-r1-T1", "kind": "theorem", "label": "T1 следствие AI", "section": 2, "page": 180, "statement": "⊢ ∼(a > a)"}
+  - {"id": "13-r1-T2", "kind": "theorem", "label": "T2 следствие AI", "section": 2, "page": 180, "statement": "(a > b) ⊢ ∼(b > a)"}
+  - {"id": "13-r1-T3", "kind": "theorem", "label": "T3 следствие AI", "section": 2, "page": 180, "statement": "(a ?> b) ⊢ ∼(a > b)"}
+  - {"id": "13-r1-T4", "kind": "theorem", "label": "T4 следствие AI", "section": 2, "page": 180, "statement": "⊢ ∼((a > b)(b > a))"}
+  - {"id": "13-r1-T5", "kind": "theorem", "label": "T5 следствие AI", "section": 2, "page": 180, "statement": "⊢ ∼((a > b)(a ¬> b))"}
+  - {"id": "13-r1-AII.1", "kind": "axiom", "label": "AII.1", "section": 2, "page": 180, "statement": "(a ← c)(b ¬← c) ⊢ (a(> c)b)"}
+  - {"id": "13-r1-AII.2", "kind": "axiom", "label": "AII.2", "section": 2, "page": 180, "statement": "(a ¬← c)(b ¬← c) ⊢ (a(= c)b)"}
+  - {"id": "13-r1-AII.3", "kind": "axiom", "label": "AII.3", "section": 2, "page": 180, "statement": "(a ?← c)(b ?← c) ⊢ (a(= c)b)"}
+  - {"id": "13-r1-AII.4", "kind": "axiom", "label": "AII.4", "section": 2, "page": 180, "statement": "(a ← c)(b ?← c) ⊢ (a ?(> c)b)"}
+  - {"id": "13-r1-AII.5", "kind": "axiom", "label": "AII.5", "section": 2, "page": 180, "statement": "(a ?← c)(b ¬← c) ⊢ (a ?(> c)b)"}
+  - {"id": "13-r1-AcI.1", "kind": "axiom", "label": "AcI.1", "section": 2, "page": 180, "statement": "⊢ ∼(a > a)"}
+  - {"id": "13-r1-AcI.2", "kind": "axiom", "label": "AcI.2", "section": 2, "page": 180, "statement": "(a > b) ⊢ ∼(b > a)"}
+  - {"id": "13-r1-AcI.3", "kind": "axiom", "label": "AcI.3", "section": 2, "page": 180, "statement": "∼(a > b) ⊢ (b > a) : (a = b)"}
+  - {"id": "13-r1-AcI.4", "kind": "axiom", "label": "AcI.4", "section": 2, "page": 180, "statement": "(a > b)(b > c) ⊢ (a > c)"}
+  - {"id": "13-r1-AcI.5", "kind": "axiom", "label": "AcI.5", "section": 2, "page": 180, "statement": "(a > b)(b = c) ⊢ (a > c)"}
+  - {"id": "13-r1-AcI.6", "kind": "axiom", "label": "AcI.6", "section": 2, "page": 180, "statement": "∼(a > b)∼(b > c) ⊢ ∼(a > c)"}
+  - {"id": "13-r1-AcI.7", "kind": "axiom", "label": "AcI.7", "section": 2, "page": 181, "statement": "(a < b) ⊢ (b > a)"}
+  - {"id": "13-r1-AcI.8", "kind": "axiom", "label": "AcI.8", "section": 2, "page": 181, "statement": "(a > b) ⊢ (b < a)"}
+  - {"id": "13-r1-AcI.9", "kind": "axiom", "label": "AcI.9", "section": 2, "page": 181, "statement": "(a = b) ⊢ ∼(a > b)∼(b > a)"}
+  - {"id": "13-r1-AcI.10", "kind": "axiom", "label": "AcI.10", "section": 2, "page": 181, "statement": "∼(a > b)∼(b > a) ⊢ (a = b)"}
+  - {"id": "13-r1-AcII.1", "kind": "axiom", "label": "AcII.1", "section": 2, "page": 181, "statement": "(a ← c)∼(b ← c) ⊢ (a(> c)b)"}
+  - {"id": "13-r1-AcII.2", "kind": "axiom", "label": "AcII.2", "section": 2, "page": 181, "statement": "∼(a ← c)∼(b ← c) ⊢ (a(= c)b)"}
+  - {"id": "13-r2", "kind": "definition", "label": "D1 § 3", "section": 3, "page": 181, "statement": "S^r2_n: (>c), (<c), (=c) с субъектом c — предикаты порядка; чтение «по порядку относительно c»; схемы — как AI с субъектом c; так же в классическом случае", "errors": ["c в логике порядка — предикат"]}
+  - {"id": "13-int-1", "kind": "interpretation", "label": "п. 1 § 4", "section": 4, "page": 182, "statement": "область значения субъектов — натуральные числа"}
+  - {"id": "13-int-2", "kind": "interpretation", "label": "п. 2 § 4", "section": 4, "page": 182, "statement": "a(>c)b = 1 е. т. е. a > b; a¬(>c)b = 1 е. т. е. a ≤ b; a?(>c)b = 1 е. т. е. соотношение не известно"}
+  - {"id": "13-int-3", "kind": "interpretation", "label": "п. 3 § 4", "section": 4, "page": 182, "statement": "aα(<c)b ≡ правая часть схем 9, 11, 13"}
+  - {"id": "13-int-4", "kind": "interpretation", "label": "п. 4 § 4", "section": 4, "page": 182, "statement": "aα(=c)b ≡ правая часть схем 15, 17, 19"}
+  - {"id": "13-int-5", "kind": "interpretation", "label": "п. 5 § 4", "section": 4, "page": 182, "statement": "при разных c¹, c² значения aα(>c¹)b и aα(>c²)b независимы"}
+  - {"id": "13-int-6", "kind": "interpretation", "label": "п. 6 § 4", "section": 4, "page": 182, "statement": "a←c и b¬←c ⇒ a > b; пары (←, ?←), (?←, ¬←) — соотношение не известно; (¬←, ¬←), (?←, ?←) — равны"}
+  - {"id": "13-MT1-4", "kind": "metatheorem", "label": "MT1 § 4", "section": 4, "page": 182, "statement": "все доказуемые формулы — тавтологии"}
+  - {"id": "13-MT2-4", "kind": "metatheorem", "label": "MT2 § 4", "section": 4, "page": 182, "statement": "aα(>c¹)b ⊢ aα(>c²)b при различных c¹, c² недоказуемы (не тавтологии)"}
+  - {"id": "13-derived", "kind": "definition", "label": "§ 5", "section": 5, "page": 182, "statement": "производные термины порядка («находится между», «структура», «ряд»…) определяются через предикаты порядка; рассмотрены в [3, 7]"}
+  - {"id": "13-r3-D1", "kind": "definition", "label": "D1 § 6", "section": 6, "page": 183, "statement": "R, R¹… — знаки порядка; (R↓x) — предикат порядка; (R↓x)(↓y) — «↓y имеет место в отношении R к ↓x»; стрелки опускаются"}
+  - {"id": "13-r3-1", "kind": "axiom", "label": "схема 1 S^r3", "section": 6, "page": 183, "statement": "∼(Rx)y ⊢ (Rx)∼y"}
+  - {"id": "13-r3-2", "kind": "axiom", "label": "схема 2 S^r3", "section": 6, "page": 183, "statement": "(Rx)∼y ⊢ ∼(Rx)y"}
+  - {"id": "13-r3-3", "kind": "axiom", "label": "схема 3 S^r3", "section": 6, "page": 183, "statement": "(Rx)y(Rx)z ⊢ (Rx)(yz)"}
+  - {"id": "13-r3-4", "kind": "axiom", "label": "схема 4 S^r3", "section": 6, "page": 183, "statement": "(Rx)(yz) ⊢ (Rx)y(Rx)z"}
+  - {"id": "13-r3-5", "kind": "axiom", "label": "схема 5 S^r3", "section": 6, "page": 183, "statement": "(Rx)y ∨ (Rx)z ⊢ (Rx)(y ∨ z)"}
+  - {"id": "13-r3-6", "kind": "axiom", "label": "схема 6 S^r3", "section": 6, "page": 183, "statement": "(Rx)(y ∨ z) ⊢ (Rx)y ∨ (Rx)z"}
+  - {"id": "13-r3-7", "kind": "axiom", "label": "схема 7 S^r3", "section": 6, "page": 183, "statement": "((R^1x)(R^2y))z ⊢ (R^1x)z(R^2y)z"}
+  - {"id": "13-r3-8", "kind": "axiom", "label": "схема 8 S^r3", "section": 6, "page": 183, "statement": "(R^1x)z(R^2y)z ⊢ ((R^1x)(R^2y))z"}
+  - {"id": "13-r3-9", "kind": "axiom", "label": "схема 9 S^r3", "section": 6, "page": 183, "statement": "((R^1x) ∨ (R^2y))z ⊢ (R^1x)z ∨ (R^2y)z"}
+  - {"id": "13-r3-10", "kind": "axiom", "label": "схема 10 S^r3", "section": 6, "page": 183, "statement": "(R^1x)z ∨ (R^2y)z ⊢ ((R^1x) ∨ (R^2y))z"}
+  - {"id": "13-r3-11", "kind": "axiom", "label": "схема 11 S^r3", "section": 6, "page": 183, "statement": "(R(x ∨ y))z ⊢ ((Rx) ∨ (Ry))z"}
+  - {"id": "13-r3-12", "kind": "axiom", "label": "схема 12 S^r3", "section": 6, "page": 183, "statement": "((Rx) ∨ (Ry))z ⊢ (R(x ∨ y))z"}
+  - {"id": "13-r3-13", "kind": "axiom", "label": "схема 13 S^r3", "section": 6, "page": 183, "statement": "(R(xy))z ⊢ ((Rx)(Ry))z"}
+  - {"id": "13-r3-14", "kind": "axiom", "label": "схема 14 S^r3", "section": 6, "page": 183, "statement": "((Rx)(Ry))z ⊢ (R(xy))z"}
+  - {"id": "13-r3-15", "kind": "axiom", "label": "схема 15 S^r3", "section": 6, "page": 183, "statement": "(R^1x)y(aR^1b → bR^2a) ⊢ (R^2y)x"}
+  - {"id": "13-o7-form", "kind": "definition", "label": "§ 7", "section": 7, "page": 184, "statement": "упорядоченные конъюнкции x(Rx)y и дизъюнкции x∨(Rx)y; x(Rx)y ⊢ y(Ry)x и x∨(Rx)y ⊢ y∨(Ry)x не имеют силы"}
+  - {"id": "13-o7-AI.1", "kind": "axiom", "label": "AI.1 § 7", "section": 7, "page": 184, "statement": "(x(R^1x)y)(aR^1b → bR^2a) ⊢ (y(R^2y)x)"}
+  - {"id": "13-o7-AI.2", "kind": "axiom", "label": "AI.2 § 7", "section": 7, "page": 184, "statement": "(x ∨ (R^1x)y)(aR^1b → bR^2a) ⊢ (y ∨ (R^2y)x)"}
+  - {"id": "13-o7-T1", "kind": "theorem", "label": "T1 § 7", "section": 7, "page": 184, "statement": "∼(x(Rx)y) ⊣⊢ ∼x ∨ (Rx)∼y"}
+  - {"id": "13-o7-T2", "kind": "theorem", "label": "T2 § 7", "section": 7, "page": 184, "statement": "∼(x ∨ (Rx)y) ⊣⊢ ∼x(Rx)∼y"}
+  - {"id": "13-o7-T3", "kind": "theorem", "label": "T3 § 7", "section": 7, "page": 184, "statement": "(x ∨ (R^1x)y)(R^2a)z ⊢ x(R^2a)z ∨ (R^1x)y"}
+  - {"id": "13-o7-AII.1", "kind": "axiom", "label": "AII.1 § 7", "section": 7, "page": 184, "statement": "x(R^1x)y(R^2y)z ⊢ (x(R^1x)y)(y(R^2y)z)"}
+  - {"id": "13-o7-AII.2", "kind": "axiom", "label": "AII.2 § 7", "section": 7, "page": 184, "statement": "(x(R^1x)y)(y(R^2y)z) ⊢ x(R^1x)y(R^2y)z"}
+  - {"id": "13-o7-AII.3", "kind": "axiom", "label": "AII.3 § 7", "section": 7, "page": 184, "statement": "x ∨ (R^1x)y ∨ (R^2y)z ⊢ (x ∨ (R^1x)y)(y ∨ (R^2y)z)"}
+  - {"id": "13-o7-AII.4", "kind": "axiom", "label": "AII.4 § 7", "section": 7, "page": 184, "statement": "(x ∨ (R^1x)y)(y ∨ (R^2y)z) ⊢ x ∨ (R^1x)y ∨ (R^2y)z"}
+  - {"id": "13-o7-AII.5", "kind": "axiom", "label": "AII.5 § 7", "section": 7, "page": 184, "statement": "x ∨ (R^1x)y(R^2y)z ⊢ (x ∨ (R^1x)y)(y(R^2y)z)"}
+  - {"id": "13-o7-AII.6", "kind": "axiom", "label": "AII.6 § 7", "section": 7, "page": 185, "statement": "(x ∨ (R^1x)y)(y(R^2y)z) ⊢ x ∨ (R^1x)y(R^2y)z"}
+  - {"id": "13-o7-AII.7", "kind": "axiom", "label": "AII.7 § 7", "section": 7, "page": 185, "statement": "x(R^1x)y ∨ (R^2y)z ⊢ (x(R^1x)y)(y ∨ (R^2y)z)"}
+  - {"id": "13-o7-AII.8", "kind": "axiom", "label": "AII.8 § 7", "section": 7, "page": 185, "statement": "(x(R^1x)y)(y ∨ (R^2y)z) ⊢ x(R^1x)y ∨ (R^2y)z"}
+  - {"id": "13-o7-AIII.1", "kind": "axiom", "label": "AIII.1 § 7", "section": 7, "page": 185, "statement": "(x(Rx)y → y(Ry)x)(y(Ry)x → x(Rx)y) ⊢ xy"}
+  - {"id": "13-o7-AIII.2", "kind": "axiom", "label": "AIII.2 § 7", "section": 7, "page": 185, "statement": "xy ⊢ (x(Rx)y → y(Ry)x)(y(Ry)x → x(Rx)y)"}
+  - {"id": "13-o7-AIII.3", "kind": "axiom", "label": "AIII.3 § 7", "section": 7, "page": 185, "statement": "(x ∨ (Rx)y → y ∨ (Ry)x)(y ∨ (Ry)x → x ∨ (Rx)y) ⊢ x ∨ y"}
+  - {"id": "13-o7-AIII.4", "kind": "axiom", "label": "AIII.4 § 7", "section": 7, "page": 185, "statement": "x ∨ y ⊢ (x ∨ (Rx)y → y ∨ (Ry)x)(y ∨ (Ry)x → x ∨ (Rx)y)"}
+  - {"id": "13-ch-D", "kind": "definition", "label": "§ 8: ⇒, D1, D2", "section": 8, "page": 185, "statement": "(⇒)(↓x,↓y) — «ситуация с x превратилась в ситуацию с y»; xα⇒y; D1 — элементарные: Q(a)⇒¬Q(a), ¬Q(a)⇒Q(a); D2 — высказывания изменения"}
+  - {"id": "13-ch-AI.1", "kind": "axiom", "label": "AI.1 S^ch", "section": 8, "page": 186, "statement": "Q(a)(R(Q(a)))¬ Q(a) ⊢ (Q(a) ⇒ ¬ Q(a))"}
+  - {"id": "13-ch-AI.2", "kind": "axiom", "label": "AI.2 S^ch", "section": 8, "page": 186, "statement": "(Q(a) ⇒ ¬ Q(a)) ⊢ Q(a)(R(Q(a)))¬ Q(a)"}
+  - {"id": "13-ch-AI.3", "kind": "axiom", "label": "AI.3 S^ch", "section": 8, "page": 186, "statement": "¬ Q(a)(R(¬ Q(a)))Q(a) ⊢ (¬ Q(a) ⇒ Q(a))"}
+  - {"id": "13-ch-AI.4", "kind": "axiom", "label": "AI.4 S^ch", "section": 8, "page": 186, "statement": "(¬ Q(a) ⇒ Q(a)) ⊢ ¬ Q(a)(R(¬ Q(a)))Q(a)"}
+  - {"id": "13-ch-AII.1", "kind": "axiom", "label": "AII.1 S^ch", "section": 8, "page": 186, "statement": "(x ⇒ y) ⊢ y"}
+  - {"id": "13-ch-AII.2", "kind": "axiom", "label": "AII.2 S^ch", "section": 8, "page": 186, "statement": "(x ¬⇒ y) ⊢ (x ⇒ ∼y)"}
+  - {"id": "13-ch-AII.3", "kind": "axiom", "label": "AII.3 S^ch", "section": 8, "page": 186, "statement": "(x ⇒ ∼y) ⊢ (x ¬⇒ y)"}
+  - {"id": "13-ch-AII.4", "kind": "axiom", "label": "AII.4 S^ch", "section": 8, "page": 186, "statement": "(x ?⇒ y) ⊢ ∼x∼y"}
+  - {"id": "13-ch-AII.5", "kind": "axiom", "label": "AII.5 S^ch", "section": 8, "page": 186, "statement": "∼x∼y ⊢ (x ?⇒ y)"}
+  - {"id": "13-ch-AIII.1", "kind": "axiom", "label": "AIII.1 S^ch", "section": 8, "page": 186, "statement": "(x ⇒ y)(R(x ⇒ y))(y ⇒ z) ⊢ (x ⇒ z)"}
+  - {"id": "13-ch-AIII.2", "kind": "axiom", "label": "AIII.2 S^ch", "section": 8, "page": 186, "statement": "(x ⇒ y)(R(x ⇒ y))(z ⇒ v) ⊢ (xz ⇒ yv)"}
+  - {"id": "13-ch-AIII.3", "kind": "axiom", "label": "AIII.3 S^ch", "section": 8, "page": 186, "statement": "((x ⇒ y) → (R(x ⇒ y))(z ⇒ v)) ⊢ (y → (Ry)v)"}
+  - {"id": "13-ch-cl", "kind": "method", "label": "§ 8, классический случай", "section": 8, "page": 186, "statement": "¬ заменить на ∼ в AI–AIII, AII.4 и AII.5 исключить"}
+  - {"id": "13-ch-int-1", "kind": "interpretation", "label": "п. 1 § 8", "section": 8, "page": 187, "statement": "x⇒y = 1 ⇒ x = 0, y = 1; y = 0 ⇒ x⇒y = 0"}
+  - {"id": "13-ch-int-2", "kind": "interpretation", "label": "п. 2 § 8", "section": 8, "page": 187, "statement": "x¬⇒y ≡ x⇒∼y"}
+  - {"id": "13-ch-int-3", "kind": "interpretation", "label": "п. 3 § 8", "section": 8, "page": 187, "statement": "x?⇒y ≡ ∼x∼y"}
+  - {"id": "13-ch-int-4", "kind": "interpretation", "label": "п. 4 § 8", "section": 8, "page": 187, "statement": "(R(x⇒y))(y⇒z) ≡ x⇒z"}
+  - {"id": "13-ch-int-5", "kind": "interpretation", "label": "п. 5 § 8", "section": 8, "page": 187, "statement": "(R(x⇒y))(z⇒v) ≡ xz⇒yv"}
+  - {"id": "13-ch-MT1", "kind": "metatheorem", "label": "MT1 § 8", "section": 8, "page": 187, "statement": "доказуемые формулы S^ch — тавтологии; система непротиворечива"}
+  - {"id": "13-ph-def", "kind": "definition", "label": "§ 9", "section": 9, "page": 187, "statement": "xα→(Rx)y — высказывания о физическом следовании"}
+  - {"id": "13-ph-AI.1", "kind": "axiom", "label": "AI.1", "section": 9, "page": 187, "statement": "(x → (Rx)y) ⊢ (∀(↓x))((Rx)y)"}
+  - {"id": "13-ph-AI.2", "kind": "axiom", "label": "AI.2", "section": 9, "page": 187, "statement": "(∀(↓x))((Rx)y) ⊢ (x → (Rx)y)"}
+  - {"id": "13-ph-AI.3", "kind": "axiom", "label": "AI.3", "section": 9, "page": 187, "statement": "(x → (Rx)y) ⊢ N(↓((Rx)y))"}
+  - {"id": "13-ph-AI.4", "kind": "axiom", "label": "AI.4", "section": 9, "page": 187, "statement": "N(↓((Rx)y)) ⊢ (x → (Rx)y)"}
+  - {"id": "13-ph-AI.5", "kind": "axiom", "label": "AI.5", "section": 9, "page": 187, "statement": "(x ¬→ (Rx)y) ⊢ (∃(↓x))((Rx)∼y)"}
+  - {"id": "13-ph-AI.6", "kind": "axiom", "label": "AI.6", "section": 9, "page": 187, "statement": "(∃(↓x))((Rx)∼y) ⊢ (x ¬→ (Rx)y)"}
+  - {"id": "13-ph-AI.7", "kind": "axiom", "label": "AI.7", "section": 9, "page": 187, "statement": "(x ¬→ (Rx)y) ⊢ M(↓((Rx)∼y))"}
+  - {"id": "13-ph-AI.8", "kind": "axiom", "label": "AI.8", "section": 9, "page": 187, "statement": "M(↓((Rx)∼y)) ⊢ (x ¬→ (Rx)y)"}
+  - {"id": "13-ph-T1(AI)", "kind": "theorem", "label": "T1(AI)", "section": 9, "page": 187, "statement": "(x ?→ (Rx)y) ⊣⊢ (?∀(↓x))((Rx)y)"}
+  - {"id": "13-ph-T2(AI)", "kind": "theorem", "label": "T2(AI)", "section": 9, "page": 187, "statement": "(x ?→ (Rx)y) ⊣⊢ ?N(↓((Rx)y))"}
+  - {"id": "13-ph-T3(AI)", "kind": "theorem", "label": "T3(AI)", "section": 9, "page": 187, "statement": "(x ?→ (Rx)y) ⊣⊢ (?∃(↓x))((Rx)∼y)"}
+  - {"id": "13-ph-T4(AI)", "kind": "theorem", "label": "T4(AI)", "section": 9, "page": 187, "statement": "(x ?→ (Rx)y) ⊣⊢ ?M(↓((Rx)∼y))"}
+  - {"id": "13-ph-AII.1", "kind": "axiom", "label": "AII.1", "section": 9, "page": 188, "statement": "(x → (R^1x)y)(aR^1b → bR^2a) ⊢ (∼y → (R^2∼y)∼x)"}
+  - {"id": "13-ph-AII.2", "kind": "axiom", "label": "AII.2", "section": 9, "page": 188, "statement": "(x → (R^1x)y)(y → (R^2y)z)((aR^1b)(bR^2c) → (aR^3c)) ⊢ (x → (R^3x)z)"}
+  - {"id": "13-ph-AII.3", "kind": "axiom", "label": "AII.3", "section": 9, "page": 188, "statement": "(x → (Rx)y)(y → z) ⊢ (x → (Rx)z)"}
+  - {"id": "13-ph-AII.4", "kind": "axiom", "label": "AII.4", "section": 9, "page": 188, "statement": "(x → (R^1x)y)(x → (R^2x)z)((aR^1b)(aR^2c) → (aR^3(b,c))) ⊢ (x → (R^3x)(yz))"}
+  - {"id": "13-ph-T1(AII)", "kind": "theorem", "label": "T1(AII)", "section": 9, "page": 187, "statement": "(x → (Rx)(yz)) ⊣⊢ (x → (Rx)y)(x → (Rx)z)"}
+  - {"id": "13-ph-T2(AII)", "kind": "theorem", "label": "T2(AII)", "section": 9, "page": 187, "statement": "(x → (Rx)y) ∨ (x → (Rx)z) ⊢ (x → (Rx)(y ∨ z))"}
